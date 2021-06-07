@@ -1,6 +1,6 @@
 {
   "name": "vue-validate-x",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Vue 3 Validate Composition",
   "main": "dist/vue-validate-x.cjs.js",
   "module": "dist/vue-validate-x.es.js",
@@ -18,7 +18,9 @@
     "type": "git",
     "url": "git+https://github.com/FrontLabsOfficial/vue-validate-x.git"
   },
-  "files": ["dist/*.js"],
+  "files": [
+    "dist/*.js"
+  ],
   "bugs": {
     "url": "https://github.com/FrontLabsOfficial/vue-validate-x/issues"
   },
