@@ -1,0 +1,7 @@
+[
+  {
+    "path": "dist/vue-validate-x.es.js",
+    "limit": "2KB",
+    "gzip": true
+  }
+]
