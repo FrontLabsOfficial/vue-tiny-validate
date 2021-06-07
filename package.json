@@ -1,10 +1,10 @@
 {
-  "name": "vue-validate-x",
+  "name": "vue-tiny-validate",
   "version": "0.1.1",
   "description": "Vue 3 Validate Composition",
-  "main": "dist/vue-validate-x.cjs.js",
-  "module": "dist/vue-validate-x.es.js",
-  "browser": "dist/vue-validate-x.umd.js",
+  "main": "dist/vue-tiny-validate.cjs.js",
+  "module": "dist/vue-tiny-validate.es.js",
+  "browser": "dist/vue-tiny-validate.umd.js",
   "sideEffects": false,
   "author": "Anh Le<ledzanh@gmail.com>",
   "license": "MIT",
@@ -12,19 +12,19 @@
     "vue",
     "validate",
     "vue-validate",
-    "vue-validate-lite"
+    "vue-tiny-validate"
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FrontLabsOfficial/vue-validate-x.git"
+    "url": "git+https://github.com/FrontLabsOfficial/vue-tiny-validate.git"
   },
   "files": [
     "dist/*.js"
   ],
   "bugs": {
-    "url": "https://github.com/FrontLabsOfficial/vue-validate-x/issues"
+    "url": "https://github.com/FrontLabsOfficial/vue-tiny-validate/issues"
   },
-  "homepage": "https://github.com/FrontLabsOfficial/vue-validate-x/tree/master#readme",
+  "homepage": "https://github.com/FrontLabsOfficial/vue-tiny-validate/tree/master#readme",
   "scripts": {
     "clean": "rm -rf dist dist-example",
     "pretty": "prettier --write '**/*.{js,css,md,vue,html}'",

@@ -8,7 +8,7 @@ const libraryEntry = resolve(__dirname, 'src/index.js')
 const libraryOutDir = resolve(__dirname, 'dist')
 
 export default ({ command, mode }) => {
-  const libraryName = 'vue-validate-x'
+  const libraryName = 'vue-tiny-validate'
 
   const exampleOption = {
     plugins: [vue()],
