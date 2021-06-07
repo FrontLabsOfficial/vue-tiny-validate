@@ -1,0 +1,50 @@
+{
+  "name": "vue-validate-x",
+  "version": "0.1.0",
+  "description": "Vue 3 Validate Composition",
+  "main": "dist/vue-validate-x.cjs.js",
+  "module": "dist/vue-validate-x.es.js",
+  "browser": "dist/vue-validate-x.umd.js",
+  "sideEffects": false,
+  "author": "Anh Le<ledzanh@gmail.com>",
+  "license": "MIT",
+  "keywords": [
+    "vue",
+    "validate",
+    "vue-validate",
+    "vue-validate-lite"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FrontLabsOfficial/vue-validate-x.git"
+  },
+
+  "bugs": {
+    "url": "https://github.com/FrontLabsOfficial/vue-validate-x/issues"
+  },
+  "homepage": "https://github.com/FrontLabsOfficial/vue-validate-x/tree/master#readme",
+  "scripts": {
+    "clean": "rm -rf dist dist-example",
+    "pretty": "prettier --write '**/*.{js,css,md,vue,html}'",
+    "dev": "vite",
+    "build": "yarn clean && vite build --mode library",
+    "build:example": "year clean && vite build --mode example",
+    "prepare": "husky install"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^1.2.3",
+    "@vue/compiler-sfc": "^3.0.5",
+    "husky": ">=6",
+    "lint-staged": ">=10",
+    "prettier": "^2.3.0",
+    "vite": "^2.3.5",
+    "vue": "^3.0.11"
+  },
+  "peerDependencies": {
+    "vue": "^3.0.11"
+  },
+  "lint-staged": {
+    "**/*.{js,css,md,vue,html}": "prettier --write"
+  }
+}
