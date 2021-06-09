@@ -1,15 +1,10 @@
-import {
-  NOOP,
-  DEFAULT_ERROR_MESSAGE,
-  hasOwn,
-  DEFAULT_ITEM_VALUE,
-} from './utils'
+import { DEFAULT_TEST_FUNCTION, DEFAULT_ERROR_MESSAGE, DEFAULT_ITEM_VALUE, hasOwn } from './utils'
 
 let _dirt = {}
 
 let _data = {}
 
-const defaultStaticValue = { data: _data, dirt: _dirt }
+const staticValue = { data: _data, dirt: _dirt }
 
 const setObjectValue = (root, key, value) => {
   if (!hasOwn(root, key)) root[key] = value
@@ -34,14 +29,13 @@ export const validateItem = (value, rules, staticValues, key) => {
   let result = { ...DEFAULT_ITEM_VALUE, dirty: isDirty }
 
   rules.forEach((rule, index) => {
-    const { $test = NOOP, $message = DEFAULT_ERROR_MESSAGE } = rule
+    const { $test = DEFAULT_TEST_FUNCTION, $message = DEFAULT_ERROR_MESSAGE } = rule
     let { errors, messages } = result
 
     const testValue = $test(value)
 
     if (!testValue) {
-      const testMessage =
-        typeof $message === 'function' ? $message(value) : $message
+      const testMessage = typeof $message === 'function' ? $message(value) : $message
       messages = [...messages, testMessage]
       errors = [...errors, { name: $test.name, index }]
     }
@@ -52,7 +46,9 @@ export const validateItem = (value, rules, staticValues, key) => {
   return result
 }
 
-export const validate = (value, rules, staticValues = defaultStaticValue) => {
+const resetItem = () => {}
+
+export const validate = (value, rules, staticValues = staticValue) => {
   const keys = Object.keys(value)
   const validations = {}
 

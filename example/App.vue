@@ -1,29 +1,31 @@
 <template>
   <div>
-    <label>First Name</label>
-    <input v-model="info.firstName" />
+    <div>
+      <label>First Name</label>
+      <input v-model="info.firstName" />
+    </div>
+    <div>
+      <label>Last Name</label>
+      <input v-model="info.lastName" />
+    </div>
+    <div>
+      <label>District</label>
+      <input v-model="info.address.district" />
+    </div>
+    <div>
+      <label>Street</label>
+      <input v-model="info.address.street" />
+    </div>
+    <div>
+      <button @click="test">Test</button>
+    </div>
+    <div>{{ result }}</div>
   </div>
-  <div>
-    <label>Last Name</label>
-    <input v-model="info.lastName" />
-  </div>
-  <div>
-    <label>District</label>
-    <input v-model="info.address.district" />
-  </div>
-  <div>
-    <label>Street</label>
-    <input v-model="info.address.street" />
-  </div>
-  <div>
-    <button @click="test">Test</button>
-  </div>
-  <div>{{ result }}</div>
 </template>
 
 <script>
 import { ref, reactive } from 'vue'
-import useValidate from 'vue-validate-lite'
+import useValidate from 'vue-tiny-validate'
 export default {
   name: 'App',
   setup() {
@@ -37,12 +39,8 @@ export default {
     })
 
     const rules = reactive({
-      firstName: [
-        { $test: value => value !== '', $message: 'This field is required' },
-      ],
-      lastName: [
-        { $test: value => value !== '', $message: 'This field is required' },
-      ],
+      firstName: [{ $test: value => value !== '', $message: 'This field is required' }],
+      lastName: [{ $test: value => value !== '', $message: 'This field is required' }],
       address: {
         district: [
           {

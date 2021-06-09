@@ -1,10 +1,8 @@
 {
   "name": "vue-tiny-validate",
   "version": "0.1.2",
-  "description": "Vue 3 Validate Composition",
-  "main": "dist/vue-tiny-validate.cjs.js",
-  "module": "dist/vue-tiny-validate.es.js",
-  "browser": "dist/vue-tiny-validate.umd.js",
+  "description": "Tiny (1KB gzipped) Vue 3 Validate Composition",
+  "main": "dist/vue-tiny-validate.es.js",
   "sideEffects": false,
   "author": "Anh Le<ledzanh@gmail.com>",
   "license": "MIT",
@@ -35,7 +33,6 @@
     "size": "size-limit",
     "release": "np"
   },
-  "dependencies": {},
   "devDependencies": {
     "@size-limit/preset-small-lib": "^4.11.0",
     "@vitejs/plugin-vue": "^1.2.3",
