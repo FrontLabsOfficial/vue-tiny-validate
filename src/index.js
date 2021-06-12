@@ -4,7 +4,7 @@ const TEST_FUNCTION = () => true;
 
 const ERROR_MESSAGE = '';
 
-const RESULT = { $dirty: false, $errors: [], $messages: [] };
+const RESULT = { $invalid: false, $errors: [], $messages: [] };
 
 const hasOwn = (obj, key) => typeof obj[key] !== 'undefined';
 
@@ -22,10 +22,11 @@ const useValidate = (data, rules) => {
   const getResult = (entry, dirt) => {
     const result = {
       ...RESULT,
-      $invalid: false,
+      $dirty: false,
     };
 
     const keys = Object.keys(entry);
+
     let testFns = [];
     let resetFns = [];
 
@@ -37,7 +38,7 @@ const useValidate = (data, rules) => {
       result.$messages = [...result.$messages, ...childResult.$messages];
 
       testFns = [...testFns, childResult.$test];
-      resetFns = [...resetFns, childResult.$test];
+      resetFns = [...resetFns, childResult.$reset];
     };
 
     keys.forEach(key => {

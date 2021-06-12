@@ -57,7 +57,7 @@ export default {
       },
     });
 
-    const { result, test, entry } = useValidate(info, rules);
+    const { result, test } = useValidate(info, rules);
 
     return { info, result, test };
   },
