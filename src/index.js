@@ -4,6 +4,8 @@ const TEST_FUNCTION = () => true;
 
 const ERROR_MESSAGE = '';
 
+const RESULT = { $dirty: false, $errors: [], $messages: [] };
+
 const hasOwn = (obj, key) => typeof obj[key] !== 'undefined';
 
 const isObject = obj => Object.prototype.toString.call(obj) === '[object Object]';
@@ -19,10 +21,8 @@ const useValidate = (data, rules) => {
 
   const getResult = (entry, dirt) => {
     const result = {
+      ...RESULT,
       $invalid: false,
-      $dirty: false,
-      $errors: [],
-      $messages: [],
     };
 
     const keys = Object.keys(entry);
@@ -85,9 +85,7 @@ const useValidate = (data, rules) => {
       const entryData = { data, rules, dirt, rawData, entry };
 
       entry[key] = {
-        $invalid: false,
-        $errors: [],
-        $messages: [],
+        ...RESULT,
         $reset: () => reset(entryData, key),
         $test: () => test(entryData, key),
       };

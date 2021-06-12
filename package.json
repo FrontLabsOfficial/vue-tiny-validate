@@ -1,7 +1,7 @@
 {
   "name": "vue-tiny-validate",
   "version": "0.1.2",
-  "description": "Tiny (1KB gzipped) Vue 3 Validate Composition",
+  "description": "Tiny (under 1KB gzipped) Vue 3 Validate Composition",
   "main": "dist/vue-tiny-validate.es.js",
   "sideEffects": false,
   "author": "Anh Le<ledzanh@gmail.com>",
@@ -27,8 +27,8 @@
     "clean": "rm -rf dist dist-example",
     "pretty": "prettier --write '**/*.{js,css,md,vue,html}'",
     "dev": "vite",
-    "build": "yarn clean && vite build --mode library && yarn size",
-    "build:example": "year clean && vite build --mode example",
+    "build": "yarn clean && yarn pretty && vite build --mode library && yarn size",
+    "build:example": "year clean && yarn pretty && vite build --mode example",
     "prepare": "husky install",
     "size": "size-limit",
     "release": "np"
