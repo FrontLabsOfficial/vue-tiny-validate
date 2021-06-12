@@ -1,40 +1,129 @@
-import { ref, computed, onBeforeMount } from 'vue'
-import { hasOwn } from './utils'
-import { validate } from './validate'
+import { ref, computed, reactive, watch, isRef } from 'vue';
+
+const TEST_FUNCTION = () => true;
+
+const ERROR_MESSAGE = '';
+
+const hasOwn = (obj, key) => typeof obj[key] !== 'undefined';
+
+const isObject = obj => Object.prototype.toString.call(obj) === '[object Object]';
 
 const useValidate = (data, rules) => {
-  const itemResults = ref({})
+  const dirt = reactive({});
 
-  const result = computed(() => {
-    let rootInvalid = false
-    let rootDirty = false
+  const rawData = reactive({});
 
-    const loopOverResult = result => {
-      Object.keys(result).forEach(key => {
-        const { invalid, dirty } = result[key]
+  const entry = reactive({});
 
-        if (!hasOwn(result[key], 'invalid')) return loopOverResult(result[key])
-        if (invalid) rootInvalid = true
-        if (dirty) rootDirty = true
-      })
-    }
+  const result = computed(() => getResult(entry, dirt));
 
-    loopOverResult(itemResults.value)
+  const getResult = (entry, dirt) => {
+    const result = {
+      $invalid: false,
+      $dirty: false,
+      $errors: [],
+      $messages: [],
+    };
 
-    return {
-      invalid: rootInvalid,
-      dirty: rootDirty,
-      ...itemResults.value,
-    }
-  })
+    const keys = Object.keys(entry);
+    let testFns = [];
+    let resetFns = [];
 
-  const test = () => {
-    itemResults.value = validate(data, rules)
-  }
+    const setOverallResult = (result, childResult) => {
+      if (!result.$dirty && childResult.$dirty) result.$dirty = true;
+      if (!result.$invalid && childResult.$invalid) result.$invalid = true;
 
-  onBeforeMount(test)
+      result.$errors = [...result.$errors, ...childResult.$errors];
+      result.$messages = [...result.$messages, ...childResult.$messages];
 
-  return { result, test }
-}
+      testFns = [...testFns, childResult.$test];
+      resetFns = [...resetFns, childResult.$test];
+    };
 
-export default useValidate
+    keys.forEach(key => {
+      if (isObject(entry[key]) && !hasOwn(entry[key], '$invalid')) {
+        const childResult = getResult(entry[key], dirt[key]);
+        result[key] = { ...childResult };
+
+        setOverallResult(result, childResult);
+      } else {
+        result[key] = { ...entry[key] };
+        result[key].$dirty = dirt[key];
+
+        setOverallResult(result, result[key]);
+      }
+    });
+
+    result.$test = () => {
+      testFns.forEach(fns => fns());
+    };
+
+    result.$reset = () => {
+      resetFns.forEach(fns => fns());
+    };
+
+    return result;
+  };
+
+  const initialize = (data, rules, dirt, rawData, entry) => {
+    const keys = Object.keys(data);
+
+    keys.forEach(key => {
+      if (isObject(data[key])) {
+        rawData[key] = {};
+        dirt[key] = reactive({});
+        entry[key] = reactive({});
+
+        const args = [data[key], rules[key], dirt[key], rawData[key], entry[key]];
+
+        return initialize(...args);
+      }
+
+      dirt[key] = false;
+      rawData[key] = data[key];
+
+      const entryData = { data, rules, dirt, rawData, entry };
+
+      entry[key] = {
+        $invalid: false,
+        $errors: [],
+        $messages: [],
+        $reset: () => reset(entryData, key),
+        $test: () => test(entryData, key),
+      };
+    });
+  };
+
+  const test = (entryData, key) => {
+    const { data, rules, dirt, rawData, entry } = entryData;
+
+    dirt[key] = dirt[key] || data[key] !== rawData[key];
+
+    let $errors = [];
+    let $messages = [];
+
+    rules[key].forEach((rule, index) => {
+      const { $test = DEFAULT_TEST_FUNCTION, $message = DEFAULT_ERROR_MESSAGE } = rule;
+      const testValue = $test(data[key]);
+
+      if (!testValue) {
+        const testMessage = typeof $message === 'function' ? $message(data) : $message;
+        $messages = [...$messages, testMessage];
+        $errors = [...$errors, { name: $test.name, index }];
+      }
+    });
+
+    entry[key] = { ...entry[key], $errors, $messages, $invalid: Boolean($errors.length) };
+  };
+
+  const reset = (entryData, key) => {
+    const { dirt } = entryData;
+    dirt[key] = false;
+  };
+
+  initialize(isRef(data) ? data.value : data, rules, dirt, rawData, entry);
+
+  return { result, test: result.value.$test, reset: result.value.$reset };
+};
+
+export default useValidate;

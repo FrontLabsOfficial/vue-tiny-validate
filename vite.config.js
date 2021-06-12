@@ -1,14 +1,14 @@
-import vue from '@vitejs/plugin-vue'
-import { resolve } from 'path'
+import vue from '@vitejs/plugin-vue';
+import { resolve } from 'path';
 
-const example = resolve(__dirname, 'example')
-const exampleOutDir = resolve(__dirname, 'dist-example')
-const library = resolve(__dirname, 'src')
-const libraryEntry = resolve(__dirname, 'src/index.js')
-const libraryOutDir = resolve(__dirname, 'dist')
+const example = resolve(__dirname, 'example');
+const exampleOutDir = resolve(__dirname, 'dist-example');
+const library = resolve(__dirname, 'src');
+const libraryEntry = resolve(__dirname, 'src/index.js');
+const libraryOutDir = resolve(__dirname, 'dist');
 
 export default ({ command, mode }) => {
-  const libraryName = 'vue-tiny-validate'
+  const libraryName = 'vue-tiny-validate';
 
   const exampleOption = {
     plugins: [vue()],
@@ -18,16 +18,16 @@ export default ({ command, mode }) => {
         [libraryName]: library,
       },
     },
-  }
+  };
 
   // dev mode
   if (command === 'serve') {
     return {
       ...exampleOption,
       server: {
-        port: 3333,
+        port: 3111,
       },
-    }
+    };
   }
 
   // otherwise, build mode
@@ -39,7 +39,7 @@ export default ({ command, mode }) => {
       build: {
         outDir: exampleOutDir,
       },
-    }
+    };
   }
 
   // build library
@@ -61,8 +61,8 @@ export default ({ command, mode }) => {
         },
         outDir: libraryOutDir,
       },
-    }
+    };
   }
 
-  return {}
-}
+  return {};
+};

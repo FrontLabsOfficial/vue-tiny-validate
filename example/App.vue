@@ -17,15 +17,15 @@
       <input v-model="info.address.street" />
     </div>
     <div>
-      <button @click="test">Test</button>
+      <button @click="result.address.street.$test()">Test</button>
     </div>
     <div>{{ result }}</div>
   </div>
 </template>
 
 <script>
-import { ref, reactive } from 'vue'
-import useValidate from 'vue-tiny-validate'
+import { ref, reactive } from 'vue';
+import useValidate from 'vue-tiny-validate';
 export default {
   name: 'App',
   setup() {
@@ -36,7 +36,7 @@ export default {
         district: 'Thanh Xuan',
         street: 'Quan Nhan',
       },
-    })
+    });
 
     const rules = reactive({
       firstName: [{ $test: value => value !== '', $message: 'This field is required' }],
@@ -55,13 +55,13 @@ export default {
           },
         ],
       },
-    })
+    });
 
-    const { result, test } = useValidate(info, rules)
+    const { result, test, entry } = useValidate(info, rules);
 
-    return { info, result, test }
+    return { info, result, test };
   },
-}
+};
 </script>
 <style>
 label {
