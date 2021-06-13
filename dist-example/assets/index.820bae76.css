@@ -1,0 +1,48 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 16px;
+}
+.form-item {
+  margin-bottom: 24px;
+  position: relative;
+}
+.form-item-message {
+  position: absolute;
+  bottom: -20px;
+  color: #c71585;
+  font-size: 14px;
+}
+.root-item {
+  font-family: monospace;
+  border: 1px solid #d3d3d3;
+  border-radius: 4px;
+}
+.json-view-item:not(.root-item) {
+  margin-left: 32px;
+}
+.validate-btn {
+  display: block;
+  font-size: 16px;
+  background: #d3d3d3;
+  border-radius: 4px;
+  border: 1px solid grey;
+  margin-bottom: 16px;
+  padding: 8px;
+}
+label {
+  display: block;
+  margin-bottom: 4px;
+}
+input {
+  display: inline-block;
+  width: 100%;
+  padding: 8px 16px;
+  margin: 0;
+  border-radius: 4px;
+  border: 1px solid #d3d3d3;
+}
+.input-error {
+  border-color: red;
+}

@@ -29,7 +29,7 @@
     "pretty": "prettier --write '**/*.{js,css,md,vue,html}'",
     "dev": "vite",
     "build": "yarn clean && yarn pretty && vite build --mode library && yarn type && yarn size",
-    "build:example": "year clean && yarn pretty && vite build --mode example",
+    "build:example": "yarn clean && yarn pretty && vite build --mode example",
     "prepare": "husky install",
     "size": "size-limit",
     "release": "np"
