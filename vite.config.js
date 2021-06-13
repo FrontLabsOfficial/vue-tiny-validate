@@ -4,7 +4,7 @@ import { resolve } from 'path';
 const example = resolve(__dirname, 'example');
 const exampleOutDir = resolve(__dirname, 'dist-example');
 const library = resolve(__dirname, 'src');
-const libraryEntry = resolve(__dirname, 'src/index.js');
+const libraryEntry = resolve(__dirname, 'src/index.ts');
 const libraryOutDir = resolve(__dirname, 'dist');
 
 export default ({ command, mode }) => {
@@ -13,11 +13,6 @@ export default ({ command, mode }) => {
   const exampleOption = {
     plugins: [vue()],
     root: example,
-    resolve: {
-      alias: {
-        [libraryName]: library,
-      },
-    },
   };
 
   // dev mode
@@ -45,6 +40,7 @@ export default ({ command, mode }) => {
   // build library
   if (mode === 'library') {
     return {
+      plugin: [vue()],
       build: {
         lib: {
           entry: libraryEntry,
