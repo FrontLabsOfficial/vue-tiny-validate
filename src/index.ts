@@ -1,4 +1,4 @@
-import { computed, reactive } from 'vue';
+import { computed, reactive, isRef } from 'vue';
 import { TEST_FUNCTION, ERROR_MESSAGE, RESULT, hasOwn, isObject } from './helpers'
 import { Data, Rules, Rule, Dirt, Entry, UnknownObject, Result, InitializeArgs, EntryData, EntryItem, Error } from './types'
 
@@ -107,7 +107,7 @@ const useValidate = (data: Data, rules: Rules) => {
     dirt[key] = false;
   };
 
-  initialize(data, rules, dirt, rawData, entry);
+  initialize((isRef(data) ? data.value : data) as Data, rules, dirt, rawData, entry);
 
   return { result, test: result.value.$test, reset: result.value.$reset };
 };
