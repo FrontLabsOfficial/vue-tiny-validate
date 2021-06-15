@@ -1,16 +1,38 @@
-import { computed, reactive, isRef } from 'vue';
-import { TEST_FUNCTION, ERROR_MESSAGE, RESULT, hasOwn, isObject } from './helpers'
-import { Data, Rules, Rule, Dirt, Entry, UnknownObject, Result, InitializeArgs, EntryData, EntryItem, Error } from './types'
+import { computed, reactive, isRef, UnwrapRef, Ref } from 'vue';
+import {
+  TEST_FUNCTION,
+  ERROR_MESSAGE,
+  RESULT,
+  hasOwn,
+  isObject,
+} from './helpers';
+import {
+  Data,
+  Rules,
+  Rule,
+  Dirt,
+  Entries,
+  UnknownObject,
+  Result,
+  Args,
+  EntryData,
+  Entry,
+  Error,
+  UseValidate,
+} from './types';
 
-const useValidate = (data: Data, rules: Rules) => {
+const useValidate = (
+  data: UnwrapRef<Data> | Ref<Data>,
+  rules: UnwrapRef<Rules> | Ref<Rules>,
+): UseValidate => {
   const dirt = reactive<Dirt>({});
   const rawData = reactive<UnknownObject>({});
-  const entry = reactive<Entry>({});
-  const result = computed<Result>(() => getResult(entry, dirt));
+  const entries = reactive<Entries>({});
+  const result = computed<Result>(() => getResult(entries, dirt));
 
-  const getResult = (entry: Entry, dirt: Dirt): Result => {
+  const getResult = (entries: Entries, dirt: Dirt): Result => {
     const result: Result = { ...RESULT, $dirty: false };
-    const keys: Array<string> = Object.keys(entry);
+    const keys: Array<string> = Object.keys(entries);
 
     let testFns: Array<Function> = [];
     let resetFns: Array<Function> = [];
@@ -27,13 +49,16 @@ const useValidate = (data: Data, rules: Rules) => {
     };
 
     keys.forEach(key => {
-      if (isObject(entry[key]) && !hasOwn(entry[key], '$invalid')) {
-        const childResult = getResult(entry[key] as Entry, dirt[key] as Dirt);
+      if (isObject(entries[key]) && !hasOwn(entries[key], '$invalid')) {
+        const childResult = getResult(
+          entries[key] as Entries,
+          dirt[key] as Dirt,
+        );
         result[key] = { ...childResult };
 
         setOverallResult(result, childResult);
       } else {
-        result[key] = { ...entry[key] };
+        result[key] = { ...entries[key] };
         result[key].$dirty = dirt[key];
 
         setOverallResult(result, result[key]);
@@ -51,16 +76,28 @@ const useValidate = (data: Data, rules: Rules) => {
     return result;
   };
 
-  const initialize = (data: Data, rules: Rules, dirt: Dirt, rawData: UnknownObject, entry: Entry): void => {
+  const initialize = (
+    data: Data,
+    rules: Rules,
+    dirt: Dirt,
+    rawData: UnknownObject,
+    entries: Entries,
+  ): void => {
     const keys: Array<string> = Object.keys(data);
 
-    keys.forEach((key) => {
+    keys.forEach(key => {
       if (isObject(data[key])) {
         rawData[key] = {};
         dirt[key] = reactive({});
-        entry[key] = reactive({});
+        entries[key] = reactive({});
 
-        const args :InitializeArgs = [data[key], rules[key] as Rules, dirt[key] as Dirt, rawData[key], entry[key] as Entry];
+        const args: Args = [
+          data[key],
+          rules[key] as Rules,
+          dirt[key] as Dirt,
+          rawData[key],
+          entries[key] as Entries,
+        ];
 
         return initialize(...args);
       }
@@ -68,9 +105,9 @@ const useValidate = (data: Data, rules: Rules) => {
       dirt[key] = false;
       rawData[key] = data[key];
 
-      const entryData: EntryData = { data, rules, dirt, rawData, entry };
+      const entryData: EntryData = { data, rules, dirt, rawData, entries };
 
-      entry[key] = {
+      entries[key] = {
         ...RESULT,
         $reset: () => reset(entryData, key),
         $test: () => test(entryData, key),
@@ -79,27 +116,33 @@ const useValidate = (data: Data, rules: Rules) => {
   };
 
   const test = (entryData: EntryData, key: string): void => {
-    const { data, rules, dirt, rawData, entry } = entryData;
+    const { data, rules, dirt, rawData, entries } = entryData;
 
     dirt[key] = dirt[key] || data[key] !== rawData[key];
 
     let $errors: Array<Error> = [];
     let $messages: Array<string> = [];
 
-    const ruleItem = rules[key] as Array<Rule>
+    const ruleItem = rules[key] as Array<Rule>;
 
     ruleItem.forEach((rule, index) => {
       const { $test = TEST_FUNCTION, $message = ERROR_MESSAGE } = rule;
       const testValue = $test(data[key]);
 
       if (!testValue) {
-        const testMessage = typeof $message === 'function' ? $message(data[key]) : $message;
+        const testMessage =
+          typeof $message === 'function' ? $message(data[key]) : $message;
         $messages = [...$messages, testMessage];
         $errors = [...$errors, { name: $test.name, index }];
       }
     });
 
-    entry[key] = { ...entry[key], $errors, $messages, $invalid: Boolean($errors.length) } as EntryItem;
+    entries[key] = {
+      ...entries[key],
+      $errors,
+      $messages,
+      $invalid: Boolean($errors.length),
+    } as Entry;
   };
 
   const reset = (entryData: EntryData, key: string): void => {
@@ -107,7 +150,13 @@ const useValidate = (data: Data, rules: Rules) => {
     dirt[key] = false;
   };
 
-  initialize((isRef(data) ? data.value : data) as Data, rules, dirt, rawData, entry);
+  initialize(
+    (isRef(data) ? data.value : data) as Data,
+    (isRef(rules) ? rules.value : rules) as Rules,
+    dirt,
+    rawData,
+    entries,
+  );
 
   return { result, test: result.value.$test, reset: result.value.$reset };
 };

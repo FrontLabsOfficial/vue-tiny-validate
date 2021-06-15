@@ -1,15 +1,15 @@
 import vue from '@vitejs/plugin-vue';
 import { resolve } from 'path';
 
+const libraryName = 'vue-tiny-validate';
+
 const example = resolve(__dirname, 'example');
 const exampleOutDir = resolve(__dirname, 'dist-example');
 const library = resolve(__dirname, 'src');
-const libraryEntry = resolve(__dirname, 'src/index.ts');
+const libraryEntry = resolve(__dirname, `src/${libraryName}.ts`);
 const libraryOutDir = resolve(__dirname, 'dist');
 
 export default ({ command, mode }) => {
-  const libraryName = 'vue-tiny-validate';
-
   const exampleOption = {
     plugins: [vue()],
     root: example,

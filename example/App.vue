@@ -2,30 +2,53 @@
   <div class="form">
     <div class="form-item">
       <label>First Name</label>
-      <input v-model="info.firstName" :class="{ 'input-error': result.firstName.$invalid }" />
-      <div v-if="result.firstName.$invalid" class="form-item-message">{{ result.firstName.$messages }}</div>
+      <input
+        v-model="info.firstName"
+        :class="{ 'input-error': result.firstName.$invalid }"
+      />
+      <div v-if="result.firstName.$invalid" class="form-item-message">
+        {{ result.firstName.$messages }}
+      </div>
     </div>
     <div class="form-item">
       <label>Last Name</label>
-      <input v-model="info.lastName" :class="{ 'input-error': result.lastName.$invalid }" />
-      <div v-if="result.lastName.$invalid" class="form-item-message">{{ result.lastName.$messages }}</div>
+      <input
+        v-model="info.lastName"
+        :class="{ 'input-error': result.lastName.$invalid }"
+      />
+      <div v-if="result.lastName.$invalid" class="form-item-message">
+        {{ result.lastName.$messages }}
+      </div>
     </div>
     <div class="form-item">
       <label>District</label>
-      <input v-model="info.address.district" :class="{ 'input-error': result.address.district.$invalid }" />
+      <input
+        v-model="info.address.district"
+        :class="{ 'input-error': result.address.district.$invalid }"
+      />
       <div v-if="result.address.district.$invalid" class="form-item-message">
         {{ result.address.district.$messages }}
       </div>
     </div>
     <div class="form-item">
       <label>Street</label>
-      <input v-model="info.address.street" :class="{ 'input-error': result.address.street.$invalid }" />
-      <div v-if="result.address.street.$invalid" class="form-item-message">{{ result.address.street.$messages }}</div>
+      <input
+        v-model="info.address.street"
+        :class="{ 'input-error': result.address.street.$invalid }"
+      />
+      <div v-if="result.address.street.$invalid" class="form-item-message">
+        {{ result.address.street.$messages }}
+      </div>
     </div>
     <div class="form-item">
       <label>Number</label>
-      <input v-model="info.address.no" :class="{ 'input-error': result.address.no.$invalid }" />
-      <div v-if="result.address.no.$invalid" class="form-item-message">{{ result.address.no.$messages }}</div>
+      <input
+        v-model="info.address.no"
+        :class="{ 'input-error': result.address.no.$invalid }"
+      />
+      <div v-if="result.address.no.$invalid" class="form-item-message">
+        {{ result.address.no.$messages }}
+      </div>
     </div>
     <button class="validate-btn" @click="validate">Validate</button>
   </div>
@@ -35,9 +58,9 @@
 </template>
 
 <script lang="ts">
-import { ref, reactive, defineComponent } from 'vue';
+import { ref, reactive, defineComponent, computed } from 'vue';
 import { JsonTreeView } from 'json-tree-view-vue3';
-import useValidate from '../src';
+import useValidate from '../src/vue-tiny-validate';
 export default defineComponent({
   name: 'App',
   components: {
@@ -56,15 +79,17 @@ export default defineComponent({
 
     const required = (value: string): boolean => value !== '';
 
-    const atLeastTenChars = (value: string): boolean => String(value).length >= 10;
+    const atLeastTenChars = (value: string): boolean =>
+      String(value).length >= 10;
 
-    const isNumber = (value: string): boolean => value !== '' && !isNaN(Number(value));
+    const isNumber = (value: string): boolean =>
+      value !== '' && !isNaN(Number(value));
 
     const isNumberMessage = (value: string): string => {
       return `Input ${value} is not allowed. A number is required`;
     };
 
-    const rules = {
+    const rules = computed(() => ({
       firstName: [{ $test: required, $message: 'Input is required' }],
       lastName: [{ $test: required, $message: 'Input is required' }],
       address: {
@@ -78,7 +103,7 @@ export default defineComponent({
           { $test: isNumber, $message: isNumberMessage },
         ],
       },
-    };
+    }));
 
     const { result } = useValidate(info, rules);
 

@@ -1,8 +1,9 @@
 {
   "name": "vue-tiny-validate",
   "version": "0.1.4",
-  "description": "Tiny (under 1KB gzipped) Vue 3 Validate Composition",
-  "main": "dist/vue-tiny-validate.es.js",
+  "description": "Tiny (1KB gzipped) Vue 3 Validate Composition",
+  "main": "dist/vue-tiny-validate.cjs.js",
+  "module": "dist/vue-tiny-validate.es.js",
   "sideEffects": false,
   "author": "Anh Le<ledzanh@gmail.com>",
   "license": "MIT",
@@ -18,16 +19,17 @@
   },
   "files": [
     "dist/*.js",
-    "dist/*.ts"
+    "dist/vue-tiny-validate.d.ts"
   ],
+  "types": "dist/vue-tiny-validate.d.ts",
   "bugs": {
     "url": "https://github.com/FrontLabsOfficial/vue-tiny-validate/issues"
   },
   "homepage": "https://github.com/FrontLabsOfficial/vue-tiny-validate/tree/master#readme",
   "scripts": {
-    "type": "tsc src/index.ts --declaration --emitDeclarationOnly --skipLibCheck --outDir dist",
+    "type": "tsc src/*.ts --declaration --emitDeclarationOnly --esModuleInterop --skipLibCheck --outfile dist/vue-tiny-validate.d.ts",
     "clean": "rm -rf dist dist-example",
-    "pretty": "prettier --write '**/*.{js,css,md,vue,html}'",
+    "pretty": "prettier --write '**/*.{ts,css,md,vue,html}'",
     "dev": "vite",
     "build": "yarn clean && yarn pretty && vite build --mode library && yarn type && yarn size",
     "build:example": "yarn clean && yarn pretty && vite build --mode example",
@@ -54,6 +56,6 @@
     "vue": "^3.0.11"
   },
   "lint-staged": {
-    "**/*.{js,css,md,vue,html}": "prettier --write"
+    "**/*.{ts,css,md,vue,html}": "prettier --write"
   }
 }
