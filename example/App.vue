@@ -67,7 +67,7 @@ export default defineComponent({
     JsonTreeView,
   },
   setup() {
-    const info = reactive({
+    const info = ref({
       firstName: '',
       lastName: '',
       address: {
@@ -90,17 +90,27 @@ export default defineComponent({
     };
 
     const rules = computed(() => ({
-      firstName: [{ $test: required, $message: 'Input is required' }],
-      lastName: [{ $test: required, $message: 'Input is required' }],
+      firstName: [
+        { $test: required, $message: 'Input is required', $key: 'required' },
+      ],
+      lastName: [
+        { $test: required, $message: 'Input is required', $key: 'required' },
+      ],
       address: {
-        district: [{ $test: required, $message: 'Input is required' }],
+        district: [
+          { $test: required, $message: 'Input is required', $key: 'required' },
+        ],
         street: [
-          { $test: required, $message: 'Input is required' },
-          { $test: atLeastTenChars, $message: 'At least 10 chars' },
+          { $test: required, $message: 'Input is required', $key: 'required' },
+          {
+            $test: atLeastTenChars,
+            $message: 'At least 10 chars',
+            $key: 'atLeast10Char',
+          },
         ],
         no: [
-          { $test: required, $message: 'Input is required' },
-          { $test: isNumber, $message: isNumberMessage },
+          { $test: required, $message: 'Input is required', $key: 'required' },
+          { $test: isNumber, $message: isNumberMessage, $key: 'isNumber' },
         ],
       },
     }));

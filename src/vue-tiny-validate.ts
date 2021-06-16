@@ -1,4 +1,4 @@
-import { computed, reactive, isRef, UnwrapRef, Ref } from 'vue';
+import { computed, reactive, isRef, watch, UnwrapRef, Ref } from 'vue';
 import {
   TEST_FUNCTION,
   ERROR_MESSAGE,
@@ -15,7 +15,7 @@ import {
   UnknownObject,
   Result,
   Args,
-  EntryData,
+  ArgsObject,
   Entry,
   Error,
   UseValidate,
@@ -76,7 +76,7 @@ const useValidate = (
     return result;
   };
 
-  const initialize = (
+  const setDefaultValue = (
     data: Data,
     rules: Rules,
     dirt: Dirt,
@@ -99,13 +99,13 @@ const useValidate = (
           entries[key] as Entries,
         ];
 
-        return initialize(...args);
+        return setDefaultValue(...args);
       }
 
       dirt[key] = false;
       rawData[key] = data[key];
 
-      const entryData: EntryData = { data, rules, dirt, rawData, entries };
+      const entryData: ArgsObject = { data, rules, dirt, rawData, entries };
 
       entries[key] = {
         ...RESULT,
@@ -115,7 +115,7 @@ const useValidate = (
     });
   };
 
-  const test = (entryData: EntryData, key: string): void => {
+  const test = (entryData: ArgsObject, key: string): void => {
     const { data, rules, dirt, rawData, entries } = entryData;
 
     dirt[key] = dirt[key] || data[key] !== rawData[key];
@@ -125,15 +125,17 @@ const useValidate = (
 
     const ruleItem = rules[key] as Array<Rule>;
 
+    if (!ruleItem) return;
+
     ruleItem.forEach((rule, index) => {
-      const { $test = TEST_FUNCTION, $message = ERROR_MESSAGE } = rule;
+      const { $test = TEST_FUNCTION, $message = ERROR_MESSAGE, $key } = rule;
       const testValue = $test(data[key]);
 
       if (!testValue) {
         const testMessage =
           typeof $message === 'function' ? $message(data[key]) : $message;
         $messages = [...$messages, testMessage];
-        $errors = [...$errors, { name: $test.name, index }];
+        $errors = [...$errors, { name: $key }];
       }
     });
 
@@ -145,20 +147,30 @@ const useValidate = (
     } as Entry;
   };
 
-  const reset = (entryData: EntryData, key: string): void => {
+  const reset = (entryData: ArgsObject, key: string): void => {
     const { dirt } = entryData;
     dirt[key] = false;
   };
 
-  initialize(
-    (isRef(data) ? data.value : data) as Data,
-    (isRef(rules) ? rules.value : rules) as Rules,
-    dirt,
-    rawData,
-    entries,
-  );
+  const initialize = () => {
+    setDefaultValue(
+      (isRef(data) ? data.value : data) as Data,
+      (isRef(rules) ? rules.value : rules) as Rules,
+      dirt,
+      rawData,
+      entries,
+    );
+  };
+
+  initialize();
+
+  watch(data, initialize);
+
+  watch(rules, initialize);
 
   return { result, test: result.value.$test, reset: result.value.$reset };
 };
 
 export default useValidate;
+
+export * from './types';

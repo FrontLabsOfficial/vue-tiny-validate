@@ -5,7 +5,8 @@ export type UnknownObject = { [key: string]: any };
 export type Data = UnknownObject;
 export type Rule = {
   $test: (value: any) => boolean;
-  $message: string | ((value: any) => string);
+  $message?: string | ((value: any) => string);
+  $key: string;
 };
 
 export type Rules = {
@@ -18,7 +19,6 @@ export type Dirt = {
 
 export type Error = {
   name: string;
-  index: number;
 };
 
 export type Entry = {
@@ -35,7 +35,7 @@ export type Entries = {
 
 export type Args = [Data, Rules, Dirt, UnknownObject, Entries];
 
-export type EntryData = {
+export type ArgsObject = {
   data: Data;
   rules: Rules;
   dirt: Dirt;
