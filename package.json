@@ -1,6 +1,6 @@
 {
   "name": "vue-tiny-validate",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Tiny (1KB gzipped) Vue 3 Validate Composition",
   "main": "dist/vue-tiny-validate.cjs.js",
   "module": "dist/vue-tiny-validate.es.js",
