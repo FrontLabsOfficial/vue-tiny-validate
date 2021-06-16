@@ -127,7 +127,7 @@ const useValidate = (
 
     if (!ruleItem) return;
 
-    ruleItem.forEach((rule, index) => {
+    ruleItem.forEach(rule => {
       const { $test = TEST_FUNCTION, $message = ERROR_MESSAGE, $key } = rule;
       const testValue = $test(data[key]);
 
