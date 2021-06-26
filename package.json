@@ -43,6 +43,7 @@
     "@types/jest": "^26.0.23",
     "@vitejs/plugin-vue": "^1.2.3",
     "@vue/compiler-sfc": "^3.0.5",
+    "@windicss/plugin-scrollbar": "^1.2.3",
     "husky": ">=6",
     "jest": "^27.0.4",
     "json-tree-view-vue3": "^0.1.15",

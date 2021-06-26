@@ -1,0 +1,31 @@
+input,
+select,
+textarea {
+  @apply bg-white border px-3 py-2 leading-6 appearance-none mt-1 block w-full shadow-sm border-gray-300
+  rounded-md sm:text-sm focus:ring-blue-500 focus:border-blue-500;
+}
+
+select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-size: 1.5em 1.5em;
+
+  @apply bg-no-repeat pr-10;
+}
+
+button {
+  @apply inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white
+  bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500;
+}
+
+.form-item {
+  @apply relative;
+}
+
+.form-item--message {
+  @apply text-xs absolute mt-0.5 block text-red-600;
+}
+
+.form-input__error {
+  @apply border-red-500;
+}

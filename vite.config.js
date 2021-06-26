@@ -1,4 +1,6 @@
 import vue from '@vitejs/plugin-vue';
+import WindiCSS from 'vite-plugin-windicss';
+
 import { resolve } from 'path';
 
 const libraryName = 'vue-tiny-validate';
@@ -11,7 +13,7 @@ const libraryOutDir = resolve(__dirname, 'dist');
 
 export default ({ command, mode }) => {
   const exampleOption = {
-    plugins: [vue()],
+    plugins: [vue(), WindiCSS()],
     root: example,
   };
 
