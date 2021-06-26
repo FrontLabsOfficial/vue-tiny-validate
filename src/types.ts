@@ -19,6 +19,7 @@ export type Dirt = {
 
 export type Error = {
   name: string;
+  message?: string | null;
 };
 
 export type Entry = {

@@ -1,14 +1,6 @@
-export const TEST_FUNCTION = (): boolean => true;
+export const RESULT = { $invalid: false, $errors: [], $messages: [] };
 
-export const ERROR_MESSAGE: string = '';
-
-export const RESULT = {
-  $invalid: false,
-  $errors: [],
-  $messages: [],
-  $test: () => {},
-  $reset: () => {},
-};
+export const NOOP = () => {};
 
 export const hasOwn = (obj: { [key: string]: any }, key: string): boolean =>
   typeof obj[key] !== 'undefined';

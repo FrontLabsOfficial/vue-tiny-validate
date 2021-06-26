@@ -1,11 +1,5 @@
 import { computed, reactive, isRef, watch, UnwrapRef, Ref } from 'vue';
-import {
-  TEST_FUNCTION,
-  ERROR_MESSAGE,
-  RESULT,
-  hasOwn,
-  isObject,
-} from './helpers';
+import { RESULT, NOOP, hasOwn, isObject } from './helpers';
 import {
   Data,
   Rules,
@@ -31,7 +25,12 @@ const useValidate = (
   const result = computed<Result>(() => getResult(entries, dirt));
 
   const getResult = (entries: Entries, dirt: Dirt): Result => {
-    const result: Result = { ...RESULT, $dirty: false };
+    const result: Result = {
+      ...RESULT,
+      $dirty: false,
+      $test: NOOP,
+      $reset: NOOP,
+    };
     const keys: Array<string> = Object.keys(entries);
 
     let testFns: Array<Function> = [];
@@ -128,14 +127,15 @@ const useValidate = (
     if (!ruleItem) return;
 
     ruleItem.forEach(rule => {
-      const { $test = TEST_FUNCTION, $message = ERROR_MESSAGE, $key } = rule;
+      const { $test, $message = null, $key } = rule;
       const testValue = $test(data[key]);
 
       if (!testValue) {
         const testMessage =
           typeof $message === 'function' ? $message(data[key]) : $message;
-        $messages = [...$messages, testMessage];
-        $errors = [...$errors, { name: $key }];
+        $errors = [...$errors, { name: $key, message: testMessage }];
+
+        if (testMessage) $messages.push(testMessage);
       }
     });
 
@@ -148,8 +148,9 @@ const useValidate = (
   };
 
   const reset = (entryData: ArgsObject, key: string): void => {
-    const { dirt } = entryData;
+    const { dirt, entries } = entryData;
     dirt[key] = false;
+    entries[key] = { ...entries[key], ...RESULT } as Entry;
   };
 
   const initialize = () => {

@@ -1,6 +1,6 @@
 [
   {
-    "path": "dist/vue-tiny-validate.es.js",
+    "path": "dist/vue-tiny-validate.cjs.js",
     "limit": "2.5KB",
     "gzip": false
   }
