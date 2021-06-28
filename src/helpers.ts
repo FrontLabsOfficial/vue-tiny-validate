@@ -1,3 +1,5 @@
+import { reactive } from 'vue';
+
 export const RESULT = {
   $invalid: false,
   $errors: [],
@@ -6,6 +8,13 @@ export const RESULT = {
 };
 
 export const NOOP = () => {};
+
+export const OPTION = reactive({
+  auto: false,
+  lazy: false,
+  firstError: false,
+  touchOnTest: false,
+});
 
 export const hasOwn = (obj: { [key: string]: any }, key: string): boolean =>
   typeof obj[key] !== 'undefined';

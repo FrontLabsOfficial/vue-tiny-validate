@@ -2,7 +2,15 @@ import { ComputedRef } from 'vue';
 
 export type UnknownObject = { [key: string]: any };
 
+export type Option = {
+  auto?: boolean; // run test on any entry changes
+  lazy?: boolean; // run test only on already dirty entry
+  firstError?: boolean; // only return first error at each entry
+  touchOnTest?: boolean; // force entry dirty on testing
+};
+
 export type Data = UnknownObject;
+
 export type Rule = {
   $test: ((value: any) => boolean) | ((value: any) => Promise<boolean>);
   $message?: string | ((value: any) => string);

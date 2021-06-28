@@ -1,5 +1,5 @@
 import { computed, reactive, isRef, watch, UnwrapRef, Ref } from 'vue';
-import { RESULT, NOOP, hasOwn, isObject } from './helpers';
+import { RESULT, NOOP, OPTION, hasOwn, isObject } from './helpers';
 import {
   Data,
   Rules,
@@ -12,17 +12,24 @@ import {
   ArgsObject,
   Entry,
   Error,
+  Option,
   UseValidate,
 } from './types';
 
 const useValidate = (
-  data: UnwrapRef<Data> | Ref<Data>,
-  rules: UnwrapRef<Rules> | Ref<Rules>,
+  _data: UnwrapRef<Data> | Ref<Data>,
+  _rules: UnwrapRef<Rules> | Ref<Rules>,
+  _option: UnwrapRef<Option> | Ref<Option> = OPTION,
 ): UseValidate => {
   const dirt = reactive<Dirt>({});
   const rawData = reactive<UnknownObject>({});
   const entries = reactive<Entries>({});
+
   const result = computed<Result>(() => getResult(entries, dirt));
+  const option = computed(() => ({
+    ...OPTION,
+    ...(isRef(_option) ? _option.value : _option),
+  }));
 
   const getResult = (entries: Entries, dirt: Dirt): Result => {
     const result: Result = {
@@ -115,13 +122,23 @@ const useValidate = (
         $reset: () => reset(entryData, key),
         $test: () => test(entryData, key),
       };
+
+      if (option.value.auto) {
+        watch(
+          () => data[key],
+          () => (entries[key] as Entry).$test(),
+        );
+      }
     }
   };
 
   const test = async (entryData: ArgsObject, key: string): Promise<void> => {
     const { data, rules, dirt, rawData, entries } = entryData;
+    const { lazy, firstError, touchOnTest } = option.value;
 
-    dirt[key] = dirt[key] || data[key] !== rawData[key];
+    dirt[key] = touchOnTest || dirt[key] || data[key] !== rawData[key];
+
+    if (lazy && !dirt[key]) return;
 
     let $errors: Array<Error> = [];
     let $messages: Array<string> = [];
@@ -146,6 +163,8 @@ const useValidate = (
         $errors = [...$errors, { name: $key, message: testMessage }];
 
         if (testMessage) $messages.push(testMessage);
+
+        if (firstError) break;
       }
     }
 
@@ -165,8 +184,8 @@ const useValidate = (
 
   const initialize = () => {
     setDefaultValue(
-      (isRef(data) ? data.value : data) as Data,
-      (isRef(rules) ? rules.value : rules) as Rules,
+      (isRef(_data) ? _data.value : _data) as Data,
+      (isRef(_rules) ? _rules.value : _rules) as Rules,
       dirt,
       rawData,
       entries,
@@ -175,9 +194,11 @@ const useValidate = (
 
   initialize();
 
-  watch(data, initialize);
+  watch(_data, initialize);
 
-  watch(rules, initialize);
+  watch(_rules, initialize);
+
+  watch(_option, initialize);
 
   return { result, test: result.value.$test, reset: result.value.$reset };
 };
