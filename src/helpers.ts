@@ -1,4 +1,9 @@
-export const RESULT = { $invalid: false, $errors: [], $messages: [] };
+export const RESULT = {
+  $invalid: false,
+  $errors: [],
+  $messages: [],
+  $pending: false,
+};
 
 export const NOOP = () => {};
 

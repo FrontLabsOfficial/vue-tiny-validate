@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 md:px-5 md:py-10 md:container md:mx-auto">
+  <div class="p-4 space-y-4 md:px-5 md:py-10 md:container md:mx-auto">
     <div class="shadow overflow-hidden rounded">
       <div class="px-4 py-5 bg-white sm:p-6">
         <div class="grid grid-cols-6 gap-6">
@@ -174,10 +174,10 @@
               }"
             />
             <span
-              v-if="result.address.street.$invalid"
+              v-if="result.address.state.$invalid"
               class="form-item--message"
             >
-              {{ result.address.street.$messages[0] }}
+              {{ result.address.state.$messages[0] }}
             </span>
           </div>
 
@@ -207,18 +207,30 @@
         </div>
       </div>
       <div class="px-4 py-3 bg-gray-100 text-right sm:px-6 form-item">
-        <button class="text-blue-600 shadow-none" @click="result.$reset">
+        <button
+          class="base-button text-blue-600 !shadow-none"
+          @click="result.$reset"
+        >
           Reset
         </button>
         <button
           @click="result.$test"
-          class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-blue-500"
+          class="
+            base-button
+            text-white
+            bg-blue-600
+            hover:bg-blue-700
+            focus:ring-blue-500
+          "
         >
           Validate
         </button>
       </div>
     </div>
-    <div class="mt-4 text-center text-light-500 md:mt-5">
+    <div class="shadow bg-white rounded px-4 py-5">
+      <JsonTreeView :data="JSON.stringify(result)" :maxDepth="0" class="tree" />
+    </div>
+    <div class="text-center text-light-500 md:mt-5">
       made with
       <span class="text-yellow-300">♥</span>
       using
@@ -263,6 +275,24 @@ export default defineComponent({
       (value: string): boolean =>
         rgx.test(value);
 
+    const cityCheck = (value: string): Promise<boolean> => {
+      return new Promise(resolve => {
+        return setTimeout(() => {
+          resolve(true);
+        }, 2000);
+      });
+    };
+
+    const stateCheck = async (value: string): Promise<boolean> => {
+      const result: boolean = await new Promise(resolve =>
+        setTimeout(() => {
+          resolve(true);
+        }, 2000),
+      );
+
+      return result;
+    };
+
     const rules = computed(() => ({
       firstName: [
         { $test: required, $message: 'Field is required', $key: 'required' },
@@ -289,9 +319,15 @@ export default defineComponent({
         ],
         city: [
           { $test: required, $message: 'Field is required', $key: 'required' },
+          { $test: cityCheck, $message: 'City is not correct', $key: 'city' },
         ],
         state: [
           { $test: required, $message: 'Field is required', $key: 'required' },
+          {
+            $test: stateCheck,
+            $message: 'State is not correct',
+            $key: 'state',
+          },
         ],
         zip: [
           { $test: required, $message: 'Field is required', $key: 'required' },

@@ -4,7 +4,7 @@ export type UnknownObject = { [key: string]: any };
 
 export type Data = UnknownObject;
 export type Rule = {
-  $test: (value: any) => boolean;
+  $test: ((value: any) => boolean) | ((value: any) => Promise<boolean>);
   $message?: string | ((value: any) => string);
   $key: string;
 };
@@ -26,6 +26,7 @@ export type Entry = {
   $invalid: boolean;
   $errors: Array<Error>;
   $messages: Array<string>;
+  $pending: boolean;
   $test: () => void;
   $reset: () => void;
 };

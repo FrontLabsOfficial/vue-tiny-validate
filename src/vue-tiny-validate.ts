@@ -37,17 +37,21 @@ const useValidate = (
     let resetFns: Array<Function> = [];
 
     const setOverallResult = (result: Result, childResult: Result): void => {
-      if (!result.$dirty && childResult.$dirty) result.$dirty = true;
-      if (!result.$invalid && childResult.$invalid) result.$invalid = true;
+      const fields = [...Object.keys(RESULT), '$dirty'];
 
-      result.$errors = [...result.$errors, ...childResult.$errors];
-      result.$messages = [...result.$messages, ...childResult.$messages];
+      for (const field of fields) {
+        if (Array.isArray(result[field])) {
+          result[field] = [...result[field], ...childResult[field]];
+        } else {
+          if (!result[field] && childResult[field]) result[field] = true;
+        }
+      }
 
       testFns = [...testFns, childResult.$test];
       resetFns = [...resetFns, childResult.$reset];
     };
 
-    keys.forEach(key => {
+    for (const key of keys) {
       if (isObject(entries[key]) && !hasOwn(entries[key], '$invalid')) {
         const childResult = getResult(
           entries[key] as Entries,
@@ -62,14 +66,14 @@ const useValidate = (
 
         setOverallResult(result, result[key]);
       }
-    });
+    }
 
     result.$test = () => {
-      testFns.forEach(fns => fns());
+      testFns.forEach(fn => fn());
     };
 
     result.$reset = () => {
-      resetFns.forEach(fns => fns());
+      resetFns.forEach(fn => fn());
     };
 
     return result;
@@ -84,7 +88,7 @@ const useValidate = (
   ): void => {
     const keys: Array<string> = Object.keys(data);
 
-    keys.forEach(key => {
+    for (const key of keys) {
       if (isObject(data[key])) {
         rawData[key] = {};
         dirt[key] = reactive({});
@@ -111,10 +115,10 @@ const useValidate = (
         $reset: () => reset(entryData, key),
         $test: () => test(entryData, key),
       };
-    });
+    }
   };
 
-  const test = (entryData: ArgsObject, key: string): void => {
+  const test = async (entryData: ArgsObject, key: string): Promise<void> => {
     const { data, rules, dirt, rawData, entries } = entryData;
 
     dirt[key] = dirt[key] || data[key] !== rawData[key];
@@ -126,9 +130,15 @@ const useValidate = (
 
     if (!ruleItem) return;
 
-    ruleItem.forEach(rule => {
+    for (const rule of ruleItem) {
       const { $test, $message = null, $key } = rule;
-      const testValue = $test(data[key]);
+      let testValue = $test(data[key]);
+
+      if (testValue instanceof Promise) {
+        entries[key].$pending = true;
+        testValue = await testValue;
+        entries[key].$pending = false;
+      }
 
       if (!testValue) {
         const testMessage =
@@ -137,7 +147,7 @@ const useValidate = (
 
         if (testMessage) $messages.push(testMessage);
       }
-    });
+    }
 
     entries[key] = {
       ...entries[key],

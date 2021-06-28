@@ -13,7 +13,7 @@ select {
   @apply bg-no-repeat pr-10;
 }
 
-button {
+.base-button {
   @apply inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md
   focus:outline-none focus:ring-2 focus:ring-offset-2;
 }
@@ -32,4 +32,34 @@ button {
 
 .form-input__success {
   @apply border-green-500;
+}
+
+.tree * {
+  @apply justify-start text-base;
+}
+
+.tree .json-view-item:not(.root-item) {
+  @apply ml-8;
+}
+
+.tree .data-key,
+.tree .value-key {
+  @apply text-gray-700 outline-none ml-0 pl-0;
+}
+
+.tree .data-key:focus,
+.tree .value-key:focus {
+  @apply outline-none;
+}
+
+.tree .data-key:hover {
+  @apply bg-transparent;
+}
+
+.tree .chevron-arrow {
+  @apply hidden;
+}
+
+.tree .properties {
+  @apply text-xs rounded bg-blue-700 text-white px-2 py-0.5;
 }
