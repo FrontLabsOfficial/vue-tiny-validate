@@ -1,6 +1,7 @@
-import { computed, reactive, isRef, watch, UnwrapRef, Ref } from 'vue';
-import { RESULT, NOOP, OPTION, hasOwn, isObject } from './helpers';
+import { computed, reactive, watch, UnwrapRef, Ref } from 'vue';
+import { OPTION, ENTRY_PARAM, NOOP, hasOwn, isObject, unwrap } from './helpers';
 import {
+  Fns,
   Data,
   Rules,
   Rule,
@@ -26,25 +27,23 @@ const useValidate = (
   const entries = reactive<Entries>({});
 
   const result = computed<Result>(() => getResult(entries, dirt));
-  const option = computed(() => ({
-    ...OPTION,
-    ...(isRef(_option) ? _option.value : _option),
-  }));
+  const option = computed(() => ({ ...OPTION, ...unwrap(_option) }));
 
   const getResult = (entries: Entries, dirt: Dirt): Result => {
     const result: Result = {
-      ...RESULT,
+      ...ENTRY_PARAM,
       $dirty: false,
       $test: NOOP,
       $reset: NOOP,
+      $touch: NOOP,
     };
     const keys: Array<string> = Object.keys(entries);
 
-    let testFns: Array<Function> = [];
-    let resetFns: Array<Function> = [];
+    const fns: Fns = { $test: [], $reset: [], $touch: [] };
+    const fnsKeys = Object.keys(fns);
 
     const setOverallResult = (result: Result, childResult: Result): void => {
-      const fields = [...Object.keys(RESULT), '$dirty'];
+      const fields = [...Object.keys(ENTRY_PARAM), '$dirty'];
 
       for (const field of fields) {
         if (Array.isArray(result[field])) {
@@ -54,8 +53,9 @@ const useValidate = (
         }
       }
 
-      testFns = [...testFns, childResult.$test];
-      resetFns = [...resetFns, childResult.$reset];
+      for (const key of fnsKeys) {
+        fns[key].push(childResult[key]);
+      }
     };
 
     for (const key of keys) {
@@ -75,13 +75,11 @@ const useValidate = (
       }
     }
 
-    result.$test = () => {
-      testFns.forEach(fn => fn());
-    };
-
-    result.$reset = () => {
-      resetFns.forEach(fn => fn());
-    };
+    for (const key of fnsKeys) {
+      result[key] = () => {
+        fns[key].forEach((fn: Function) => fn());
+      };
+    }
 
     return result;
   };
@@ -118,16 +116,20 @@ const useValidate = (
       const entryData: ArgsObject = { data, rules, dirt, rawData, entries };
 
       entries[key] = {
-        ...RESULT,
+        ...ENTRY_PARAM,
         $reset: () => reset(entryData, key),
         $test: () => test(entryData, key),
+        $touch: () => touch(entryData, key),
       };
 
+      if (entries[key].$unwatch) {
+        (entries[key] as Entry).$unwatch!();
+      }
+
       if (option.value.auto) {
-        watch(
-          () => data[key],
-          () => (entries[key] as Entry).$test(),
-        );
+        Object.setPrototypeOf(entries[key], {
+          $unwatch: watch(() => data[key], (entries[key] as Entry).$test),
+        });
       }
     }
   };
@@ -179,13 +181,18 @@ const useValidate = (
   const reset = (entryData: ArgsObject, key: string): void => {
     const { dirt, entries } = entryData;
     dirt[key] = false;
-    entries[key] = { ...entries[key], ...RESULT } as Entry;
+    entries[key] = { ...entries[key], ...ENTRY_PARAM } as Entry;
+  };
+
+  const touch = (entryData: ArgsObject, key: string): void => {
+    const { dirt } = entryData;
+    dirt[key] = true;
   };
 
   const initialize = () => {
     setDefaultValue(
-      (isRef(_data) ? _data.value : _data) as Data,
-      (isRef(_rules) ? _rules.value : _rules) as Rules,
+      unwrap(_data) as Data,
+      unwrap(_rules) as Rules,
       dirt,
       rawData,
       entries,

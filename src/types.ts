@@ -2,6 +2,10 @@ import { ComputedRef } from 'vue';
 
 export type UnknownObject = { [key: string]: any };
 
+export type Fns = {
+  [key: string]: Array<Function>;
+};
+
 export type Option = {
   auto?: boolean; // run test on any entry changes
   lazy?: boolean; // run test only on already dirty entry
@@ -25,6 +29,12 @@ export type Dirt = {
   [key: string]: boolean | Dirt;
 };
 
+export type FnsMapItem = {
+  [key: string]: Array<Function>;
+};
+
+export type FnsMap = Array<FnsMapItem>;
+
 export type Error = {
   name: string;
   message?: string | null;
@@ -37,6 +47,8 @@ export type Entry = {
   $pending: boolean;
   $test: () => void;
   $reset: () => void;
+  $touch: () => void;
+  $unwatch?: () => void;
 };
 
 export type Entries = {
@@ -59,6 +71,7 @@ export type Result = {
   $messages: Array<string>;
   $test: () => void;
   $reset: () => void;
+  $touch: () => void;
   $dirty: boolean;
 
   [key: string]: any;
