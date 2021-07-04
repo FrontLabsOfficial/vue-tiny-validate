@@ -20,7 +20,8 @@ export const ENTRY_PARAM = {
 };
 
 export const OPTION = reactive({
-  auto: false,
+  autoTest: false,
+  autoTouch: false,
   lazy: false,
   firstError: false,
   touchOnTest: false,

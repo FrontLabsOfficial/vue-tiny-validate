@@ -7,10 +7,10 @@ export type Fns = {
 };
 
 export type Option = {
-  auto?: boolean; // run test on any entry changes
-  lazy?: boolean; // run test only on already dirty entry
-  firstError?: boolean; // only return first error at each entry
-  touchOnTest?: boolean; // force entry dirty on testing
+  auto?: boolean;
+  lazy?: boolean;
+  firstError?: boolean;
+  touchOnTest?: boolean;
 };
 
 export type Data = UnknownObject;
@@ -22,7 +22,7 @@ export type Rule = {
 };
 
 export type Rules = {
-  [key: string]: Array<Rule> | Rules;
+  [key: string]: Array<Rule> | Rule | Rules;
 };
 
 export type Dirt = {
@@ -74,6 +74,8 @@ export type Result = {
   $touch: () => void;
   $dirty: boolean;
 
+  // currently there's no good implementation to well support circular reference
+  // so left it any
   [key: string]: any;
 };
 

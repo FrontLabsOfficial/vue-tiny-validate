@@ -248,7 +248,8 @@
 <script lang="ts">
 import { ref, reactive, defineComponent, computed } from 'vue';
 import { JsonTreeView } from 'json-tree-view-vue3';
-import useValidate from '../../src/vue-tiny-validate';
+// @ts-ignore
+import useValidate from 'vue-tiny-validate';
 export default defineComponent({
   name: 'App',
   components: {
@@ -268,77 +269,77 @@ export default defineComponent({
       },
     });
 
-    const required = (value: string): boolean => value !== '';
+    const rules = computed(() => {
+      const requiredCheck = (value: string): boolean => value !== '';
 
-    const rgxValidate =
-      (rgx: RegExp) =>
-      (value: string): boolean =>
-        rgx.test(value);
+      const rgxCheck =
+        (rgx: RegExp) =>
+        (value: string): boolean =>
+          rgx.test(value);
 
-    const cityCheck = (value: string): Promise<boolean> => {
-      return new Promise(resolve => {
-        return setTimeout(() => {
-          resolve(true);
-        }, 2000);
-      });
-    };
+      const cityCheck = (value: string): Promise<boolean> => {
+        return new Promise(resolve => {
+          return setTimeout(() => {
+            resolve(true);
+          }, 2000);
+        });
+      };
 
-    const stateCheck = async (value: string): Promise<boolean> => {
-      const result: boolean = await new Promise(resolve =>
-        setTimeout(() => {
-          resolve(true);
-        }, 2000),
-      );
+      const stateCheck = async (value: string): Promise<boolean> => {
+        const result: boolean = await new Promise(resolve =>
+          setTimeout(() => {
+            resolve(true);
+          }, 2000),
+        );
 
-      return result;
-    };
+        return result;
+      };
 
-    const rules = computed(() => ({
-      firstName: [
-        { $test: required, $message: 'Field is required', $key: 'required' },
-      ],
-      lastName: [
-        { $test: required, $message: 'Field is required', $key: 'required' },
-      ],
-      email: [
-        { $test: required, $message: 'Field is required', $key: 'required' },
-        {
-          $test: rgxValidate(
-            /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
-          ),
-          $message: (value: string) => `Your email "${value}" is not correct`,
-          $key: 'email',
+      const required = {
+        $test: requiredCheck,
+        $message: 'Field is required',
+        $key: 'required',
+      };
+
+      const email = {
+        $test: rgxCheck(
+          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
+        ),
+        $message: (value: string) => `Your email "${value}" is not correct`,
+        $key: 'email',
+      };
+
+      const city = {
+        $test: cityCheck,
+        $message: 'City is not correct',
+        $key: 'city',
+      };
+
+      const state = {
+        $test: stateCheck,
+        $message: 'State is not correct',
+        $key: 'state',
+      };
+
+      const zip = {
+        $test: rgxCheck(/^[0-9]{5}(?:-[0-9]{4})?$/),
+        $message: 'ZIP code is not correct',
+        $key: 'zip',
+      };
+
+      return {
+        firstName: [required],
+        lastName: required,
+        email: [required, email],
+        address: {
+          country: required,
+          street: required,
+          city: [required, city],
+          state: [required, state],
+          zip: [required, zip],
         },
-      ],
-      address: {
-        country: [
-          { $test: required, $message: 'Field is required', $key: 'required' },
-        ],
-        street: [
-          { $test: required, $message: 'Field is required', $key: 'required' },
-        ],
-        city: [
-          { $test: required, $message: 'Field is required', $key: 'required' },
-          { $test: cityCheck, $message: 'City is not correct', $key: 'city' },
-        ],
-        state: [
-          { $test: required, $message: 'Field is required', $key: 'required' },
-          {
-            $test: stateCheck,
-            $message: 'State is not correct',
-            $key: 'state',
-          },
-        ],
-        zip: [
-          { $test: required, $message: 'Field is required', $key: 'required' },
-          {
-            $test: rgxValidate(/^[0-9]{5}(?:-[0-9]{4})?$/),
-            $message: 'ZIP code is not correct',
-            $key: 'zip',
-          },
-        ],
-      },
-    }));
+      };
+    });
 
     const { result } = useValidate(info, rules);
 

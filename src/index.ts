@@ -91,10 +91,10 @@ const useValidate = (
     rawData: UnknownObject,
     entries: Entries,
   ): void => {
-    const keys: Array<string> = Object.keys(data);
+    const keys: Array<string> = Object.keys(rules);
 
     for (const key of keys) {
-      if (isObject(data[key])) {
+      if (isObject(rules[key]) && !hasOwn(rules[key], '$test')) {
         rawData[key] = {};
         dirt[key] = reactive({});
         entries[key] = reactive({});
@@ -122,15 +122,15 @@ const useValidate = (
         $touch: () => touch(entryData, key),
       };
 
-      if (entries[key].$unwatch) {
-        (entries[key] as Entry).$unwatch!();
-      }
-
-      if (option.value.auto) {
-        Object.setPrototypeOf(entries[key], {
-          $unwatch: watch(() => data[key], (entries[key] as Entry).$test),
-        });
-      }
+      Object.setPrototypeOf(entries[key], {
+        $uw: watch(
+          () => data[key],
+          () => {
+            if (option.value.autoTest) (entries[key] as Entry).$test();
+            if (option.value.autoTouch) (entries[key] as Entry).$touch();
+          },
+        ),
+      });
     }
   };
 
@@ -145,9 +145,11 @@ const useValidate = (
     let $errors: Array<Error> = [];
     let $messages: Array<string> = [];
 
-    const ruleItem = rules[key] as Array<Rule>;
+    let ruleItem = rules[key];
 
     if (!ruleItem) return;
+
+    if (!Array.isArray(ruleItem)) ruleItem = [ruleItem] as Array<Rule>;
 
     for (const rule of ruleItem) {
       const { $test, $message = null, $key } = rule;
@@ -155,7 +157,11 @@ const useValidate = (
 
       if (testValue instanceof Promise) {
         entries[key].$pending = true;
-        testValue = await testValue;
+        try {
+          testValue = await testValue;
+        } catch (e) {
+          testValue = false;
+        }
         entries[key].$pending = false;
       }
 
@@ -179,14 +185,15 @@ const useValidate = (
   };
 
   const reset = (entryData: ArgsObject, key: string): void => {
-    const { dirt, entries } = entryData;
-    dirt[key] = false;
-    entries[key] = { ...entries[key], ...ENTRY_PARAM } as Entry;
+    entryData.dirt[key] = false;
+    entryData.entries[key] = {
+      ...entryData.entries[key],
+      ...ENTRY_PARAM,
+    } as Entry;
   };
 
   const touch = (entryData: ArgsObject, key: string): void => {
-    const { dirt } = entryData;
-    dirt[key] = true;
+    entryData.dirt[key] = true;
   };
 
   const initialize = () => {

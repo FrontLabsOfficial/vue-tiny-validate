@@ -8,13 +8,18 @@ const libraryName = 'vue-tiny-validate';
 const example = resolve(__dirname, 'example');
 const exampleOutDir = resolve(__dirname, 'dist-example');
 const library = resolve(__dirname, 'src');
-const libraryEntry = resolve(__dirname, `src/${libraryName}.ts`);
+const libraryEntry = resolve(__dirname, `src/index.ts`);
 const libraryOutDir = resolve(__dirname, 'dist');
 
 export default ({ command, mode }) => {
   const exampleOption = {
     plugins: [vue(), WindiCSS()],
     root: example,
+    resolve: {
+      alias: {
+        [libraryName]: library,
+      },
+    },
   };
 
   // dev mode
@@ -22,7 +27,7 @@ export default ({ command, mode }) => {
     return {
       ...exampleOption,
       server: {
-        port: 3111,
+        port: 3456,
       },
     };
   }
@@ -47,6 +52,7 @@ export default ({ command, mode }) => {
         lib: {
           entry: libraryEntry,
           name: libraryName,
+          fileName: 'index',
           formats: ['es', 'cjs', 'umd'],
         },
         rollupOptions: {

@@ -1,7 +1,7 @@
 [
   {
-    "path": "dist/vue-tiny-validate.cjs.js",
-    "limit": "2.5KB",
+    "path": "dist/index.cjs.js",
+    "limit": "3KB",
     "gzip": false
   }
 ]
