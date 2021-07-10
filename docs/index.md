@@ -25,3 +25,7 @@ That's why `vue-tiny-validate` was born.
 
 - This library is heavily inspired from [Vuelidate](https://github.com/vuelidate/vuelidate).
 - Created by [Anh Le](https://github.com/culee) from [ShopBase Front Team](https://github.com/FrontLabsOfficial).
+
+<a href="https://www.netlify.com" style="margin-top: 2rem; display: block;">
+  <img src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg" alt="Deploys by Netlify" />
+</a>
