@@ -29,14 +29,14 @@
   },
   "homepage": "https://github.com/FrontLabsOfficial/vue-tiny-validate/tree/master#readme",
   "scripts": {
-    "clean": "rm -rf dist dist-example",
+    "clean": "rm -rf dist dist-example docs/.vitepress/dist",
     "pretty": "prettier --write '**/*.{ts,js,css,md,vue,html}'",
     "type": "tsc src/*.ts --declaration --emitDeclarationOnly --esModuleInterop --skipLibCheck --outdir dist",
     "test": "jest",
     "dev": "vite",
     "dev:docs": "vitepress dev docs --port 4000",
     "build": "yarn clean && yarn pretty && vite build --mode library && yarn type && size-limit",
-    "build:docs": "vitepress build docs",
+    "build:docs": "yarn clean && vitepress build docs",
     "build:example": "yarn clean && yarn pretty && vite build --mode example",
     "release": "np"
   },
