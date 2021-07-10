@@ -1,4 +1,4 @@
-import { computed, reactive, watch, UnwrapRef, Ref } from 'vue';
+import { computed, reactive, watch, UnwrapRef, Ref, ComputedRef } from 'vue';
 import { OPTION, ENTRY_PARAM, NOOP, hasOwn, isObject, unwrap } from './helpers';
 import {
   Fns,
@@ -18,16 +18,16 @@ import {
 } from './types';
 
 const useValidate = (
-  _data: UnwrapRef<Data> | Ref<Data>,
-  _rules: UnwrapRef<Rules> | Ref<Rules>,
-  _option: UnwrapRef<Option> | Ref<Option> = OPTION,
+  _data: UnwrapRef<Data> | Ref<Data> | ComputedRef<Data>,
+  _rules: UnwrapRef<Rules> | Ref<Rules> | ComputedRef<Rules>,
+  _option: UnwrapRef<Option> | Ref<Option> | ComputedRef<Option> = OPTION,
 ): UseValidate => {
   const dirt = reactive<Dirt>({});
   const rawData = reactive<UnknownObject>({});
   const entries = reactive<Entries>({});
 
   const result = computed<Result>(() => getResult(entries, dirt));
-  const option = computed(() => ({ ...OPTION, ...unwrap(_option) }));
+  const option = computed<Option>(() => ({ ...OPTION, ...unwrap(_option) }));
 
   const getResult = (entries: Entries, dirt: Dirt): Result => {
     const result: Result = {
@@ -40,10 +40,10 @@ const useValidate = (
     const keys: Array<string> = Object.keys(entries);
 
     const fns: Fns = { $test: [], $reset: [], $touch: [] };
-    const fnsKeys = Object.keys(fns);
+    const fnsKeys: Array<string> = Object.keys(fns);
 
     const setOverallResult = (result: Result, childResult: Result): void => {
-      const fields = [...Object.keys(ENTRY_PARAM), '$dirty'];
+      const fields: Array<string> = [...Object.keys(ENTRY_PARAM), '$dirty'];
 
       for (const field of fields) {
         if (Array.isArray(result[field])) {
@@ -145,15 +145,15 @@ const useValidate = (
     let $errors: Array<Error> = [];
     let $messages: Array<string> = [];
 
-    let ruleItem = rules[key];
+    let ruleItem = rules[key] as Rule | Array<Rule>;
 
     if (!ruleItem) return;
 
-    if (!Array.isArray(ruleItem)) ruleItem = [ruleItem] as Array<Rule>;
+    if (!Array.isArray(ruleItem)) ruleItem = [ruleItem];
 
     for (const rule of ruleItem) {
       const { $test, $message = null, $key } = rule;
-      let testValue = $test(data[key]);
+      let testValue: boolean | Promise<boolean> = $test(data[key]);
 
       if (testValue instanceof Promise) {
         entries[key].$pending = true;
@@ -167,7 +167,9 @@ const useValidate = (
 
       if (!testValue) {
         const testMessage =
-          typeof $message === 'function' ? $message(data[key]) : $message;
+          typeof $message === 'function'
+            ? $message(data[key])
+            : ($message as string);
         $errors = [...$errors, { name: $key, message: testMessage }];
 
         if (testMessage) $messages.push(testMessage);
@@ -196,7 +198,7 @@ const useValidate = (
     entryData.dirt[key] = true;
   };
 
-  const initialize = () => {
+  const initialize = (): void => {
     setDefaultValue(
       unwrap(_data) as Data,
       unwrap(_rules) as Rules,
@@ -214,7 +216,7 @@ const useValidate = (
 
   watch(_option, initialize);
 
-  return { result, test: result.value.$test, reset: result.value.$reset };
+  return { result };
 };
 
 export default useValidate;

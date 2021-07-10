@@ -7,7 +7,8 @@ export type Fns = {
 };
 
 export type Option = {
-  auto?: boolean;
+  autoTouch?: boolean;
+  autoTest?: boolean;
   lazy?: boolean;
   firstError?: boolean;
   touchOnTest?: boolean;
@@ -74,13 +75,10 @@ export type Result = {
   $touch: () => void;
   $dirty: boolean;
 
-  // currently there's no good implementation to well support circular reference
-  // so left it any
+  // currently there's no good implementation to well support circular reference, so left it any
   [key: string]: any;
 };
 
 export type UseValidate = {
   result: ComputedRef<Result>;
-  test: () => void;
-  reset: () => void;
 };
