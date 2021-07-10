@@ -1,0 +1,8 @@
+:root {
+  --c-brand: #2563eb;
+  --c-brand-light: #3b82f6;
+}
+
+.sidebar > .sidebar-links > .sidebar-link + .sidebar-link {
+  padding-top: 0;
+}

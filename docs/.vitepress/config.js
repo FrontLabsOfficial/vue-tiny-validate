@@ -17,19 +17,13 @@ module.exports = {
     docsBranch: 'main',
     prevLinks: true,
     nextLinks: true,
-    nav: [
-      {
-        text: 'Releases',
-        link: 'https://github.com/FrontLabsOfficial/vue-tiny-validate/releases',
-      },
+    sidebar: [
+      { text: 'Introduction', link: '/' },
+      { text: 'Getting Started', link: '/getting-started' },
+      { text: 'Usage', link: '/usage' },
+      { text: 'Examples', link: '/examples' },
+      { text: 'API', link: '/api' },
+      { text: 'Changelog', link: '/change-log' },
     ],
-    sidebar: {
-      '/': [
-        {
-          text: 'Quick Start',
-          children: [{ text: 'Getting Started', link: '/' }],
-        },
-      ],
-    },
   },
 };
