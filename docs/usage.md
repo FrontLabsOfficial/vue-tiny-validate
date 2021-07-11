@@ -295,7 +295,7 @@ const { result } = useValidate(data, rules, options);
 If you want the `$touch` method to be called along with the `$test` method, use the `autoTouch` option.
 
 ```js
-const options = reactive({ autoTouch: true });
+const options = reactive({ touchOnTest: true });
 
 const { result } = useValidate(data, rules, options);
 ```
