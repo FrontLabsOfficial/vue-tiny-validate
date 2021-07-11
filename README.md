@@ -1,6 +1,6 @@
-# Introduction
+## `vue-tiny-validate`
 
-### `vue-tiny-validate` Tiny (2.5KB minified) Vue Validate Composition
+Tiny (2.5KB minified) Vue Validate Composition
 
 ## Motivation
 
@@ -9,7 +9,7 @@ size of the external libraries. Over time, the Vue community has seen so many gr
 [Vuelidate](https://github.com/vuelidate/vuelidate) or [vee-validate](https://github.com/logaretm/vee-validate). They
 are all great.
 
-However, most (or maybe all) of them are over **10KB** that we think it's way too much for just a validation library.
+However, most (or maybe all) of them are over **3KB** that we think it's way too much for just a validation library.
 We want a **minimal** but **robust** and **fully supported** one.
 
 That's why `vue-tiny-validate` was born.
@@ -21,11 +21,15 @@ That's why `vue-tiny-validate` was born.
 - Flexible. Full control over everything.
 - Fully functional. Sync validation, async validation, etc supported.
 
+## Usage
+
+- See [docs](https://vue-tiny-validate.netlify.app) for more detail.
+
 ## About
 
 - This library is heavily inspired from [Vuelidate](https://github.com/vuelidate/vuelidate).
 - Created by [Anh Le](https://github.com/culee) from [ShopBase Front Team](https://github.com/FrontLabsOfficial).
 
-<a href="https://www.netlify.com" style="margin-top: 2rem; display: block;">
-  <img src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg" alt="Deploys by Netlify" />
-</a>
+## LICENSE
+
+- [MIT](https://github.com/FrontLabsOfficial/vue-tiny-validate/blob/master/LICENSE)

@@ -77,6 +77,13 @@ All the error messages go here.
 State to check whether property is **touched** or **dirtied**. It's **true** whenever property's value is **changed** or
 property is **touched** using `touch` method.
 
+### $pending
+
+- Type: `boolean`
+- Default: `false`
+
+It's **true** whenever a property is doing its async validation.
+
 ## Methods
 
 ```ts
@@ -92,18 +99,21 @@ type Result = {
 ### $test
 
 - Type: `function`
+- Default: `(value: any) => void`
 
 The `$test` method loops through **rule array** of each property and execute test based on each **rule item**.
 
 ### $reset
 
 - Type: `function`
+- Default: `() => void`
 
 The `$reset` method sets result of property to its default value.
 
 ### $touch
 
 - Type: `function`
+- Default: `() => void`
 
 The `$touch` method sets `dirty` result of property to **true**.
 
@@ -129,10 +139,16 @@ make the `$test` method to be executed on **every property changes**.
 
 ### autoTouch
 
+- Type: `boolean`
+- Default: `false`
+
 Same as the option right above. Set this option to **true** will make `$touch` method to be executed on **every property
 changes**.
 
 ### lazy
+
+- Type: `boolean`
+- Default: `false`
 
 As said above, `$test` method will execute all rule item of each property. It's gonna be **redudant** if `$test` method
 tests **undirtied** or **untouched** property because it haven't updated yet. Set this option to **true** will make
@@ -140,10 +156,16 @@ tests **undirtied** or **untouched** property because it haven't updated yet. Se
 
 ### firstError
 
+- Type: `boolean`
+- Default: `false`
+
 In some cases, you only need to get the first error of your validation. Set this option to **true** will make `$test`
 method stop after getting its first error.
 
 ### touchOnTest
+
+- Type: `boolean`
+- Default: `false`
 
 By default, when execute `$test` method, only changed property will be considered as **dirtied** or **touched**. Set
 this option to **true** will make `$touch` method to be executed along with `$test` method.

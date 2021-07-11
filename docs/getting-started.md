@@ -15,7 +15,7 @@ yarn add vue-tiny-validate
 ## Quickstart
 
 ::: warning
-`vue-tiny-validate` is primarily written for Vue 3. In order to use with Vue 2, you need to install
+`vue-tiny-validate` is primarily written for **Vue 3**. In order to use with **Vue 2**, you need to install
 `@vue/composition-api`.
 :::
 
@@ -49,10 +49,9 @@ export default {
 }
 ```
 
-As you can see above, the `useValidate` composition requires 2 parameters `data` and `rules`. They are all
-**reactive objects** with **same structure** that both have the `name` property at the same level.
+As you can see above, the `useValidate` composition requires 2 parameters `data` and `rules`.
 
-The returned value `result` has everything you need to **get** and **set** the validation. In this example, we use the
+The `result` value has everything you need to **get** and **set** the validation. In this example, we use the
 `$test` function to validate and the `$invalid` property to get validation state.
 
-Head to [Usage](/usage) to see more detailed usage.
+Head to [Usage](/usage) to see more detailed instructions.

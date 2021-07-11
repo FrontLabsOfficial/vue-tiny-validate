@@ -49,7 +49,7 @@ export type Entry = {
   $test: () => void;
   $reset: () => void;
   $touch: () => void;
-  $unwatch?: () => void;
+  $uw?: () => void;
 };
 
 export type Entries = {
