@@ -77,6 +77,9 @@ const useValidate = (
 
     for (const key of fnsKeys) {
       result[key] = () => {
+        if (key === '$test')
+          return Promise.all(fns[key].map((fn: Function) => fn()));
+
         fns[key].forEach((fn: Function) => fn());
       };
     }
@@ -117,7 +120,7 @@ const useValidate = (
         entries[key] = {
           ...ENTRY_PARAM,
           $reset: () => reset(entryData, key),
-          $test: () => test(entryData, key),
+          $test: async () => await test(entryData, key),
           $touch: () => touch(entryData, key),
         };
 

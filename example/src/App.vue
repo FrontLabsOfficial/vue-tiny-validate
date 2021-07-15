@@ -255,14 +255,11 @@
         </div>
       </div>
       <div class="px-4 py-3 bg-gray-100 text-right sm:px-6 form-item">
-        <button
-          class="base-button text-blue-600 !shadow-none"
-          @click="result.$reset"
-        >
+        <button class="base-button text-blue-600 !shadow-none" @click="reset">
           Reset
         </button>
         <button
-          @click="result.$test"
+          @click="validate"
           class="
             base-button
             text-white
@@ -408,7 +405,17 @@ export default defineComponent({
 
     const { result } = useValidate(info, rules);
 
-    return { info, result };
+    const validate = async () => {
+      await result.value.$test();
+      console.log('Validated!');
+    };
+
+    const reset = () => {
+      result.value.$reset();
+      console.log('Resetted!');
+    };
+
+    return { info, result, validate, reset };
   },
 });
 </script>
