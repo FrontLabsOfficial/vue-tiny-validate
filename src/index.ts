@@ -213,8 +213,6 @@ const useValidate = (
 
   initialize();
 
-  watch(_data, initialize);
-
   watch(_rules, initialize);
 
   watch(_option, initialize);
