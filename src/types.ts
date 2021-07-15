@@ -17,7 +17,9 @@ export type Option = {
 export type Data = UnknownObject;
 
 export type Rule = {
-  $test: ((value: any) => boolean) | ((value: any) => Promise<boolean>);
+  $test:
+    | ((value: any, data: Data) => boolean)
+    | ((value: any, data: Data) => Promise<boolean>);
   $message?: string | ((value: any) => string);
   $key: string;
 };

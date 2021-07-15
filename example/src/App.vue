@@ -204,6 +204,54 @@
               {{ result.address.zip.$messages[0] }}
             </span>
           </div>
+
+          <div class="col-span-6 sm:col-span-3 form-item">
+            <label
+              for="password01"
+              class="block text-sm font-medium text-gray-700"
+            >
+              Password
+            </label>
+            <input
+              type="text"
+              name="password01"
+              id="password01"
+              autocomplete="given-name"
+              v-model="info.password.p1"
+              :class="{
+                'form-input__error': result.password.p1.$invalid,
+                'form-input__success':
+                  !result.password.p1.$invalid && result.password.p1.$dirty,
+              }"
+            />
+            <span v-if="result.password.p1.$invalid" class="form-item--message">
+              {{ result.password.p1.$messages[0] }}
+            </span>
+          </div>
+
+          <div class="col-span-6 sm:col-span-3 form-item">
+            <label
+              for="password02"
+              class="block text-sm font-medium text-gray-700"
+            >
+              Retype password
+            </label>
+            <input
+              type="text"
+              name="password02"
+              id="password02"
+              autocomplete="family-name"
+              v-model="info.password.p2"
+              :class="{
+                'form-input__error': result.password.p2.$invalid,
+                'form-input__success':
+                  !result.password.p2.$invalid && result.password.p2.$dirty,
+              }"
+            />
+            <span v-if="result.password.p2.$invalid" class="form-item--message">
+              {{ result.password.p2.$messages[0] }}
+            </span>
+          </div>
         </div>
       </div>
       <div class="px-4 py-3 bg-gray-100 text-right sm:px-6 form-item">
@@ -256,7 +304,7 @@ export default defineComponent({
     JsonTreeView,
   },
   setup() {
-    const info = ref({
+    const defaultInfo = {
       firstName: '',
       lastName: '',
       email: '',
@@ -267,7 +315,13 @@ export default defineComponent({
         state: '',
         zip: '',
       },
-    });
+      password: {
+        p1: '',
+        p2: '',
+      },
+    };
+
+    const info = ref(Object.assign({}, defaultInfo));
 
     const rules = computed(() => {
       const requiredCheck = (value: string): boolean => value !== '';
@@ -327,6 +381,13 @@ export default defineComponent({
         $key: 'zip',
       };
 
+      const same = {
+        $test: (value: any, globalValue: any) =>
+          value === globalValue.password.p1,
+        $message: 'Password is not the same',
+        $key: 'same',
+      };
+
       return {
         firstName: [required],
         lastName: required,
@@ -337,6 +398,10 @@ export default defineComponent({
           city: [required, city],
           state: [required, state],
           zip: [required, zip],
+        },
+        password: {
+          p1: required,
+          p2: [required, same],
         },
       };
     });

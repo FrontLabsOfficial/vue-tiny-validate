@@ -107,30 +107,30 @@ const useValidate = (
           entries[key] as Entries,
         ];
 
-        return setDefaultValue(...args);
+        setDefaultValue(...args);
+      } else {
+        dirt[key] = false;
+        rawData[key] = data[key];
+
+        const entryData: ArgsObject = { data, rules, dirt, rawData, entries };
+
+        entries[key] = {
+          ...ENTRY_PARAM,
+          $reset: () => reset(entryData, key),
+          $test: () => test(entryData, key),
+          $touch: () => touch(entryData, key),
+        };
+
+        Object.setPrototypeOf(entries[key], {
+          $uw: watch(
+            () => data[key],
+            () => {
+              if (option.value.autoTest) (entries[key] as Entry).$test();
+              if (option.value.autoTouch) (entries[key] as Entry).$touch();
+            },
+          ),
+        });
       }
-
-      dirt[key] = false;
-      rawData[key] = data[key];
-
-      const entryData: ArgsObject = { data, rules, dirt, rawData, entries };
-
-      entries[key] = {
-        ...ENTRY_PARAM,
-        $reset: () => reset(entryData, key),
-        $test: () => test(entryData, key),
-        $touch: () => touch(entryData, key),
-      };
-
-      Object.setPrototypeOf(entries[key], {
-        $uw: watch(
-          () => data[key],
-          () => {
-            if (option.value.autoTest) (entries[key] as Entry).$test();
-            if (option.value.autoTouch) (entries[key] as Entry).$touch();
-          },
-        ),
-      });
     }
   };
 
@@ -153,7 +153,10 @@ const useValidate = (
 
     for (const rule of ruleItem) {
       const { $test, $message = null, $key } = rule;
-      let testValue: boolean | Promise<boolean> = $test(data[key]);
+      let testValue: boolean | Promise<boolean> = $test(
+        data[key],
+        unwrap(_data),
+      );
 
       if (testValue instanceof Promise) {
         entries[key].$pending = true;
