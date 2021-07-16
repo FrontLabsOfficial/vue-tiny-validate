@@ -347,42 +347,42 @@ export default defineComponent({
       };
 
       const required = {
-        $test: requiredCheck,
-        $message: 'Field is required',
-        $key: 'required',
+        test: requiredCheck,
+        message: 'Field is required',
+        name: 'required',
       };
 
       const email = {
-        $test: rgxCheck(
+        test: rgxCheck(
           /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
         ),
-        $message: (value: string) => `Your email "${value}" is not correct`,
-        $key: 'email',
+        message: (value: string) => `Your email "${value}" is not correct`,
+        name: 'email',
       };
 
       const city = {
-        $test: cityCheck,
-        $message: 'City is not correct',
-        $key: 'city',
+        test: cityCheck,
+        message: 'City is not correct',
+        name: 'city',
       };
 
       const state = {
-        $test: stateCheck,
-        $message: 'State is not correct',
-        $key: 'state',
+        test: stateCheck,
+        message: 'State is not correct',
+        name: 'state',
       };
 
       const zip = {
-        $test: rgxCheck(/^[0-9]{5}(?:-[0-9]{4})?$/),
-        $message: 'ZIP code is not correct',
-        $key: 'zip',
+        test: rgxCheck(/^[0-9]{5}(?:-[0-9]{4})?$/),
+        message: 'ZIP code is not correct',
+        name: 'zip',
       };
 
       const same = {
-        $test: (value: any, globalValue: any) =>
+        test: (value: any, globalValue: any) =>
           value === globalValue.password.p1,
-        $message: 'Password is not the same',
-        $key: 'same',
+        message: 'Password is not the same',
+        name: 'same',
       };
 
       return {

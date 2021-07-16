@@ -97,7 +97,7 @@ const useValidate = (
     const keys: Array<string> = Object.keys(rules);
 
     for (const key of keys) {
-      if (isObject(rules[key]) && !hasOwn(rules[key], '$test')) {
+      if (isObject(rules[key]) && !hasOwn(rules[key], 'test')) {
         rawData[key] = {};
         dirt[key] = reactive({});
         entries[key] = reactive({});
@@ -155,8 +155,8 @@ const useValidate = (
     if (!Array.isArray(ruleItem)) ruleItem = [ruleItem];
 
     for (const rule of ruleItem) {
-      const { $test, $message = null, $key } = rule;
-      let testValue: boolean | Promise<boolean> = $test(
+      const { test, message = null, name } = rule;
+      let testValue: boolean | Promise<boolean> = test(
         data[key],
         unwrap(_data),
       );
@@ -173,10 +173,10 @@ const useValidate = (
 
       if (!testValue) {
         const testMessage =
-          typeof $message === 'function'
-            ? $message(data[key])
-            : ($message as string);
-        $errors = [...$errors, { name: $key, message: testMessage }];
+          typeof message === 'function'
+            ? message(data[key])
+            : (message as string);
+        $errors = [...$errors, { name, message: testMessage }];
 
         if (testMessage) $messages.push(testMessage);
 

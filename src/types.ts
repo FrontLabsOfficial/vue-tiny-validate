@@ -17,11 +17,11 @@ export type Option = {
 export type Data = UnknownObject;
 
 export type Rule = {
-  $test:
+  test:
     | ((value: any, data: Data) => boolean)
     | ((value: any, data: Data) => Promise<boolean>);
-  $message?: string | ((value: any) => string);
-  $key: string;
+  message?: string | ((value: any) => string);
+  name: string;
 };
 
 export type Rules = {

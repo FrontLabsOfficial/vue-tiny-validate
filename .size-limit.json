@@ -1,6 +1,6 @@
 [
   {
-    "path": "dist/index.cjs.js",
+    "path": "dist/index.umd.js",
     "limit": "3KB",
     "gzip": false
   }
