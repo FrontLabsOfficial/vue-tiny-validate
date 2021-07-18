@@ -9,7 +9,7 @@ size of the external libraries. Over time, the Vue community has seen so many gr
 [Vuelidate](https://github.com/vuelidate/vuelidate) or [vee-validate](https://github.com/logaretm/vee-validate). They
 are all great.
 
-However, most (or maybe all) of them are over **3KB** that we think it's way too much for just a validation library.
+However, most (or maybe all) of them are over **10KB** that we think it's way too much for just a validation library.
 We want a **minimal** but **robust** and **fully supported** one.
 
 That's why `vue-tiny-validate` was born.
@@ -28,7 +28,7 @@ That's why `vue-tiny-validate` was born.
 ## About
 
 - This library is heavily inspired from [Vuelidate](https://github.com/vuelidate/vuelidate).
-- Created by [Anh Le](https://github.com/culee) from [ShopBase Front Team](https://github.com/FrontLabsOfficial).
+- Created by [Anh Le](https://github.com/culee).
 
 ## LICENSE
 
