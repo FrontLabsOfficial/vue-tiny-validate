@@ -1,4 +1,4 @@
-import { ComputedRef } from 'vue';
+import { ComputedRef } from 'vue-demi';
 
 export type UnknownObject = { [key: string]: any };
 

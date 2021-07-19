@@ -1,4 +1,4 @@
-import { reactive, isRef } from 'vue';
+import { reactive, isRef } from 'vue-demi';
 import { UnknownObject } from './types';
 
 export const hasOwn = (obj: UnknownObject, key: string): boolean =>

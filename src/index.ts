@@ -1,4 +1,11 @@
-import { computed, reactive, watch, UnwrapRef, Ref, ComputedRef } from 'vue';
+import {
+  computed,
+  reactive,
+  watch,
+  UnwrapRef,
+  Ref,
+  ComputedRef,
+} from 'vue-demi';
 import { OPTION, ENTRY_PARAM, NOOP, hasOwn, isObject, unwrap } from './helpers';
 import {
   Fns,
