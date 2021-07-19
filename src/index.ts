@@ -27,7 +27,7 @@ import {
 const useValidate = (
   _data: UnwrapRef<Data> | Ref<Data> | ComputedRef<Data>,
   _rules: UnwrapRef<Rules> | Ref<Rules> | ComputedRef<Rules>,
-  _option: UnwrapRef<Option> | Ref<Option> | ComputedRef<Option> = OPTION,
+  _option: UnwrapRef<Option> | Ref<Option> | ComputedRef<Option> = reactive({}),
 ): UseValidate => {
   const dirt = reactive<Dirt>({});
   const rawData = reactive<UnknownObject>({});
@@ -226,6 +226,26 @@ const useValidate = (
   watch(_rules, initialize);
 
   watch(_option, initialize);
+
+  // for development purpose
+  // @ts-ignore
+  if (import.meta.env.MODE === 'development') {
+    const watchOps = { immediate: true, deep: true };
+
+    const watchCb =
+      (label: string) =>
+      (value: any): void => {
+        console.log('\x1b[32m%s\x1b[0m', label, value);
+      };
+
+    watch(result, watchCb('RESULT'));
+
+    watch(_data, watchCb('DATA UPDATED'), watchOps);
+
+    watch(_rules, watchCb('RULES UPDATED'), watchOps);
+
+    watch(_option, watchCb('OPTIONS UPDATED'), watchOps);
+  }
 
   return { result };
 };
