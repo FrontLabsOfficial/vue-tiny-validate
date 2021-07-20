@@ -33,8 +33,16 @@ const useValidate = (
   const rawData = reactive<UnknownObject>({});
   const entries = reactive<Entries>({});
 
-  const result = computed<Result>(() => getResult(entries, dirt));
   const option = computed<Option>(() => ({ ...OPTION, ...unwrap(_option) }));
+
+  const result = computed<Result | any>(() => {
+    const rawResult: Result = getResult(entries, dirt);
+    const { transform } = option.value;
+
+    return transform
+      ? transform(rawResult, unwrap(_data), unwrap(_rules), unwrap(_option))
+      : rawResult;
+  });
 
   const getResult = (entries: Entries, dirt: Dirt): Result => {
     const result: Result = {
@@ -166,6 +174,8 @@ const useValidate = (
       let testValue: boolean | Promise<boolean> = test(
         data[key],
         unwrap(_data),
+        unwrap(_rules),
+        unwrap(_option),
       );
 
       if (testValue instanceof Promise) {
@@ -200,9 +210,11 @@ const useValidate = (
   };
 
   const reset = (entryData: ArgsObject, key: string): void => {
-    entryData.dirt[key] = false;
-    entryData.entries[key] = {
-      ...entryData.entries[key],
+    const { dirt, entries } = entryData;
+
+    dirt[key] = false;
+    entries[key] = {
+      ...entries[key],
       ...ENTRY_PARAM,
     } as Entry;
   };

@@ -1,4 +1,5 @@
 import { ComputedRef } from 'vue-demi';
+import { Options } from 'prettier';
 
 export type UnknownObject = { [key: string]: any };
 
@@ -12,14 +13,32 @@ export type Option = {
   lazy?: boolean;
   firstError?: boolean;
   touchOnTest?: boolean;
+  transform?:
+    | ((
+        value: any,
+        data?: Data,
+        rules?: Rules,
+        option?: Option,
+      ) => Result | any)
+    | ((
+        value: any,
+        data?: Data,
+        rules?: Rules,
+        option?: Option,
+      ) => Promise<Result | any>);
 };
 
 export type Data = UnknownObject;
 
 export type Rule = {
   test:
-    | ((value: any, data: Data) => boolean)
-    | ((value: any, data: Data) => Promise<boolean>);
+    | ((value: any, data?: Data, rules?: Rules, option?: Option) => boolean)
+    | ((
+        value: any,
+        data?: Data,
+        rules?: Rules,
+        option?: Option,
+      ) => Promise<boolean>);
   message?: string | ((value: any) => string);
   name: string;
 };
@@ -82,5 +101,5 @@ export type Result = {
 };
 
 export type UseValidate = {
-  result: ComputedRef<Result>;
+  result: ComputedRef<Result | any>;
 };

@@ -25,4 +25,5 @@ export const OPTION = reactive({
   lazy: false,
   firstError: false,
   touchOnTest: false,
+  transform: (value: any) => value,
 });

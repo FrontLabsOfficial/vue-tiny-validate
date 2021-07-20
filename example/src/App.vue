@@ -234,7 +234,7 @@
               for="password02"
               class="block text-sm font-medium text-gray-700"
             >
-              Retype password
+              Re-type your password
             </label>
             <input
               type="text"
