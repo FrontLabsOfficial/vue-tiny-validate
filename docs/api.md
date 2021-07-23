@@ -90,7 +90,7 @@ It's **true** whenever the `$test` method is performing **async validation**.
 type Result = {
   // result properties...
 
-  $test: () => void;
+  $test: (() => void) | (() => Promise<void>);
   $reset: () => void;
   $touch: () => void;
 };
@@ -98,7 +98,7 @@ type Result = {
 
 ### $test
 
-- Type: `function`
+- Type: `async function | function`
 - Default: `(value: any, data?: Data, rules?: Rules, option?: Option) => void`
 
 The `$test` method loops through the array of rules of each property and executes `test` function of each rule item.
@@ -175,5 +175,5 @@ Setting this option to **true** will have the `$touch` method executed along wit
 - Type: `function`
 - Default: `(value: any, data?: Data, rules?: Rules, option?: Option) => any`
 
-In some cases, you want to attach a value to the `result` value. Or sometimes, you want to modify the `result` value.
-That's when `transform` come. Use this option to transform the `result` object to anything that fit your needs.
+In some cases, you might want to modify or attach a value to the `result` value. That's when `transform` comes. Use this
+option to transform the `result` object to anything that fits your needs.

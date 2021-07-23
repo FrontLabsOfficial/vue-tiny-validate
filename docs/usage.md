@@ -213,6 +213,10 @@ const rules = reactive({
 Validate your data by calling the `$test` method. Technically, it will run through all properties and execute each of
 their validator.
 
+::: warning
+`$test` is either function or async function.
+:::
+
 ```js
 const { result } = useValidate(data, rules);
 
@@ -304,11 +308,12 @@ const options = reactive({ touchOnTest: true });
 const { result } = useValidate(data, rules, options);
 ```
 
-### Transform
+## Transform
 
 If you want to transform the `result` value, use the `transform` option.
 
 ```js
+// add some additional value to result object
 const transform = value => ({ ...value, addition: 'some value' });
 
 const options = reactive({ transform });

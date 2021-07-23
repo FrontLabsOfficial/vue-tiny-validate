@@ -1,23 +1,83 @@
+## 0.2.2
+
+- Fix **wrong** `result` when `data` has multiple nested properties
+- Async `$test` method
+
+```js
+await result.$test();
+console.log('Tested');
+```
+
+- Cancel async validation on resetting
+- Add more parameters (`data`, `rules`, `options`) to `test` function
+
+```js
+const rules = reactive({
+  name: {
+    $key: 'required',
+    $test: (value, data, rules, options) => {
+      // you can access data, rules, options here
+      return Boolean(value);
+    },
+    $message: 'Name must not be empty.',
+  },
+});
+```
+
+- Support Vue 2
+- Add `transform` option
+
+```js
+// add some additional value to result object
+const transform = value => ({ ...value, addition: 'some value' });
+
+const options = reactive({ transform });
+
+const { result } = useValidate(data, rules, options);
+```
+
 ## 0.2.1
 
-- :boom: Update core / add test unit / update build
-- :zap: Optimize code size
-- :sparkles: New config
-- :sparkles: Support async validate function
-- :zap: Clear entry data on reset
+- New `options` parameter. See documentation for more detail
+- Support async validate function
+
+```js
+const rules = reactive({
+  name: {
+    $key: 'required',
+    $test: (value) => new Promise(resolve => {
+      resolve(true);
+    });
+  }
+})
+```
+
+- Clear entry data (`$error`, `$invalid`, `$messages`) on resetting
 
 ## 0.2.0
 
-- :coffin: Remove unused code
-- :art: Prettify code
-- :recycle: Prettify | Support ref rule
-- :package: Update package.json files
-- :sparkles: Support ref data
+- Support `Ref` data and `Ref` rules
+
+```js
+export default {
+  setup() {
+    const data = ref({ name: 'Evelyn' });
+    const rules = ref({
+      name: {
+        $key: 'required',
+        $test: value => Boolean(value),
+        $message: 'Name must not be empty.',
+      },
+    });
+
+    const { result } = useValidate(data, rules);
+
+    return { result, data };
+  },
+};
+```
 
 ## 0.1.3
 
-- :bug: Ignore dist-example dir
-- :bug: Fix build example command
-- :label: Convert from JS to TS
-- :bug: Fix wrong default result
-- :recycle: Refactor mechanism
+- Convert from JS to TS
+- Fix **wrong** default `result`
