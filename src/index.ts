@@ -1,5 +1,6 @@
 import {
   computed,
+  ref,
   reactive,
   watch,
   UnwrapRef,
@@ -156,13 +157,24 @@ const useValidate = (
     const { data, rules, dirt, rawData, entries } = entryData;
     const { lazy, firstError, touchOnTest } = option.value;
 
+    let stop = false;
+
+    const uw = watch(
+      () => entries[key].$pending,
+      value => {
+        if (!value) {
+          stop = true;
+          uw();
+        }
+      },
+    );
+
     dirt[key] = touchOnTest || dirt[key] || data[key] !== rawData[key];
 
     if (lazy && !dirt[key]) return;
 
     let $errors: Array<Error> = [];
     let $messages: Array<string> = [];
-
     let ruleItem = rules[key] as Rule | Array<Rule>;
 
     if (!ruleItem) return;
@@ -180,12 +192,14 @@ const useValidate = (
 
       if (testValue instanceof Promise) {
         entries[key].$pending = true;
+
         try {
           testValue = await testValue;
         } catch (e) {
           testValue = false;
         }
-        entries[key].$pending = false;
+
+        if (!stop) entries[key].$pending = false;
       }
 
       if (!testValue) {
@@ -193,6 +207,7 @@ const useValidate = (
           typeof message === 'function'
             ? message(data[key])
             : (message as string);
+
         $errors = [...$errors, { name, message: testMessage }];
 
         if (testMessage) $messages.push(testMessage);
@@ -201,12 +216,14 @@ const useValidate = (
       }
     }
 
-    entries[key] = {
-      ...entries[key],
-      $errors,
-      $messages,
-      $invalid: Boolean($errors.length),
-    } as Entry;
+    if (!stop) {
+      entries[key] = {
+        ...entries[key],
+        $errors,
+        $messages,
+        $invalid: Boolean($errors.length),
+      } as Entry;
+    }
   };
 
   const reset = (entryData: ArgsObject, key: string): void => {

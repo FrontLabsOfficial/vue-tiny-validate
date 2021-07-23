@@ -1,5 +1,4 @@
 import { ComputedRef } from 'vue-demi';
-import { Options } from 'prettier';
 
 export type UnknownObject = { [key: string]: any };
 
@@ -67,7 +66,7 @@ export type Entry = {
   $errors: Array<Error>;
   $messages: Array<string>;
   $pending: boolean;
-  $test: () => void;
+  $test: (() => void) | (() => Promise<void>);
   $reset: () => void;
   $touch: () => void;
   $uw?: () => void;
@@ -91,7 +90,7 @@ export type Result = {
   $invalid: boolean;
   $errors: Array<Error>;
   $messages: Array<string>;
-  $test: () => void;
+  $test: (() => void) | (() => Promise<void>);
   $reset: () => void;
   $touch: () => void;
   $dirty: boolean;

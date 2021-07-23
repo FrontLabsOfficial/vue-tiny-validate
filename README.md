@@ -10,7 +10,7 @@ tools, namely [Vuelidate](https://github.com/vuelidate/vuelidate) or
 [vee-validate](https://github.com/logaretm/vee-validate). They were all great, but they weren't the best fit for our
 problem at hand.
 
-Most, or maybe all of them, are over **10KB**. This was way too heavy for our goal of keeping our validation library
+Most, or maybe all of them, are over **10KB** minified. This was way too heavy for our goal of keeping our validation library
 **robust**, **fully-supported**, and most importantly, **minimal**.
 
 That's why `vue-tiny-validate` was born.
@@ -18,7 +18,7 @@ That's why `vue-tiny-validate` was born.
 ## Features
 
 - Easy. Come with familiar API and coherent documentation.
-- Tiny. No dependencies. Only **2.5KB** minified. **1.1KB** gzipped.
+- Tiny. No dependencies. Only **3KB** minified. **1.3KB** gzipped.
 - Flexible. Full control over everything.
 - Fully functional. Sync validation, async validation, etc supported.
 
