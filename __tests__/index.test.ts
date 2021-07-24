@@ -23,7 +23,7 @@ describe('data', () => {
   test('simple data', () => {
     const data = { number: 0 };
     const rules = {
-      number: { $key: 'test_01', $test: (value: any) => value > 0 },
+      number: { name: 'test_01', test: (value: any) => value > 0 },
     };
 
     const { vm } = shallowMount(createComponent(data, rules, options));
@@ -40,9 +40,9 @@ describe('data', () => {
   test('nested data', () => {
     const data = { number: 0, another: { number: 5 } };
     const rules = {
-      number: { $key: 'test_01', $test: (value: any) => value > 0 },
+      number: { name: 'test_01', test: (value: any) => value > 0 },
       another: {
-        number: { $key: 'test_02', $test: (value: any) => value > 0 },
+        number: { name: 'test_02', test: (value: any) => value > 0 },
       },
     };
 
@@ -67,8 +67,8 @@ describe('rules', () => {
     const data = { number: 5 };
     const rules = {
       number: [
-        { $key: 'test_01', $test: (value: any) => value !== 5 },
-        { $key: 'test_02', $test: (value: any) => value % 2 === 0 },
+        { name: 'test_01', test: (value: any) => value !== 5 },
+        { name: 'test_02', test: (value: any) => value % 2 === 0 },
       ],
     };
 
@@ -88,7 +88,7 @@ describe('rules', () => {
 
     const data = { number: 5 };
     const rules = {
-      number: { $key: 'test_01', $test: test(20) },
+      number: { name: 'test_01', test: test(20) },
     };
 
     const { vm } = shallowMount(createComponent(data, rules, options));
@@ -108,9 +108,9 @@ describe('rules', () => {
     const data = { number: 5 };
     const rules = {
       number: {
-        $key: 'test_01',
-        $test: (value: any) => value !== 5,
-        $message: 'Can not be 5!!!',
+        name: 'test_01',
+        test: (value: any) => value !== 5,
+        message: 'Can not be 5!!!',
       },
     };
 
@@ -131,9 +131,9 @@ describe('rules', () => {
     const data = { number: 5 };
     const rules = {
       number: {
-        $key: 'test_01',
-        $test: (value: any) => value !== 5,
-        $message: (value: any) => `Got ${value}. Can not be 5!!!`,
+        name: 'test_01',
+        test: (value: any) => value !== 5,
+        message: (value: any) => `Got ${value}. Can not be 5!!!`,
       },
     };
 
@@ -158,7 +158,7 @@ describe('rules', () => {
 
     const data = { number: 5 };
     const rules = {
-      number: { $key: 'test_01', $test: test },
+      number: { name: 'test_01', test: test },
     };
 
     const { vm } = shallowMount(createComponent(data, rules, options));
@@ -190,8 +190,8 @@ describe('option', () => {
     const data = { number: 5 };
     const rules = {
       number: [
-        { $key: 'test_01', $test: (value: any) => value !== 5 },
-        { $key: 'test_02', $test: (value: any) => value % 2 === 0 },
+        { name: 'test_01', test: (value: any) => value !== 5 },
+        { name: 'test_02', test: (value: any) => value % 2 === 0 },
       ],
     };
 
@@ -211,7 +211,7 @@ describe('option', () => {
   test('touch on testing', () => {
     const data = { number: 5 };
     const rules = {
-      number: { $key: 'test_01', $test: (value: any) => value !== 5 },
+      number: { name: 'test_01', test: (value: any) => value !== 5 },
     };
 
     const { vm } = shallowMount(

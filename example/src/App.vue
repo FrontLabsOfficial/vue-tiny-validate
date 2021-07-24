@@ -295,6 +295,9 @@ import { ref, reactive, defineComponent, computed } from 'vue';
 import { JsonTreeView } from 'json-tree-view-vue3';
 // @ts-ignore
 import useValidate from 'vue-tiny-validate';
+// @ts-ignore
+import cloneDeep from 'lodash/cloneDeep';
+
 export default defineComponent({
   name: 'App',
   components: {
@@ -318,7 +321,7 @@ export default defineComponent({
       },
     };
 
-    const info = ref(Object.assign({}, defaultInfo));
+    const info = ref(cloneDeep(defaultInfo));
 
     const rules = computed(() => {
       const requiredCheck = (value: string): boolean => value !== '';
@@ -411,6 +414,7 @@ export default defineComponent({
     };
 
     const reset = () => {
+      info.value = cloneDeep(defaultInfo);
       result.value.$reset();
       console.log('Resetted!');
     };
