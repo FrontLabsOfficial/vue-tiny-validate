@@ -1,15 +1,15 @@
 ## 0.3.0
 
-- Fix **wrong** `result` when `data` has multiple nested properties
-- Async `$test` method
+- Fix **wrong** `result` when `data` has multiple nested properties.
+- Async `$test` method.
 
 ```js
 await result.$test();
 console.log('Tested');
 ```
 
-- Cancel async validation on resetting
-- Add more parameters (`data`, `rules`, `options`) to `test` function. Also, update `rule` properties
+- Cancel async validation on resetting.
+- Add more parameters (`data`, `rules`, `options`) to `test` function. Also, update `rule` properties.
 
 ```js
 const rules = reactive({
@@ -25,8 +25,8 @@ const rules = reactive({
 });
 ```
 
-- Support Vue 2
-- Add `transform` option
+- Support Vue 2.
+- Add `transform` option.
 
 ```js
 // add some additional value to result object
@@ -39,8 +39,8 @@ const { result } = useValidate(data, rules, options);
 
 ## 0.2.1
 
-- New `options` parameter. See documentation for more detail
-- Support async validate function
+- New `options` parameter. See documentation for more detail.
+- Support async validate function.
 
 ```js
 const rules = reactive({
@@ -53,11 +53,11 @@ const rules = reactive({
 })
 ```
 
-- Clear entry data (`$error`, `$invalid`, `$messages`) on resetting
+- Clear entry data (`$error`, `$invalid`, `$messages`) on resetting.
 
 ## 0.2.0
 
-- Support `Ref` data and `Ref` rules
+- Support `Ref` data and `Ref` rules.
 
 ```js
 export default {
@@ -80,5 +80,5 @@ export default {
 
 ## 0.1.3
 
-- Convert from JS to TS
-- Fix **wrong** default `result`
+- Convert from JS to TS.
+- Fix **wrong** default `result`.
