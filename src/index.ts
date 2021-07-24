@@ -1,6 +1,5 @@
 import {
   computed,
-  ref,
   reactive,
   watch,
   UnwrapRef,
@@ -22,6 +21,7 @@ import {
   Entry,
   Error,
   Option,
+  GetDataFn,
   UseValidate,
 } from './types';
 
@@ -104,7 +104,7 @@ const useValidate = (
   };
 
   const setDefaultValue = (
-    data: Data,
+    data: GetDataFn,
     rules: Rules,
     dirt: Dirt,
     rawData: UnknownObject,
@@ -119,7 +119,7 @@ const useValidate = (
         entries[key] = reactive({});
 
         const args: Args = [
-          data[key],
+          () => data()[key],
           rules[key] as Rules,
           dirt[key] as Dirt,
           rawData[key],
@@ -129,7 +129,7 @@ const useValidate = (
         setDefaultValue(...args);
       } else {
         dirt[key] = false;
-        rawData[key] = data[key];
+        rawData[key] = data()[key];
 
         const entryData: ArgsObject = { data, rules, dirt, rawData, entries };
 
@@ -142,7 +142,7 @@ const useValidate = (
 
         Object.setPrototypeOf(entries[key], {
           $uw: watch(
-            () => data[key],
+            () => data()[key],
             () => {
               if (option.value.autoTest) (entries[key] as Entry).$test();
               if (option.value.autoTouch) (entries[key] as Entry).$touch();
@@ -169,7 +169,7 @@ const useValidate = (
       },
     );
 
-    dirt[key] = touchOnTest || dirt[key] || data[key] !== rawData[key];
+    dirt[key] = touchOnTest || dirt[key] || data()[key] !== rawData[key];
 
     if (lazy && !dirt[key]) return;
 
@@ -184,7 +184,7 @@ const useValidate = (
     for (const rule of ruleItem) {
       const { test, message = null, name } = rule;
       let testValue: boolean | Promise<boolean> = test(
-        data[key],
+        data()[key],
         unwrap(_data),
         unwrap(_rules),
         unwrap(_option),
@@ -205,7 +205,7 @@ const useValidate = (
       if (!testValue) {
         const testMessage =
           typeof message === 'function'
-            ? message(data[key])
+            ? message(data()[key])
             : (message as string);
 
         $errors = [...$errors, { name, message: testMessage }];
@@ -242,7 +242,7 @@ const useValidate = (
 
   const initialize = (): void => {
     setDefaultValue(
-      unwrap(_data) as Data,
+      () => unwrap(_data) as GetDataFn,
       unwrap(_rules) as Rules,
       dirt,
       rawData,

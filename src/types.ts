@@ -76,10 +76,12 @@ export type Entries = {
   [key: string]: Entry | Entries;
 };
 
-export type Args = [Data, Rules, Dirt, UnknownObject, Entries];
+export type GetDataFn = () => Data;
+
+export type Args = [GetDataFn, Rules, Dirt, UnknownObject, Entries];
 
 export type ArgsObject = {
-  data: Data;
+  data: GetDataFn;
   rules: Rules;
   dirt: Dirt;
   rawData: UnknownObject;
