@@ -20,9 +20,9 @@ export default {
     const data = reactive({ name: 'Evelyn' });
     const rules = reactive({
       name: {
-        $key: 'required',
-        $test: (value) => Boolean(value),
-        $message: 'Name must not be empty.'
+        name: 'required',
+        test: (value) => Boolean(value),
+        message: 'Name must not be empty.'
       }
     })
 
@@ -61,15 +61,15 @@ const data = reactive({
 
 const rules = reactive({
   name: {
-    $key: 'required',
-    $test: value => Boolean(value),
-    $message: 'Name must not be empty.',
+    name: 'required',
+    test: value => Boolean(value),
+    message: 'Name must not be empty.',
   },
   add: {
     street: {
-      $key: 'required',
-      $test: value => Boolean(value),
-      $message: 'Street must not be empty.',
+      name: 'required',
+      test: value => Boolean(value),
+      message: 'Street must not be empty.',
     },
   },
 });
@@ -82,8 +82,8 @@ Each property has its own rule. Rule must be **an object** (validator).
 ```js
 const rules = reactive({
   name: {
-    $key: 'required',
-    $test: value => Boolean(value),
+    name: 'required',
+    test: value => Boolean(value),
   },
 });
 ```
@@ -104,11 +104,11 @@ When the property has **more than one** rules, these rules must be presented in 
 ```js
 const rules = reactive({
   name: [
-    { $key: 'required', $test: value => Boolean(value) },
+    { name: 'required', test: value => Boolean(value) },
     {
-      $key: 'maxLength10',
-      $test: value => value.length <= 10,
-      $message: 'Excess max length',
+      name: 'maxLength10',
+      test: value => value.length <= 10,
+      message: 'Excess max length',
     },
   ],
 });
@@ -122,8 +122,8 @@ const rules = reactive({
 ```js
 const rules = reactive({
   name: {
-    $key: 'required',
-    $test: (value) => new Promise(resolve => {
+    name: 'required',
+    test: (value) => new Promise(resolve => {
       resolve(true);
     });
   }
@@ -133,8 +133,8 @@ const rules = reactive({
 ```js
 const rules = reactive({
   name: {
-    $key: 'required',
-    $test: async (value) => {
+    name: 'required',
+    test: async (value) => {
       const r = await new Promise(resolve => {
         resolve(true);
       });
@@ -155,8 +155,8 @@ const rgxCheck = rgx => value => rgx.test(value);
 
 const rules = reactive({
   name: {
-    $key: 'checkZipCode',
-    $test: rgxCheck(/^[0-9]{5}(?:-[0-9]{4})?$/),
+    name: 'checkZipCode',
+    test: rgxCheck(/^[0-9]{5}(?:-[0-9]{4})?$/),
   },
 });
 ```
@@ -168,9 +168,9 @@ As said above, `message` is basically a string that is returned when `test` retu
 ```js
 const rules = reactive({
   name: {
-    $key: 'required',
-    $test: value => Boolean(value),
-    $message: 'This property is required.',
+    name: 'required',
+    test: value => Boolean(value),
+    message: 'This property is required.',
   },
 });
 ```
@@ -183,9 +183,9 @@ If you need to include the **data** value in your message, simply assign a funct
 ```js
 const rules = reactive({
   name: {
-    $key: 'required',
-    $test: value => Boolean(value),
-    $message: value => `Your "${value}" is not allowed.`,
+    name: 'required',
+    test: value => Boolean(value),
+    message: value => `Your "${value}" is not allowed.`,
   },
 });
 ```
@@ -201,9 +201,9 @@ const messageWith = extra => value =>
 
 const rules = reactive({
   name: {
-    $key: 'required',
-    $test: value => Boolean(value),
-    $message: messageWith('hello'),
+    name: 'required',
+    test: value => Boolean(value),
+    message: messageWith('hello'),
   },
 });
 ```

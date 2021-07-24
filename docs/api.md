@@ -12,9 +12,9 @@ Rules:
 
 ```ts
 type Rule = {
-  $test: ((value: any) => boolean) | ((value: any) => Promise<boolean>);
-  $message?: string | ((value: any) => string);
-  $key: string;
+  test: ((value: any) => boolean) | ((value: any) => Promise<boolean>);
+  message?: string | ((value: any) => string);
+  name: string;
 };
 
 type Rules = {

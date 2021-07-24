@@ -1,4 +1,4 @@
-## 0.2.2
+## 0.3.0
 
 - Fix **wrong** `result` when `data` has multiple nested properties
 - Async `$test` method
@@ -9,17 +9,18 @@ console.log('Tested');
 ```
 
 - Cancel async validation on resetting
-- Add more parameters (`data`, `rules`, `options`) to `test` function
+- Add more parameters (`data`, `rules`, `options`) to `test` function. Also, update `rule` properties
 
 ```js
 const rules = reactive({
   name: {
-    $key: 'required',
-    $test: (value, data, rules, options) => {
+    // rule now has (name, test, message) properties instead of ($key, $test, $message) properties
+    name: 'required',
+    test: (value, data, rules, options) => {
       // you can access data, rules, options here
       return Boolean(value);
     },
-    $message: 'Name must not be empty.',
+    message: 'Name must not be empty.',
   },
 });
 ```
@@ -44,8 +45,8 @@ const { result } = useValidate(data, rules, options);
 ```js
 const rules = reactive({
   name: {
-    $key: 'required',
-    $test: (value) => new Promise(resolve => {
+    name: 'required',
+    test: (value) => new Promise(resolve => {
       resolve(true);
     });
   }
@@ -64,9 +65,9 @@ export default {
     const data = ref({ name: 'Evelyn' });
     const rules = ref({
       name: {
-        $key: 'required',
-        $test: value => Boolean(value),
-        $message: 'Name must not be empty.',
+        name: 'required',
+        test: value => Boolean(value),
+        message: 'Name must not be empty.',
       },
     });
 

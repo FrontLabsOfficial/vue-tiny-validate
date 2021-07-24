@@ -31,9 +31,9 @@ export default {
     const data = reactive({ name: 'Evelyn' });
     const rules = reactive({
       name: {
-        $key: 'required',
-        $test: (value) => Boolean(value),
-        $message: 'Name must not be empty.'
+        name: 'required',
+        test: (value) => Boolean(value),
+        message: 'Name must not be empty.'
       }
     })
 
