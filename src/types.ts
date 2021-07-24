@@ -1,4 +1,4 @@
-import { ComputedRef } from 'vue';
+import { ComputedRef } from 'vue-demi';
 
 export type UnknownObject = { [key: string]: any };
 
@@ -12,14 +12,34 @@ export type Option = {
   lazy?: boolean;
   firstError?: boolean;
   touchOnTest?: boolean;
+  transform?:
+    | ((
+        value: any,
+        data?: Data,
+        rules?: Rules,
+        option?: Option,
+      ) => Result | any)
+    | ((
+        value: any,
+        data?: Data,
+        rules?: Rules,
+        option?: Option,
+      ) => Promise<Result | any>);
 };
 
 export type Data = UnknownObject;
 
 export type Rule = {
-  $test: ((value: any) => boolean) | ((value: any) => Promise<boolean>);
-  $message?: string | ((value: any) => string);
-  $key: string;
+  test:
+    | ((value: any, data?: Data, rules?: Rules, option?: Option) => boolean)
+    | ((
+        value: any,
+        data?: Data,
+        rules?: Rules,
+        option?: Option,
+      ) => Promise<boolean>);
+  message?: string | ((value: any) => string);
+  name: string;
 };
 
 export type Rules = {
@@ -46,7 +66,7 @@ export type Entry = {
   $errors: Array<Error>;
   $messages: Array<string>;
   $pending: boolean;
-  $test: () => void;
+  $test: (() => void) | (() => Promise<void>);
   $reset: () => void;
   $touch: () => void;
   $uw?: () => void;
@@ -56,10 +76,12 @@ export type Entries = {
   [key: string]: Entry | Entries;
 };
 
-export type Args = [Data, Rules, Dirt, UnknownObject, Entries];
+export type GetDataFn = () => Data;
+
+export type Args = [GetDataFn, Rules, Dirt, UnknownObject, Entries];
 
 export type ArgsObject = {
-  data: Data;
+  data: GetDataFn;
   rules: Rules;
   dirt: Dirt;
   rawData: UnknownObject;
@@ -70,7 +92,7 @@ export type Result = {
   $invalid: boolean;
   $errors: Array<Error>;
   $messages: Array<string>;
-  $test: () => void;
+  $test: (() => void) | (() => Promise<void>);
   $reset: () => void;
   $touch: () => void;
   $dirty: boolean;
@@ -80,5 +102,5 @@ export type Result = {
 };
 
 export type UseValidate = {
-  result: ComputedRef<Result>;
+  result: ComputedRef<Result | any>;
 };

@@ -204,17 +204,62 @@
               {{ result.address.zip.$messages[0] }}
             </span>
           </div>
+
+          <div class="col-span-6 sm:col-span-3 form-item">
+            <label
+              for="password01"
+              class="block text-sm font-medium text-gray-700"
+            >
+              Password
+            </label>
+            <input
+              type="text"
+              name="password01"
+              id="password01"
+              autocomplete="given-name"
+              v-model="info.password.p1"
+              :class="{
+                'form-input__error': result.password.p1.$invalid,
+                'form-input__success':
+                  !result.password.p1.$invalid && result.password.p1.$dirty,
+              }"
+            />
+            <span v-if="result.password.p1.$invalid" class="form-item--message">
+              {{ result.password.p1.$messages[0] }}
+            </span>
+          </div>
+
+          <div class="col-span-6 sm:col-span-3 form-item">
+            <label
+              for="password02"
+              class="block text-sm font-medium text-gray-700"
+            >
+              Re-type your password
+            </label>
+            <input
+              type="text"
+              name="password02"
+              id="password02"
+              autocomplete="family-name"
+              v-model="info.password.p2"
+              :class="{
+                'form-input__error': result.password.p2.$invalid,
+                'form-input__success':
+                  !result.password.p2.$invalid && result.password.p2.$dirty,
+              }"
+            />
+            <span v-if="result.password.p2.$invalid" class="form-item--message">
+              {{ result.password.p2.$messages[0] }}
+            </span>
+          </div>
         </div>
       </div>
       <div class="px-4 py-3 bg-gray-100 text-right sm:px-6 form-item">
-        <button
-          class="base-button text-blue-600 !shadow-none"
-          @click="result.$reset"
-        >
+        <button class="base-button text-blue-600 !shadow-none" @click="reset">
           Reset
         </button>
         <button
-          @click="result.$test"
+          @click="validate"
           class="
             base-button
             text-white
@@ -250,13 +295,16 @@ import { ref, reactive, defineComponent, computed } from 'vue';
 import { JsonTreeView } from 'json-tree-view-vue3';
 // @ts-ignore
 import useValidate from 'vue-tiny-validate';
+// @ts-ignore
+import cloneDeep from 'lodash/cloneDeep';
+
 export default defineComponent({
   name: 'App',
   components: {
     JsonTreeView,
   },
   setup() {
-    const info = ref({
+    const defaultInfo = {
       firstName: '',
       lastName: '',
       email: '',
@@ -267,7 +315,13 @@ export default defineComponent({
         state: '',
         zip: '',
       },
-    });
+      password: {
+        p1: '',
+        p2: '',
+      },
+    };
+
+    const info = ref(cloneDeep(defaultInfo));
 
     const rules = computed(() => {
       const requiredCheck = (value: string): boolean => value !== '';
@@ -296,35 +350,42 @@ export default defineComponent({
       };
 
       const required = {
-        $test: requiredCheck,
-        $message: 'Field is required',
-        $key: 'required',
+        test: requiredCheck,
+        message: 'Field is required',
+        name: 'required',
       };
 
       const email = {
-        $test: rgxCheck(
+        test: rgxCheck(
           /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
         ),
-        $message: (value: string) => `Your email "${value}" is not correct`,
-        $key: 'email',
+        message: (value: string) => `Your email "${value}" is not correct`,
+        name: 'email',
       };
 
       const city = {
-        $test: cityCheck,
-        $message: 'City is not correct',
-        $key: 'city',
+        test: cityCheck,
+        message: 'City is not correct',
+        name: 'city',
       };
 
       const state = {
-        $test: stateCheck,
-        $message: 'State is not correct',
-        $key: 'state',
+        test: stateCheck,
+        message: 'State is not correct',
+        name: 'state',
       };
 
       const zip = {
-        $test: rgxCheck(/^[0-9]{5}(?:-[0-9]{4})?$/),
-        $message: 'ZIP code is not correct',
-        $key: 'zip',
+        test: rgxCheck(/^[0-9]{5}(?:-[0-9]{4})?$/),
+        message: 'ZIP code is not correct',
+        name: 'zip',
+      };
+
+      const same = {
+        test: (value: any, globalValue: any) =>
+          value === globalValue.password.p1,
+        message: 'Password is not the same',
+        name: 'same',
       };
 
       return {
@@ -338,12 +399,27 @@ export default defineComponent({
           state: [required, state],
           zip: [required, zip],
         },
+        password: {
+          p1: required,
+          p2: [required, same],
+        },
       };
     });
 
     const { result } = useValidate(info, rules);
 
-    return { info, result };
+    const validate = async () => {
+      await result.value.$test();
+      console.log('Validated!');
+    };
+
+    const reset = () => {
+      info.value = cloneDeep(defaultInfo);
+      result.value.$reset();
+      console.log('Resetted!');
+    };
+
+    return { info, result, validate, reset };
   },
 });
 </script>

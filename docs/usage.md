@@ -20,9 +20,9 @@ export default {
     const data = reactive({ name: 'Evelyn' });
     const rules = reactive({
       name: {
-        $key: 'required',
-        $test: (value) => Boolean(value),
-        $message: 'Name must not be empty.'
+        name: 'required',
+        test: (value) => Boolean(value),
+        message: 'Name must not be empty.'
       }
     })
 
@@ -35,21 +35,21 @@ export default {
 }
 ```
 
-The `useValidate` requires 3 parameters `data`, `rules` and `options`. `data` and `rules` are **mandatory**. They must
-have **same properties** at every level. The other one `options` is **optional**.
+The `useValidate` composition requires 3 parameters: `data`, `rules` and `options`. `data` and `rules` are **mandatory**.
+They must have the **same properties** at every level. The other one `options` is optional.
 
-They all must be **reactive object**, such as `ref`, `reactive` or `computed`.
+These 3 parameters must all be **reactive object**. To be exact, they can only be `Ref`, `Reactive` or `Computed`.
 
-Start validate your data by calling the `$test` method. All the validation states such as **messages** or **validate
-state** will be stored in `result` object.
+Start validating your data by calling the `$test` method. All the validation states (such as **messages**) will be
+stored in the `result` object.
 
 ::: warning
-Resetting any of **data**, **rules** or **options** values will also reset the **validation results**.
+Re-assigning any **rules** or **options** values will also reset the **validation results**.
 :::
 
 ### Nested data
 
-Data can also be nested. Again, remember to have **data** and **rules** a same property at every level.
+Data can also be nested. Again, remember to assign the **same properties** for `data` and `rules` at every level.
 
 ```js
 const data = reactive({
@@ -61,15 +61,15 @@ const data = reactive({
 
 const rules = reactive({
   name: {
-    $key: 'required',
-    $test: value => Boolean(value),
-    $message: 'Name must not be empty.',
+    name: 'required',
+    test: value => Boolean(value),
+    message: 'Name must not be empty.',
   },
   add: {
     street: {
-      $key: 'required',
-      $test: value => Boolean(value),
-      $message: 'Street must not be empty.',
+      name: 'required',
+      test: value => Boolean(value),
+      message: 'Street must not be empty.',
     },
   },
 });
@@ -82,33 +82,33 @@ Each property has its own rule. Rule must be **an object** (validator).
 ```js
 const rules = reactive({
   name: {
-    $key: 'required',
-    $test: value => Boolean(value),
+    name: 'required',
+    test: value => Boolean(value),
   },
 });
 ```
 
-Each validator has 3 properties `$key`, `$test` and `$message`. The first two item are **mandatory** and the other one
-is **optional**.
+Each validator has 3 properties: `key`, `test` and `message`. The first two items are **mandatory** and the other one
+`message` is **optional**.
 
-`$key` is an unique string that is used to identify which **error** does the property have after validation.
+`key` is an unique string that is used to identify which **error** the property has after being validated.
 
-`$test` is a validate function that returns a **boolean** value. All the validate logic goes here.
+`test` is a validate function that returns a **boolean** value. All the validate logic goes here.
 
-Whenever the `$test` function return **false** value, a `$message` string is also returned.
+Whenever the `test` function returns false value, a `message` string is also returned.
 
 ### Multiple
 
-When property has **more than one** rules, rule must be **an array of validators**.
+When the property has **more than one** rules, these rules must be presented in an **array** of validators.
 
 ```js
 const rules = reactive({
   name: [
-    { $key: 'required', $test: value => Boolean(value) },
+    { name: 'required', test: value => Boolean(value) },
     {
-      $key: 'maxLength10',
-      $test: value => value.length <= 10,
-      $message: 'Excess max length',
+      name: 'maxLength10',
+      test: value => value.length <= 10,
+      message: 'Excess max length',
     },
   ],
 });
@@ -116,14 +116,14 @@ const rules = reactive({
 
 ### Async
 
-**Async validation** is supported by default. Simply use an **async function** or a function that returns a
-**Promise** as `$test`.
+**Async validation** is supported by default. Simply assign ab **async function** or a function that returns a
+**Promise** to `test`.
 
 ```js
 const rules = reactive({
   name: {
-    $key: 'required',
-    $test: (value) => new Promise(resolve => {
+    name: 'required',
+    test: (value) => new Promise(resolve => {
       resolve(true);
     });
   }
@@ -133,8 +133,8 @@ const rules = reactive({
 ```js
 const rules = reactive({
   name: {
-    $key: 'required',
-    $test: async (value) => {
+    name: 'required',
+    test: async (value) => {
       const r = await new Promise(resolve => {
         resolve(true);
       });
@@ -147,45 +147,45 @@ const rules = reactive({
 
 ### Extra parameters
 
-In some cases, the `$test` **depends** on other parameters. In other words, you need to provide a
-**dynamic validator**. Simply create a **higher order function** that wraps your normal validator.
+In some cases, `test` depends on other parameters. In other words, you need to provide a **dynamic validator**, which
+can simply be done by creating a **higher order function** that wraps your normal validator.
 
 ```js
 const rgxCheck = rgx => value => rgx.test(value);
 
 const rules = reactive({
   name: {
-    $key: 'checkZipCode',
-    $test: rgxCheck(/^[0-9]{5}(?:-[0-9]{4})?$/),
+    name: 'checkZipCode',
+    test: rgxCheck(/^[0-9]{5}(?:-[0-9]{4})?$/),
   },
 });
 ```
 
 ## Messages
 
-As said above, `$message` is basically a string that is returned when `$test` return **false**.
+As said above, `message` is basically a string that is returned when `test` returns **false**.
 
 ```js
 const rules = reactive({
   name: {
-    $key: 'required',
-    $test: value => Boolean(value),
-    $message: 'This property is required.',
+    name: 'required',
+    test: value => Boolean(value),
+    message: 'This property is required.',
   },
 });
 ```
 
 ### With data value
 
-If you need to include the **data** value in your message, simply use a function that returns a **string** as `$message`
-method.
+If you need to include the **data** value in your message, simply assign a function that returns a **string** to
+`message`.
 
 ```js
 const rules = reactive({
   name: {
-    $key: 'required',
-    $test: value => Boolean(value),
-    $message: value => `Your "${value}" is not allowed.`,
+    name: 'required',
+    test: value => Boolean(value),
+    message: value => `Your "${value}" is not allowed.`,
   },
 });
 ```
@@ -201,9 +201,9 @@ const messageWith = extra => value =>
 
 const rules = reactive({
   name: {
-    $key: 'required',
-    $test: value => Boolean(value),
-    $message: messageWith('hello'),
+    name: 'required',
+    test: value => Boolean(value),
+    message: messageWith('hello'),
   },
 });
 ```
@@ -211,7 +211,11 @@ const rules = reactive({
 ## Test
 
 Validate your data by calling the `$test` method. Technically, it will run through all properties and execute each of
-them's validator.
+their validator.
+
+::: warning
+`$test` is either function or async function.
+:::
 
 ```js
 const { result } = useValidate(data, rules);
@@ -228,12 +232,13 @@ const testName = () => {
 ```
 
 ::: warning
-Be careful. The `$test` method is different from the `$test` function in validator.
+Be careful. The `$test` method is different from the `test` function in validator.
 :::
 
 ### Lazy
 
-If you want to skip validate **unchanged** (or **undirtied** / **untouched**) property, use the `lazy` option.
+To **minimize** the processing time, you would sometimes want to **skip** validating **unchanged** (or undirtied, untouched)
+properties. In this case, you could use the `lazy` option.
 
 ```js
 const options = reactive({ lazy: true });
@@ -242,6 +247,9 @@ const { result } = useValidate(data, rules, options);
 ```
 
 ### Return first error
+
+With the same purpose of **minimizing** effort, you could **stop** the validation process after you have detected the
+**first error**. This can be done by using the `firstError` option.
 
 If you want to have only one error at most at each validation, use the `firstError` option.
 
@@ -253,7 +261,7 @@ const { result } = useValidate(data, rules, options);
 
 ### Auto test
 
-If you want the `$test` method to be called whenever any properties have changed, use the `autoTest` option.
+If you want the `$test` method to be called whenever any properties have changes, use the `autoTest` option.
 
 ```js
 const options = reactive({ autoTest: true });
@@ -263,8 +271,8 @@ const { result } = useValidate(data, rules, options);
 
 ## Touch
 
-Normally, only changed property is considered as **touched** or **dirtied**. Calling the `$touch` method will the
-property to be **touched** or **dirtied**.
+Normally, only changed properties are considered as **touched** or **dirtied**. You can intentionally cause the property
+to be **touched** or **dirtied** by calling the `$touch` method.
 
 ```js
 const { result } = useValidate(data, rules);
@@ -282,7 +290,7 @@ const touchName = () => {
 
 ### Auto touch
 
-If you want the `$touch` method to be called whenever any properties have changed, use the `autoTouch` option.
+If you want the `$touch` method to be called whenever any properties have changes, use the `autoTouch` option.
 
 ```js
 const options = reactive({ autoTouch: true });
@@ -292,7 +300,7 @@ const { result } = useValidate(data, rules, options);
 
 ### Touch on test
 
-If you want the `$touch` method to be called along with the `$test` method, use the `autoTouch` option.
+If you want the `$touch` method to be called along with the `$test` method, use the `touchOnTest` option.
 
 ```js
 const options = reactive({ touchOnTest: true });
@@ -300,9 +308,23 @@ const options = reactive({ touchOnTest: true });
 const { result } = useValidate(data, rules, options);
 ```
 
+## Transform
+
+If you want to transform the `result` value, use the `transform` option.
+
+```js
+// add some additional value to result object
+const transform = value => ({ ...value, addition: 'some value' });
+
+const options = reactive({ transform });
+
+const { result } = useValidate(data, rules, options);
+```
+
 ## Reset
 
-Calling the `$reset` method will `errors`, `messages`, `invalid` and `pending` value of property to its default value.
+Calling the `$reset` method will set the `errors`, `messages`, `invalid` and `pending` value of the property to its
+default value.
 
 ```js
 const { result } = useValidate(data, rules);

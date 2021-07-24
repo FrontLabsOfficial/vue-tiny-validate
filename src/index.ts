@@ -1,4 +1,11 @@
-import { computed, reactive, watch, UnwrapRef, Ref, ComputedRef } from 'vue';
+import {
+  computed,
+  reactive,
+  watch,
+  UnwrapRef,
+  Ref,
+  ComputedRef,
+} from 'vue-demi';
 import { OPTION, ENTRY_PARAM, NOOP, hasOwn, isObject, unwrap } from './helpers';
 import {
   Fns,
@@ -14,20 +21,29 @@ import {
   Entry,
   Error,
   Option,
+  GetDataFn,
   UseValidate,
 } from './types';
 
 const useValidate = (
   _data: UnwrapRef<Data> | Ref<Data> | ComputedRef<Data>,
   _rules: UnwrapRef<Rules> | Ref<Rules> | ComputedRef<Rules>,
-  _option: UnwrapRef<Option> | Ref<Option> | ComputedRef<Option> = OPTION,
+  _option: UnwrapRef<Option> | Ref<Option> | ComputedRef<Option> = reactive({}),
 ): UseValidate => {
   const dirt = reactive<Dirt>({});
   const rawData = reactive<UnknownObject>({});
   const entries = reactive<Entries>({});
 
-  const result = computed<Result>(() => getResult(entries, dirt));
   const option = computed<Option>(() => ({ ...OPTION, ...unwrap(_option) }));
+
+  const result = computed<Result | any>(() => {
+    const rawResult: Result = getResult(entries, dirt);
+    const { transform } = option.value;
+
+    return transform
+      ? transform(rawResult, unwrap(_data), unwrap(_rules), unwrap(_option))
+      : rawResult;
+  });
 
   const getResult = (entries: Entries, dirt: Dirt): Result => {
     const result: Result = {
@@ -77,6 +93,9 @@ const useValidate = (
 
     for (const key of fnsKeys) {
       result[key] = () => {
+        if (key === '$test')
+          return Promise.all(fns[key].map((fn: Function) => fn()));
+
         fns[key].forEach((fn: Function) => fn());
       };
     }
@@ -85,7 +104,7 @@ const useValidate = (
   };
 
   const setDefaultValue = (
-    data: Data,
+    data: GetDataFn,
     rules: Rules,
     dirt: Dirt,
     rawData: UnknownObject,
@@ -94,43 +113,43 @@ const useValidate = (
     const keys: Array<string> = Object.keys(rules);
 
     for (const key of keys) {
-      if (isObject(rules[key]) && !hasOwn(rules[key], '$test')) {
+      if (isObject(rules[key]) && !hasOwn(rules[key], 'test')) {
         rawData[key] = {};
         dirt[key] = reactive({});
         entries[key] = reactive({});
 
         const args: Args = [
-          data[key],
+          () => data()[key],
           rules[key] as Rules,
           dirt[key] as Dirt,
           rawData[key],
           entries[key] as Entries,
         ];
 
-        return setDefaultValue(...args);
+        setDefaultValue(...args);
+      } else {
+        dirt[key] = false;
+        rawData[key] = data()[key];
+
+        const entryData: ArgsObject = { data, rules, dirt, rawData, entries };
+
+        entries[key] = {
+          ...ENTRY_PARAM,
+          $reset: () => reset(entryData, key),
+          $test: async () => await test(entryData, key),
+          $touch: () => touch(entryData, key),
+        };
+
+        Object.setPrototypeOf(entries[key], {
+          $uw: watch(
+            () => data()[key],
+            () => {
+              if (option.value.autoTest) (entries[key] as Entry).$test();
+              if (option.value.autoTouch) (entries[key] as Entry).$touch();
+            },
+          ),
+        });
       }
-
-      dirt[key] = false;
-      rawData[key] = data[key];
-
-      const entryData: ArgsObject = { data, rules, dirt, rawData, entries };
-
-      entries[key] = {
-        ...ENTRY_PARAM,
-        $reset: () => reset(entryData, key),
-        $test: () => test(entryData, key),
-        $touch: () => touch(entryData, key),
-      };
-
-      Object.setPrototypeOf(entries[key], {
-        $uw: watch(
-          () => data[key],
-          () => {
-            if (option.value.autoTest) (entries[key] as Entry).$test();
-            if (option.value.autoTouch) (entries[key] as Entry).$touch();
-          },
-        ),
-      });
     }
   };
 
@@ -138,13 +157,24 @@ const useValidate = (
     const { data, rules, dirt, rawData, entries } = entryData;
     const { lazy, firstError, touchOnTest } = option.value;
 
-    dirt[key] = touchOnTest || dirt[key] || data[key] !== rawData[key];
+    let stop = false;
+
+    const uw = watch(
+      () => entries[key].$pending,
+      value => {
+        if (!value) {
+          stop = true;
+          uw();
+        }
+      },
+    );
+
+    dirt[key] = touchOnTest || dirt[key] || data()[key] !== rawData[key];
 
     if (lazy && !dirt[key]) return;
 
     let $errors: Array<Error> = [];
     let $messages: Array<string> = [];
-
     let ruleItem = rules[key] as Rule | Array<Rule>;
 
     if (!ruleItem) return;
@@ -152,25 +182,33 @@ const useValidate = (
     if (!Array.isArray(ruleItem)) ruleItem = [ruleItem];
 
     for (const rule of ruleItem) {
-      const { $test, $message = null, $key } = rule;
-      let testValue: boolean | Promise<boolean> = $test(data[key]);
+      const { test, message = null, name } = rule;
+      let testValue: boolean | Promise<boolean> = test(
+        data()[key],
+        unwrap(_data),
+        unwrap(_rules),
+        unwrap(_option),
+      );
 
       if (testValue instanceof Promise) {
         entries[key].$pending = true;
+
         try {
           testValue = await testValue;
         } catch (e) {
           testValue = false;
         }
-        entries[key].$pending = false;
+
+        if (!stop) entries[key].$pending = false;
       }
 
       if (!testValue) {
         const testMessage =
-          typeof $message === 'function'
-            ? $message(data[key])
-            : ($message as string);
-        $errors = [...$errors, { name: $key, message: testMessage }];
+          typeof message === 'function'
+            ? message(data()[key])
+            : (message as string);
+
+        $errors = [...$errors, { name, message: testMessage }];
 
         if (testMessage) $messages.push(testMessage);
 
@@ -178,18 +216,22 @@ const useValidate = (
       }
     }
 
-    entries[key] = {
-      ...entries[key],
-      $errors,
-      $messages,
-      $invalid: Boolean($errors.length),
-    } as Entry;
+    if (!stop) {
+      entries[key] = {
+        ...entries[key],
+        $errors,
+        $messages,
+        $invalid: Boolean($errors.length),
+      } as Entry;
+    }
   };
 
   const reset = (entryData: ArgsObject, key: string): void => {
-    entryData.dirt[key] = false;
-    entryData.entries[key] = {
-      ...entryData.entries[key],
+    const { dirt, entries } = entryData;
+
+    dirt[key] = false;
+    entries[key] = {
+      ...entries[key],
       ...ENTRY_PARAM,
     } as Entry;
   };
@@ -200,7 +242,7 @@ const useValidate = (
 
   const initialize = (): void => {
     setDefaultValue(
-      unwrap(_data) as Data,
+      () => unwrap(_data) as GetDataFn,
       unwrap(_rules) as Rules,
       dirt,
       rawData,
@@ -210,11 +252,29 @@ const useValidate = (
 
   initialize();
 
-  watch(_data, initialize);
-
   watch(_rules, initialize);
 
   watch(_option, initialize);
+
+  // for development purpose
+  // @ts-ignore
+  if (import.meta.env.MODE === 'development') {
+    const watchOps = { immediate: true, deep: true };
+
+    const watchCb =
+      (label: string) =>
+      (value: any): void => {
+        console.log('\x1b[32m%s\x1b[0m', label, value);
+      };
+
+    watch(result, watchCb('RESULT'));
+
+    watch(_data, watchCb('DATA UPDATED'), watchOps);
+
+    watch(_rules, watchCb('RULES UPDATED'), watchOps);
+
+    watch(_option, watchCb('OPTIONS UPDATED'), watchOps);
+  }
 
   return { result };
 };

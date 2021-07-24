@@ -12,9 +12,9 @@ Rules:
 
 ```ts
 type Rule = {
-  $test: ((value: any) => boolean) | ((value: any) => Promise<boolean>);
-  $message?: string | ((value: any) => string);
-  $key: string;
+  test: ((value: any) => boolean) | ((value: any) => Promise<boolean>);
+  message?: string | ((value: any) => string);
+  name: string;
 };
 
 type Rules = {
@@ -24,7 +24,7 @@ type Rules = {
 type RulesParam: UnwrapRef<Rules> | Ref<Rules> | ComputedRef<Rules>;
 ```
 
-**Data** and **Rules** should have same structure or at least **Data** has all the properties that **Rules** has.
+`Data` and `Rules` should have the same structure, and `Data` must always have all the properties that `Rules` has.
 
 They all must be **reactive object**. More exactly, they can only be **Ref**, **Reactive** or **Computed**.
 
@@ -46,7 +46,7 @@ type Result = {
 - Type: `boolean`
 - Default: `false`
 
-Validation state. It's **true** whenever properties has **errors**.
+Validation state. It's **true** whenever properties have **errors**.
 
 ### $errors
 
@@ -74,15 +74,15 @@ All the error messages go here.
 - Type: `boolean`
 - Default: `false`
 
-State to check whether property is **touched** or **dirtied**. It's **true** whenever property's value is **changed** or
-property is **touched** using `touch` method.
+State to check whether property has been **touched** or **dirtied**. It's **true** whenever property's value has been
+**changed** or property is **touched** using `touch` method.
 
 ### $pending
 
 - Type: `boolean`
 - Default: `false`
 
-It's **true** whenever a property is doing its async validation.
+It's **true** whenever the `$test` method is performing **async validation**.
 
 ## Methods
 
@@ -90,7 +90,7 @@ It's **true** whenever a property is doing its async validation.
 type Result = {
   // result properties...
 
-  $test: () => void;
+  $test: (() => void) | (() => Promise<void>);
   $reset: () => void;
   $touch: () => void;
 };
@@ -98,24 +98,24 @@ type Result = {
 
 ### $test
 
-- Type: `function`
-- Default: `(value: any) => void`
+- Type: `async function | function`
+- Default: `(value: any, data?: Data, rules?: Rules, option?: Option) => void`
 
-The `$test` method loops through **rule array** of each property and execute test based on each **rule item**.
+The `$test` method loops through the array of rules of each property and executes `test` function of each rule item.
 
 ### $reset
 
 - Type: `function`
 - Default: `() => void`
 
-The `$reset` method sets result of property to its default value.
+The `$reset` method sets the result of the property to its default value.
 
 ### $touch
 
 - Type: `function`
 - Default: `() => void`
 
-The `$touch` method sets `dirty` result of property to **true**.
+The `$touch` method sets `dirty` result of the property to **true**.
 
 ## Options
 
@@ -134,38 +134,46 @@ type Option = {
 - Type: `boolean`
 - Default: `false`
 
-Normally, the `result` object is only updated whenever `$test` method is called. Set this option to **true** will
-make the `$test` method to be executed on **every property changes**.
+Normally, the `result` object is only updated whenever `$test` method is called. Setting this option to **true** will
+have the `$test` method executed on every property change.
 
 ### autoTouch
 
 - Type: `boolean`
 - Default: `false`
 
-Same as the option right above. Set this option to **true** will make `$touch` method to be executed on **every property
-changes**.
+Same as the option right above. Setting this option to **true** will have `$touch` method executed on every property
+change.
 
 ### lazy
 
 - Type: `boolean`
 - Default: `false`
 
-As said above, `$test` method will execute all rule item of each property. It's gonna be **redudant** if `$test` method
-tests **undirtied** or **untouched** property because it haven't updated yet. Set this option to **true** will make
-`$test` method skip **undirtied** or **untouched** property.
+As said above, `$test` method will execute all rule items of each property. It's gonna be **redudant** if the `$test`
+method tests **undirtied** or **untouched** properties, as they haven't been updated. Setting this option to **true**
+will make the `$test` method skip **undirtied** or **untouched** properties.
 
 ### firstError
 
 - Type: `boolean`
 - Default: `false`
 
-In some cases, you only need to get the first error of your validation. Set this option to **true** will make `$test`
-method stop after getting its first error.
+In some cases, to minimize effort, you only need to validate through the first error. Setting this option to **true**
+will make the `$test` method stop the validation process after getting its **first error**.
 
 ### touchOnTest
 
 - Type: `boolean`
 - Default: `false`
 
-By default, when execute `$test` method, only changed property will be considered as **dirtied** or **touched**. Set
-this option to **true** will make `$touch` method to be executed along with `$test` method.
+By default, when executing the `$test` method, only changed properties will be considered as **dirtied** or **touched**.
+Setting this option to **true** will have the `$touch` method executed along with the `$test` method.
+
+### transform
+
+- Type: `function`
+- Default: `(value: any, data?: Data, rules?: Rules, option?: Option) => any`
+
+In some cases, you might want to modify or attach a value to the `result` value. That's when `transform` comes. Use this
+option to transform the `result` object to anything that fits your needs.
