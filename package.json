@@ -1,6 +1,6 @@
 {
   "name": "vue-tiny-validate",
-  "version": "0.3.0",
+  "version": "0.2.1",
   "description": "Tiny Vue Validate Composition",
   "main": "dist/index.umd.js",
   "module": "dist/index.es.js",
@@ -35,7 +35,7 @@
     "test": "jest",
     "dev": "vite",
     "dev:docs": "vitepress dev docs --port 4000",
-    "build": "yarn clean && yarn pretty && vite build --mode library && yarn type && size-limit",
+    "build": "yarn clean && yarn pretty && vite build --mode library && yarn type",
     "build:docs": "yarn clean && vitepress build docs",
     "build:example": "yarn clean && yarn pretty && vite build --mode example",
     "release": "np"
