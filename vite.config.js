@@ -56,10 +56,11 @@ export default ({ command, mode }) => {
           formats: ['es', 'cjs', 'umd'],
         },
         rollupOptions: {
-          external: ['vue'],
+          external: ['vue', 'vue-demi'],
           output: {
             globals: {
               vue: 'Vue',
+              'vue-demi': 'VueDemi',
             },
           },
         },

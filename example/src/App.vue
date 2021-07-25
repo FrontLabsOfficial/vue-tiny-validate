@@ -293,9 +293,7 @@
 <script lang="ts">
 import { ref, reactive, defineComponent, computed } from 'vue';
 import { JsonTreeView } from 'json-tree-view-vue3';
-// @ts-ignore
 import useValidate from 'vue-tiny-validate';
-// @ts-ignore
 import cloneDeep from 'lodash/cloneDeep';
 
 export default defineComponent({

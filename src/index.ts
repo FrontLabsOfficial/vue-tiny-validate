@@ -6,7 +6,15 @@ import {
   Ref,
   ComputedRef,
 } from 'vue-demi';
-import { OPTION, ENTRY_PARAM, NOOP, hasOwn, isObject, unwrap } from './helpers';
+import {
+  OPTION,
+  ENTRY_PARAM,
+  NOOP,
+  hasOwn,
+  isObject,
+  unwrap,
+  setReactiveValue,
+} from './helpers';
 import {
   Fns,
   Data,
@@ -113,10 +121,14 @@ const useValidate = (
     const keys: Array<string> = Object.keys(rules);
 
     for (const key of keys) {
-      if (isObject(rules[key]) && !hasOwn(rules[key], 'test')) {
-        rawData[key] = {};
-        dirt[key] = reactive({});
-        entries[key] = reactive({});
+      if (
+        isObject(rules[key]) &&
+        !hasOwn(rules[key], 'test') &&
+        !hasOwn(rules[key], 'name')
+      ) {
+        setReactiveValue(rawData, key, {});
+        setReactiveValue(dirt, key, reactive({}));
+        setReactiveValue(entries, key, reactive({}));
 
         const args: Args = [
           () => data()[key],
@@ -128,17 +140,17 @@ const useValidate = (
 
         setDefaultValue(...args);
       } else {
-        dirt[key] = false;
-        rawData[key] = data()[key];
+        setReactiveValue(dirt, key, false);
+        setReactiveValue(rawData, key, data()[key]);
 
         const entryData: ArgsObject = { data, rules, dirt, rawData, entries };
 
-        entries[key] = {
+        setReactiveValue(entries, key, {
           ...ENTRY_PARAM,
           $reset: () => reset(entryData, key),
           $test: async () => await test(entryData, key),
           $touch: () => touch(entryData, key),
-        };
+        });
 
         Object.setPrototypeOf(entries[key], {
           $uw: watch(
@@ -169,7 +181,11 @@ const useValidate = (
       },
     );
 
-    dirt[key] = touchOnTest || dirt[key] || data()[key] !== rawData[key];
+    setReactiveValue(
+      dirt,
+      key,
+      touchOnTest || dirt[key] || data()[key] !== rawData[key],
+    );
 
     if (lazy && !dirt[key]) return;
 
@@ -217,27 +233,28 @@ const useValidate = (
     }
 
     if (!stop) {
-      entries[key] = {
+      setReactiveValue(entries, key, {
         ...entries[key],
         $errors,
         $messages,
         $invalid: Boolean($errors.length),
-      } as Entry;
+      } as Entry);
     }
   };
 
   const reset = (entryData: ArgsObject, key: string): void => {
     const { dirt, entries } = entryData;
 
-    dirt[key] = false;
-    entries[key] = {
+    setReactiveValue(dirt, key, false);
+    setReactiveValue(entries, key, {
       ...entries[key],
       ...ENTRY_PARAM,
-    } as Entry;
+    } as Entry);
   };
 
   const touch = (entryData: ArgsObject, key: string): void => {
-    entryData.dirt[key] = true;
+    const { dirt } = entryData;
+    setReactiveValue(dirt, key, true);
   };
 
   const initialize = (): void => {

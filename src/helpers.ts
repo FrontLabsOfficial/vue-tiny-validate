@@ -1,5 +1,13 @@
-import { reactive, isRef } from 'vue-demi';
+import { reactive, isRef, isVue2, Vue2 } from 'vue-demi';
 import { UnknownObject } from './types';
+
+export const setReactiveValue = (obj: any, key: string, value: any) => {
+  if (isVue2) {
+    Vue2.set(obj, key, value);
+  } else {
+    obj[key] = value;
+  }
+};
 
 export const hasOwn = (obj: UnknownObject, key: string): boolean =>
   typeof obj[key] !== 'undefined';
