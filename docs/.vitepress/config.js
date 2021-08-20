@@ -1,13 +1,13 @@
 module.exports = {
   title: 'vue-tiny-validate',
-  description: 'Tiny (1KB gzipped) Vue 3 Validate Composition',
+  description: 'iny Vue Validate Composition',
   head: [
     ['meta', { property: 'og:title', content: 'vue-tiny-validate' }],
     [
       'meta',
       {
         property: 'og:description',
-        content: 'Tiny (1KB gzipped) Vue 3 Validate Composition',
+        content: 'Tiny Vue Validate Composition',
       },
     ],
   ],
