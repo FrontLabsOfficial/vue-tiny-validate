@@ -89,22 +89,17 @@ const useValidate = (
           dirt[key] as Dirt,
         );
         result[key] = { ...childResult };
-
         setOverallResult(result, childResult);
       } else {
-        result[key] = { ...entries[key] };
-        result[key].$dirty = dirt[key];
-
+        result[key] = { ...entries[key], $dirty: dirt[key] };
         setOverallResult(result, result[key]);
       }
     }
 
     for (const key of fnsKeys) {
       result[key] = () => {
-        if (key === '$test')
-          return Promise.all(fns[key].map((fn: Function) => fn()));
-
-        fns[key].forEach((fn: Function) => fn());
+        const executedFns = fns[key].map((fn: Function) => fn());
+        return key === '$test' ? Promise.all(executedFns) : executedFns;
       };
     }
 
@@ -130,15 +125,13 @@ const useValidate = (
         setReactiveValue(dirt, key, reactive({}));
         setReactiveValue(entries, key, reactive({}));
 
-        const args: Args = [
+        setDefaultValue(
           () => data()[key],
           rules[key] as Rules,
           dirt[key] as Dirt,
           rawData[key],
           entries[key] as Entries,
-        ];
-
-        setDefaultValue(...args);
+        );
       } else {
         setReactiveValue(dirt, key, false);
         setReactiveValue(rawData, key, data()[key]);
@@ -169,25 +162,18 @@ const useValidate = (
     const { data, rules, dirt, rawData, entries } = entryData;
     const { lazy, firstError, touchOnTest } = option.value;
 
-    let stop = false;
+    const isDirtied = dirt[key] || touchOnTest || data()[key] !== rawData[key];
 
-    const uw = watch(
+    if (lazy && !isDirtied) return;
+
+    let cancel = false;
+
+    watch(
       () => entries[key].$pending,
       value => {
-        if (!value) {
-          stop = true;
-          uw();
-        }
+        if (!value) cancel = true;
       },
     );
-
-    setReactiveValue(
-      dirt,
-      key,
-      touchOnTest || dirt[key] || data()[key] !== rawData[key],
-    );
-
-    if (lazy && !dirt[key]) return;
 
     let $errors: Array<Error> = [];
     let $messages: Array<string> = [];
@@ -215,7 +201,7 @@ const useValidate = (
           testValue = false;
         }
 
-        if (!stop) entries[key].$pending = false;
+        if (!cancel) entries[key].$pending = false;
       }
 
       if (!testValue) {
@@ -232,7 +218,8 @@ const useValidate = (
       }
     }
 
-    if (!stop) {
+    if (!cancel) {
+      setReactiveValue(dirt, key, isDirtied);
       setReactiveValue(entries, key, {
         ...entries[key],
         $errors,
@@ -254,6 +241,7 @@ const useValidate = (
 
   const touch = (entryData: ArgsObject, key: string): void => {
     const { dirt } = entryData;
+
     setReactiveValue(dirt, key, true);
   };
 
