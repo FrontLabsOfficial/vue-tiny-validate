@@ -4,8 +4,8 @@
 <template>
   <input v-model="data.name" />
   <div>Is Invalid: {{ result.$invalid }}</div>
-  <div v-if="result.messages.length">
-    <span v-for="(message, index) in result.messages" :key="index">
+  <div v-if="result.$messages.length">
+    <span v-for="(message, index) in result.$messages" :key="index">
       {{ message }}
     </span>
   </div>
