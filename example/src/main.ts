@@ -1,4 +1,4 @@
-import { createApp } from 'vue';
+import { createApp } from 'vue-demi';
 import 'virtual:windi.css';
 import './style.css';
 
