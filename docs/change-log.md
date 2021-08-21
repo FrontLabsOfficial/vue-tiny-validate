@@ -1,3 +1,7 @@
+## 0.2.3
+
+- Fix `result` value is **touched** / **dirtied** before finishing test.
+
 ## 0.2.2
 
 - Fix **wrong** `result` when `data` has multiple nested properties.
