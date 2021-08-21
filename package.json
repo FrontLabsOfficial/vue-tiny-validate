@@ -1,6 +1,6 @@
 {
   "name": "vue-tiny-validate",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Tiny Vue Validate Composition",
   "main": "dist/index.umd.js",
   "module": "dist/index.es.js",
