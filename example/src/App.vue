@@ -23,7 +23,7 @@
               }"
             />
             <span v-if="result.firstName.$invalid" class="form-item--message">
-              {{ result.firstName.$messages[0] }}
+              {{ result.firstName.$messages.join(' | ') }}
             </span>
           </div>
 
@@ -47,7 +47,7 @@
               }"
             />
             <span v-if="result.lastName.$invalid" class="form-item--message">
-              {{ result.lastName.$messages[0] }}
+              {{ result.lastName.$messages.join(' | ') }}
             </span>
           </div>
 
@@ -71,7 +71,7 @@
               }"
             />
             <span v-if="result.email.$invalid" class="form-item--message">
-              {{ result.email.$messages[0] }}
+              {{ result.email.$messages.join(' | ') }}
             </span>
           </div>
 
@@ -103,7 +103,7 @@
               v-if="result.address.country.$invalid"
               class="form-item--message"
             >
-              {{ result.address.country.$messages[0] }}
+              {{ result.address.country.$messages.join(' | ') }}
             </span>
           </div>
 
@@ -131,7 +131,7 @@
               v-if="result.address.street.$invalid"
               class="form-item--message"
             >
-              {{ result.address.street.$messages[0] }}
+              {{ result.address.street.$messages.join(' | ') }}
             </span>
           </div>
 
@@ -154,7 +154,7 @@
               v-if="result.address.city.$invalid"
               class="form-item--message"
             >
-              {{ result.firstName.$messages[0] }}
+              {{ result.address.city.$messages.join(' | ') }}
             </span>
           </div>
 
@@ -177,7 +177,7 @@
               v-if="result.address.state.$invalid"
               class="form-item--message"
             >
-              {{ result.address.state.$messages[0] }}
+              {{ result.address.state.$messages.join(' | ') }}
             </span>
           </div>
 
@@ -201,7 +201,7 @@
               }"
             />
             <span v-if="result.address.zip.$invalid" class="form-item--message">
-              {{ result.address.zip.$messages[0] }}
+              {{ result.address.zip.$messages.join(' | ') }}
             </span>
           </div>
 
@@ -225,7 +225,7 @@
               }"
             />
             <span v-if="result.password.p1.$invalid" class="form-item--message">
-              {{ result.password.p1.$messages[0] }}
+              {{ result.password.p1.$messages.join(' | ') }}
             </span>
           </div>
 
@@ -249,27 +249,111 @@
               }"
             />
             <span v-if="result.password.p2.$invalid" class="form-item--message">
-              {{ result.password.p2.$messages[0] }}
+              {{ result.password.p2.$messages.join(' | ') }}
             </span>
           </div>
         </div>
       </div>
-      <div class="px-4 py-3 bg-gray-100 text-right sm:px-6 form-item">
-        <button class="base-button text-blue-600 !shadow-none" @click="reset">
-          Reset
-        </button>
-        <button
-          @click="validate"
-          class="
-            base-button
-            text-white
-            bg-blue-600
-            hover:bg-blue-700
-            focus:ring-blue-500
-          "
-        >
-          Validate
-        </button>
+      <div
+        class="
+          px-4
+          py-3
+          bg-gray-100
+          form-item
+          gap-4
+          flex flex-col
+          sm:px-6
+          md:flex-row
+          md:justify-between
+          md:items-center
+        "
+      >
+        <div class="flex flex-col md:flex-row gap-4">
+          <div class="flex items-center">
+            <input
+              type="checkbox"
+              id="autoTest"
+              class="mr-1"
+              v-model="options.autoTest"
+            />
+            <label
+              for="autoTest"
+              class="block text-sm font-medium text-gray-700"
+            >
+              Auto test
+            </label>
+          </div>
+          <div class="flex items-center">
+            <input
+              type="checkbox"
+              id="autoTouch"
+              class="mr-1"
+              v-model="options.autoTouch"
+            />
+            <label
+              for="autoTouch"
+              class="block text-sm font-medium text-gray-700"
+            >
+              Auto touch
+            </label>
+          </div>
+          <div class="flex items-center">
+            <input
+              type="checkbox"
+              id="lazy"
+              class="mr-1"
+              v-model="options.lazy"
+            />
+            <label for="lazy" class="block text-sm font-medium text-gray-700">
+              Lazy
+            </label>
+          </div>
+          <div class="flex items-center">
+            <input
+              type="checkbox"
+              id="firstError"
+              class="mr-1"
+              v-model="options.firstError"
+            />
+            <label
+              for="firstError"
+              class="block text-sm font-medium text-gray-700"
+            >
+              First error
+            </label>
+          </div>
+          <div class="flex items-center">
+            <input
+              type="checkbox"
+              id="touchOnTest"
+              class="mr-1"
+              v-model="options.touchOnTest"
+            />
+            <label
+              for="touchOnTest"
+              class="block text-sm font-medium text-gray-700"
+            >
+              Touch on test
+            </label>
+          </div>
+        </div>
+        <div class="text-right">
+          <button class="base-button text-blue-600 !shadow-none" @click="reset">
+            Reset
+          </button>
+          <button
+            @click="validate"
+            class="
+              base-button
+              text-white
+              bg-blue-600
+              hover:bg-blue-700
+              focus:ring-blue-500
+            "
+          >
+            Validate
+          </button>
+        </div>
       </div>
     </div>
     <div class="shadow bg-white rounded px-4 py-5">
@@ -291,7 +375,7 @@
 </template>
 
 <script lang="ts">
-import { ref, reactive, defineComponent, computed } from 'vue';
+import { ref, reactive, defineComponent, computed, watch } from 'vue';
 import { JsonTreeView } from 'json-tree-view-vue3';
 import useValidate from 'vue-tiny-validate';
 import cloneDeep from 'lodash/cloneDeep';
@@ -321,6 +405,14 @@ export default defineComponent({
 
     const info = ref(cloneDeep(defaultInfo));
 
+    const options = reactive({
+      autoTest: false,
+      autoTouch: false,
+      lazy: false,
+      firstError: false,
+      touchOnTest: false,
+    });
+
     const rules = computed(() => {
       const requiredCheck = (value: string): boolean => value !== '';
 
@@ -332,7 +424,7 @@ export default defineComponent({
       const cityCheck = (value: string): Promise<boolean> => {
         return new Promise(resolve => {
           return setTimeout(() => {
-            resolve(true);
+            resolve(/[a-z]/.test(value));
           }, 2000);
         });
       };
@@ -340,7 +432,7 @@ export default defineComponent({
       const stateCheck = async (value: string): Promise<boolean> => {
         const result: boolean = await new Promise(resolve =>
           setTimeout(() => {
-            resolve(true);
+            resolve(/[a-z]/.test(value));
           }, 2000),
         );
 
@@ -363,13 +455,13 @@ export default defineComponent({
 
       const city = {
         test: cityCheck,
-        message: 'City is not correct',
+        message: 'City must be a string',
         name: 'city',
       };
 
       const state = {
         test: stateCheck,
-        message: 'State is not correct',
+        message: 'State must be a string',
         name: 'state',
       };
 
@@ -404,7 +496,7 @@ export default defineComponent({
       };
     });
 
-    const { result } = useValidate(info, rules);
+    const { result } = useValidate(info, rules, options);
 
     const validate = async () => {
       await result.value.$test();
@@ -417,7 +509,11 @@ export default defineComponent({
       console.log('Resetted!');
     };
 
-    return { info, result, validate, reset };
+    watch(options, () => {
+      info.value = cloneDeep(defaultInfo);
+    });
+
+    return { info, options, result, validate, reset };
   },
 });
 </script>

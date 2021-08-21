@@ -35,16 +35,15 @@
     "test": "jest",
     "dev": "vite",
     "dev:docs": "vitepress dev docs --port 4000",
-    "build": "yarn clean && yarn pretty && vite build --mode library && yarn type",
+    "build:lib": "yarn clean && yarn pretty && vite build --mode lib && yarn type",
     "build:docs": "yarn clean && vitepress build docs",
     "build:example": "yarn clean && yarn pretty && vite build --mode example",
-    "release": "np"
+    "release": "yarn build:lib && np"
   },
   "dependencies": {
     "vue-demi": "^0.11.2"
   },
   "devDependencies": {
-    "@size-limit/preset-small-lib": "^4.11.0",
     "@types/jest": "^26.0.23",
     "@types/lodash": "^4.14.171",
     "@vitejs/plugin-vue": "^1.2.3",
@@ -59,19 +58,16 @@
     "np": "^7.5.0",
     "prettier": "^2.3.0",
     "sass": "^1.34.1",
-    "size-limit": "^4.11.0",
     "ts-jest": "^27.0.3",
     "typescript": "^4.3.2",
     "vite": "^2.3.5",
     "vite-plugin-windicss": "^1.0.4",
     "vitepress": "^0.15.3",
-    "vue": "^3.0.11",
     "vue-jest": "^5.0.0-alpha.10",
     "windicss": "^3.1.3"
   },
   "peerDependencies": {
-    "@vue/composition-api": "^1.0.0-rc.1",
-    "vue": ">= 2.6 || >=3.0.0"
+    "@vue/composition-api": "^1.0.0-rc.1"
   },
   "peerDependenciesMeta": {
     "@vue/composition-api": {

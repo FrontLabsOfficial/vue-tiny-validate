@@ -1,7 +1,6 @@
-input,
-select,
-textarea {
-  @apply bg-white border px-3 py-2 leading-6 appearance-none mt-1 block w-full shadow-sm border-gray-300
+input[type='text'],
+select {
+  @apply bg-white border px-3 py-2 leading-6 mt-1 block w-full shadow-sm border-gray-300
   rounded-md sm:text-sm focus:ring-blue-500 focus:border-blue-500;
 }
 
@@ -10,7 +9,7 @@ select {
   background-position: right 0.5rem center;
   background-size: 1.5em 1.5em;
 
-  @apply bg-no-repeat pr-10;
+  @apply bg-no-repeat pr-10 appearance-none;
 }
 
 .base-button {
@@ -26,11 +25,11 @@ select {
   @apply text-xs absolute mt-0.5 block text-red-600;
 }
 
-.form-input__error {
+.form-input__error[type='text'] {
   @apply border-red-500;
 }
 
-.form-input__success {
+.form-input__success[type='text'] {
   @apply border-green-500;
 }
 
