@@ -20,7 +20,7 @@ That's why `vue-tiny-validate` was born.
 - Easy. Come with familiar API and coherent documentation.
 - Tiny. Only **3.4KB** minified. **1.4KB** gzipped.
 - Flexible. Full control over everything.
-- Fully functional. Sync validation, async validation, etc supported.\
+- Fully functional. Sync validation, async validation, etc supported.
 - Compatible. Works with both Vue 2.6 and Vue 3.
 
 ## Usage
