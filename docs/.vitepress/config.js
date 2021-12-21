@@ -31,5 +31,10 @@ module.exports = {
       { text: 'FAQ', link: '/faq' },
       { text: 'Changelog', link: '/change-log' },
     ],
+    algolia: {
+      appId: 'IPJD2UD9OR',
+      apiKey: '9dd8e988e93000e13b11a56c9acc649c',
+      indexName: 'vue-tiny-validate-js'
+    }
   },
 };
