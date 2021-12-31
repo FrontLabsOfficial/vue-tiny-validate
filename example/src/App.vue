@@ -135,7 +135,10 @@
             </span>
           </div>
 
-          <div class="col-span-6 sm:col-span-6 lg:col-span-2 form-item">
+          <div
+            class="col-span-6 sm:col-span-6 lg:col-span-2 form-item"
+            :class="{'form-item__loading': result.address.city.$pending}"
+          >
             <label for="city" class="block text-sm font-medium text-gray-700">
               City
             </label>
@@ -158,7 +161,10 @@
             </span>
           </div>
 
-          <div class="col-span-6 sm:col-span-3 lg:col-span-2 form-item">
+          <div
+            class="col-span-6 sm:col-span-3 lg:col-span-2 form-item"
+            :class="{'form-item__loading': result.address.state.$pending}"
+          >
             <label for="state" class="block text-sm font-medium text-gray-700">
               State / Province
             </label>

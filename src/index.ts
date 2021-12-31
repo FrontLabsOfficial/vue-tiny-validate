@@ -209,7 +209,7 @@ const useValidate = (
             ? message(data()[key])
             : (message as string);
 
-        $errors = [...$errors, { name, message: testMessage }];
+        $errors.push({ name, message: testMessage });
 
         if (testMessage) $messages.push(testMessage);
 
@@ -261,7 +261,6 @@ const useValidate = (
   watch(_option, initialize);
 
   // for development purpose
-  // @ts-ignore
   if (import.meta.env.MODE === 'development') {
     const watchOps = { immediate: true, deep: true };
 
