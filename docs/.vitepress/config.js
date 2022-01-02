@@ -19,8 +19,12 @@ module.exports = {
     nextLinks: true,
     nav: [
       {
-        text: 'Example',
+        text: 'Example Source',
         link: 'https://github.com/FrontLabsOfficial/vue-tiny-validate/tree/master/example',
+      },
+      {
+        text: 'Example',
+        link: 'https://vue-tiny-validate-example.netlify.app/',
       },
     ],
     sidebar: [

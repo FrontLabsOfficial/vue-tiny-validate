@@ -428,11 +428,9 @@ export default defineComponent({
           rgx.test(value);
 
       const cityCheck = (value: string): Promise<boolean> => {
-        return new Promise(resolve => {
-          return setTimeout(() => {
-            resolve(/[a-z]/.test(value));
-          }, 2000);
-        });
+        return new Promise(resolve => setTimeout(() => {
+          resolve(/[a-z]/.test(value));
+        }, 2000));
       };
 
       const stateCheck = async (value: string): Promise<boolean> => {

@@ -40,7 +40,7 @@ They must have the **same properties** at every level. The other one `options` i
 
 These 3 parameters must all be **reactive object**. To be exact, they can only be `Ref`, `Reactive` or `Computed`.
 
-Start validating your data by calling the `$test` method. All the validation states (such as **messages**) will be
+Start validating your data by calling the `$test` method. All the validation states will be
 stored in the `result` object.
 
 ::: warning
@@ -88,10 +88,10 @@ const rules = reactive({
 });
 ```
 
-Each validator has 3 properties: `key`, `test` and `message`. The first two items are **mandatory** and the other one
+Each validator has 3 properties: `name`, `test` and `message`. The first two items are **mandatory** and the other one
 `message` is **optional**.
 
-`key` is an unique string that is used to identify which **error** the property has after being validated.
+`name` is an unique key that is used to identify which error the property has after being validated.
 
 `test` is a validate function that returns a **boolean** value. All the validate logic goes here.
 
@@ -99,7 +99,7 @@ Whenever the `test` function returns false value, a `message` string is also ret
 
 ### Multiple
 
-When the property has **more than one** rules, these rules must be presented in an **array** of validators.
+When the property has more than one rules, these rules must be presented in an **array** of validators.
 
 ```js
 const rules = reactive({
@@ -116,7 +116,7 @@ const rules = reactive({
 
 ### Async
 
-**Async validation** is supported by default. Simply assign ab **async function** or a function that returns a
+**Async validation** is supported by default. Simply assign an **async function** or a function that returns a
 **Promise** to `test`.
 
 ```js
@@ -147,7 +147,7 @@ const rules = reactive({
 
 ### Extra parameters
 
-In some cases, `test` depends on other parameters. In other words, you need to provide a **dynamic validator**, which
+In some cases, the `test` method depends on other parameters. In other words, you need to provide a **dynamic validator**, which
 can simply be done by creating a **higher order function** that wraps your normal validator.
 
 ```js
@@ -211,7 +211,7 @@ const rules = reactive({
 ## Test
 
 Validate your data by calling the `$test` method. Technically, it will run through all properties and execute each of
-their validator.
+their validators.
 
 ::: warning
 `$test` is either function or async function.
@@ -220,12 +220,12 @@ their validator.
 ```js
 const { result } = useValidate(data, rules);
 
-// This function is called to test all data
+// This function is called to test all properties
 const testAll = () => {
   result.$test();
 };
 
-// This function is called to test the -name- property
+// This function is called to only test the 'name' property
 const testName = () => {
   result.name.$test();
 };
@@ -277,12 +277,12 @@ to be **touched** or **dirtied** by calling the `$touch` method.
 ```js
 const { result } = useValidate(data, rules);
 
-// This function is called to touch all data
+// This function is called to touch all properties
 const touchAll = () => {
   result.$touch();
 };
 
-// This function is called to touch the -name- property
+// This function is called to only touch the 'name' property
 const touchName = () => {
   result.name.$touch();
 };
@@ -290,7 +290,7 @@ const touchName = () => {
 
 ### Auto touch
 
-If you want the `$touch` method to be called whenever any properties have changes, use the `autoTouch` option.
+If you want the `$touch` method to be called whenever any properties have changed, use the `autoTouch` option.
 
 ```js
 const options = reactive({ autoTouch: true });
@@ -329,12 +329,12 @@ default value.
 ```js
 const { result } = useValidate(data, rules);
 
-// This function is called to reset all data
+// This function is called to reset all properties
 const resetAll = () => {
   result.$reset();
 };
 
-// This function is called to reset the -name- property
+// This function is called to only reset the 'name' property
 const resetName = () => {
   result.name.$reset();
 };

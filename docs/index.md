@@ -1,5 +1,3 @@
-# Introduction
-
 ### `vue-tiny-validate` Tiny Vue Validate Composition
 
 ## Motivation

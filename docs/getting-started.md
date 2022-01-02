@@ -1,12 +1,12 @@
 ## Installation
 
-with NPM:
+with **npm**:
 
 ```bash
 npm install vue-tiny-validate
 ```
 
-or with Yarn:
+or with **Yarn**:
 
 ```bash
 yarn add vue-tiny-validate
@@ -14,7 +14,7 @@ yarn add vue-tiny-validate
 
 ## Quickstart
 
-Now that you've installed the library, let's get started with a very basic usage guide below.
+Now that you've installed the library, let's get started with a basic usage guide below.
 
 ```js
 <template>
@@ -49,4 +49,4 @@ As you can see above, the `useValidate` composition requires 2 parameters `data`
 The `result` value has everything you need to **get** and **set** the validation. In this example, we use the
 `$test` method to validate and the `$invalid` property to get validation state.
 
-Head to [Usage](/usage) to see more detailed instructions.
+Head to **[Usage](/usage)** to see more detailed instructions.

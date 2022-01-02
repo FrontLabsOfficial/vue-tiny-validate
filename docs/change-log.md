@@ -1,10 +1,14 @@
 ## 0.2.4
 
-- Fix `result` value is **touched** / **dirtied** before finishing test.
+- Fix `result` value is touched / dirtied before finishing test.
+
+## 0.2.3
+
+- This version is un-published due to some build problems.
 
 ## 0.2.2
 
-- Fix **wrong** `result` when `data` has multiple nested properties.
+- Fix wrong `result` when `data` has multiple nested properties.
 - Async `$test` method.
 
 ```js
@@ -29,7 +33,7 @@ const rules = reactive({
 });
 ```
 
-- Support Vue 2.
+- Support Vue 2.6.
 - Add `transform` option.
 
 ```js
@@ -84,5 +88,5 @@ export default {
 
 ## 0.1.3
 
-- Convert from JS to TS.
-- Fix **wrong** default `result`.
+- Convert from JavaScript to TypeScript.
+- Fix wrong default `result`.

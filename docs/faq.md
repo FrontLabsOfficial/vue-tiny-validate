@@ -2,7 +2,7 @@
 
 **Q: Why is there no built-in validator ?**
 
-**A**: Frankly speaking, it's because we are **super lazy**. Moreover, we believe that there is no pre-built validator
+**A**: Frankly saying, it's because we are **super lazy**. Moreover, we believe that there is no pre-built validator
 that can satisfy all of your needs, so it's **redundant** to have any in the first place. Instead, just build your own
 validator.
 
