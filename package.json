@@ -41,6 +41,8 @@
     "release": "yarn build:lib && np"
   },
   "dependencies": {
+    "@firebase/analytics": "^0.7.5",
+    "@firebase/app": "^0.7.17",
     "vue-demi": "^0.11.2"
   },
   "devDependencies": {
