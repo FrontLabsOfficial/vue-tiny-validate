@@ -1,5 +1,5 @@
 import { initializeApp } from '@firebase/app'
-import { getAnalytics } from '@firebase/analytics'
+import { getAnalytics, isSupported } from '@firebase/analytics'
 
 const config = {
   apiKey: "AIzaSyBY-7TmR3rfgye-KDG3QCx2F73tM4BQo-A",
@@ -12,9 +12,14 @@ const config = {
 }
 
 const AnalyticsPlugin = {
-  install(app, options) {
-    const firebaseApp = initializeApp(config);
-    const analytics = getAnalytics(firebaseApp);
+  async install(app, options) {
+    const isEnvSupported = await isSupported();
+
+    if (isEnvSupported) {
+      const firebaseApp = initializeApp(config);
+      getAnalytics(firebaseApp);
+      console.info('Init-ed FireBase Analytics');
+    }
   }
 }
 
