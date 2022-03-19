@@ -1,12 +1,12 @@
-import vue from '@vitejs/plugin-vue';
-import WindiCSS from 'vite-plugin-windicss';
 import { resolve } from 'path';
+import WindiCSS from 'vite-plugin-windicss';
+import vue from '@vitejs/plugin-vue';
 
 const LIBRARY_NAME = 'vue-tiny-validate';
 
 const settings = {
   plugins: [vue(), WindiCSS()],
-  root: resolve(__dirname, 'example'),
+  root: resolve(__dirname, 'example/vue3'),
   resolve: {
     alias: {
       [LIBRARY_NAME]: resolve(__dirname, 'src'),
@@ -30,8 +30,8 @@ const buildExample = {
   },
 };
 
-// build: lib
-const buildLib = {
+// build: library
+const buildLibrary = {
   plugin: [vue()],
   build: {
     lib: {
@@ -59,8 +59,8 @@ export default ({ command, mode }) => {
       return dev;
     case command === 'build' && mode === 'example':
       return buildExample;
-    case command === 'build' && mode === 'lib':
-      return buildLib;
+    case command === 'build' && mode === 'library':
+      return buildLibrary;
     default:
       return {};
   }

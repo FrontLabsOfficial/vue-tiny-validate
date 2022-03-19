@@ -137,7 +137,7 @@
 
           <div
             class="col-span-6 sm:col-span-6 lg:col-span-2 form-item"
-            :class="{'form-item__loading': result.address.city.$pending}"
+            :class="{ 'form-item__loading': result.address.city.$pending }"
           >
             <label for="city" class="block text-sm font-medium text-gray-700">
               City
@@ -163,7 +163,7 @@
 
           <div
             class="col-span-6 sm:col-span-3 lg:col-span-2 form-item"
-            :class="{'form-item__loading': result.address.state.$pending}"
+            :class="{ 'form-item__loading': result.address.state.$pending }"
           >
             <label for="state" class="block text-sm font-medium text-gray-700">
               State / Province
@@ -381,10 +381,10 @@
 </template>
 
 <script lang="ts">
-import { ref, reactive, defineComponent, computed, watch } from 'vue';
 import { JsonTreeView } from 'json-tree-view-vue3';
-import useValidate from 'vue-tiny-validate';
 import cloneDeep from 'lodash/cloneDeep';
+import { ref, reactive, defineComponent, computed, watch } from 'vue';
+import useValidate from 'vue-tiny-validate';
 
 export default defineComponent({
   name: 'App',
@@ -428,9 +428,11 @@ export default defineComponent({
           rgx.test(value);
 
       const cityCheck = (value: string): Promise<boolean> => {
-        return new Promise(resolve => setTimeout(() => {
-          resolve(/[a-z]/.test(value));
-        }, 2000));
+        return new Promise(resolve =>
+          setTimeout(() => {
+            resolve(/[a-z]/.test(value));
+          }, 2000),
+        );
       };
 
       const stateCheck = async (value: string): Promise<boolean> => {

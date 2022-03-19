@@ -1,8 +1,6 @@
-import { createApp } from 'vue-demi';
 import 'virtual:windi.css';
-import './style.css';
-
-// @ts-ignore
+import { createApp } from 'vue-demi';
 import App from './App.vue';
+import './style.css';
 
 createApp(App).mount('#app');

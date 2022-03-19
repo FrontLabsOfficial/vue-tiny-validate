@@ -1,7 +1,6 @@
-import { ref, reactive } from 'vue';
-import { shallowMount } from '@vue/test-utils';
-// @ts-ignore
+import { reactive } from 'vue';
 import useValidate from 'vue-tiny-validate';
+import { shallowMount } from '@vue/test-utils';
 
 // set up Vue component
 export const createComponent = (_data: any, _rules: any, _options: any) => ({

@@ -7,7 +7,17 @@
 
 // style
 body {
-  background: linear-gradient(-60deg, #5f86f2, #a65ff2, #f25fd0, #f25f61, #f2cb5f, #abf25f, #5ff281, #5ff2f0);
+  background: linear-gradient(
+    -60deg,
+    #5f86f2,
+    #a65ff2,
+    #f25fd0,
+    #f25f61,
+    #f2cb5f,
+    #abf25f,
+    #5ff281,
+    #5ff2f0
+  );
   background-position: 0 50%;
   background-size: 300% 300%;
   animation: moveGradient 10s alternate infinite;
@@ -60,14 +70,23 @@ select {
   width: calc(100% + 2px);
   height: 38px;
   z-index: 1;
-  background: linear-gradient(60deg, #5f86f2, #a65ff2, #f25fd0, #f25f61, #f2cb5f, #abf25f, #5ff281, #5ff2f0);
+  background: linear-gradient(
+    60deg,
+    #5f86f2,
+    #a65ff2,
+    #f25fd0,
+    #f25f61,
+    #f2cb5f,
+    #abf25f,
+    #5ff281,
+    #5ff2f0
+  );
   background-position: 0 50%;
   background-size: 300% 300%;
   animation: moveGradient 4s alternate infinite;
 
   @apply -bottom-0.5 sm:bottom-0 absolute -left-px rounded-md;
 }
-
 
 // json tree
 .tree * {

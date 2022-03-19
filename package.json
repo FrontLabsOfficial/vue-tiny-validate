@@ -29,36 +29,40 @@
   },
   "homepage": "https://github.com/FrontLabsOfficial/vue-tiny-validate/tree/master#readme",
   "scripts": {
+    "postinstall": "husky install",
     "clean": "rm -rf dist dist-example docs/.vitepress/dist",
-    "pretty": "prettier --write '**/*.{ts,js,css,md,vue,html}'",
-    "type": "tsc src/*.ts --declaration --emitDeclarationOnly --esModuleInterop --skipLibCheck --outdir dist",
+    "format": "prettier --write '**/*.{ts,js,css,md,vue,html}'",
+    "type": "tsc --outdir dist",
     "test": "jest",
-    "dev": "vite",
+    "dev": "yarn dev:vue3",
+    "dev:vue3": "vite",
+    "dev:vue2": "vite",
     "dev:docs": "vitepress dev docs --port 4000",
-    "build:lib": "yarn clean && yarn pretty && vite build --mode lib && yarn type",
+    "build:library": "yarn clean && vite build --mode library && yarn type",
     "build:docs": "yarn clean && vitepress build docs",
-    "build:example": "yarn clean && yarn pretty && vite build --mode example",
-    "release": "yarn build:lib && np"
+    "build:example:vue3": "yarn clean && yarn pretty && vite build --mode example",
+    "build:example:vue2": "yarn clean && yarn pretty && vite build --mode example",
+    "release": "yarn build:library && np"
   },
   "dependencies": {
-    "@firebase/analytics": "^0.7.5",
-    "@firebase/app": "^0.7.17",
     "vue-demi": "^0.11.2"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.23",
+    "@firebase/analytics": "^0.7.6",
+    "@firebase/app": "^0.7.19",
+    "@trivago/prettier-plugin-sort-imports": "^3.2.0",
     "@types/lodash": "^4.14.171",
     "@vitejs/plugin-vue": "^2.0.1",
     "@vue/compiler-sfc": "^3.2.26",
     "@vue/test-utils": "^2.0.0-rc.9",
     "@windicss/plugin-scrollbar": "^1.2.3",
     "husky": ">=6",
-    "jest": "^27.0.4",
+    "jest": "^27.5.1",
     "json-tree-view-vue3": "^0.1.16",
-    "lint-staged": ">=10",
     "lodash": "^4.17.21",
     "np": "^7.5.0",
     "prettier": "^2.3.0",
+    "pretty-quick": "^3.1.3",
     "sass": "^1.34.1",
     "ts-jest": "^27.0.3",
     "typescript": "^4.3.2",
@@ -78,7 +82,25 @@
       "optional": true
     }
   },
-  "lint-staged": {
-    "**/*.{ts,js,css,md,vue,html}": "prettier --write"
+  "prettier": {
+    "arrowParens": "avoid",
+    "bracketSpacing": true,
+    "htmlWhitespaceSensitivity": "ignore",
+    "insertPragma": false,
+    "jsxBracketSameLine": true,
+    "jsxSingleQuote": false,
+    "printWidth": 80,
+    "proseWrap": "preserve",
+    "quoteProps": "as-needed",
+    "requirePragma": false,
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "all",
+    "useTabs": false,
+    "importOrder": [
+      "^@(.*)/(.*)$",
+      "^[./]"
+    ]
   }
 }
