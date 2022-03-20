@@ -12,7 +12,7 @@ const config = {
 };
 
 const AnalyticsPlugin = {
-  async install(app, options) {
+  async install() {
     const isEnvSupported = await isSupported();
 
     if (isEnvSupported) {

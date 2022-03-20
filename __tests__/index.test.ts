@@ -102,7 +102,7 @@ describe('rules', () => {
   });
 
   test('rule with message', () => {
-    const test = (cNumber: any) => (value: any) => cNumber === value;
+    // const test = (cNumber: any) => (value: any) => cNumber === value;
 
     const data = { number: 5 };
     const rules = {
@@ -125,7 +125,7 @@ describe('rules', () => {
   });
 
   test('rule with message function', () => {
-    const test = (cNumber: any) => (value: any) => cNumber === value;
+    // const test = (cNumber: any) => (value: any) => cNumber === value;
 
     const data = { number: 5 };
     const rules = {
@@ -148,7 +148,7 @@ describe('rules', () => {
   });
 
   test('async rule', async () => {
-    const test = async (value: any) =>
+    const test = async () =>
       new Promise(resolve =>
         setTimeout(() => {
           resolve(false);
@@ -157,7 +157,7 @@ describe('rules', () => {
 
     const data = { number: 5 };
     const rules = {
-      number: { name: 'test_01', test: test },
+      number: { name: 'test_01', test },
     };
 
     const { vm } = shallowMount(createComponent(data, rules, options));

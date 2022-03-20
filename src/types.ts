@@ -1,12 +1,10 @@
-import { ComputedRef } from 'vue-demi';
+import type { ComputedRef } from 'vue-demi';
 
-export type UnknownObject = { [key: string]: any };
+export type UnknownObject = Record<string, any>;
 
-export type Fns = {
-  [key: string]: Array<Function>;
-};
+export type Fns = Record<string, Array<Function>>;
 
-export type Option = {
+export interface Option {
   autoTouch?: boolean;
   autoTest?: boolean;
   lazy?: boolean;
@@ -25,11 +23,11 @@ export type Option = {
         rules?: Rules,
         option?: Option,
       ) => Promise<Result | any>);
-};
+}
 
 export type Data = UnknownObject;
 
-export type Rule = {
+export interface Rule {
   test:
     | ((value: any, data?: Data, rules?: Rules, option?: Option) => boolean)
     | ((
@@ -40,28 +38,26 @@ export type Rule = {
       ) => Promise<boolean>);
   message?: string | ((value: any) => string);
   name: string;
-};
+}
 
-export type Rules = {
+export interface Rules {
   [key: string]: Array<Rule> | Rule | Rules;
-};
+}
 
-export type Dirt = {
+export interface Dirt {
   [key: string]: boolean | Dirt;
-};
+}
 
-export type FnsMapItem = {
-  [key: string]: Array<Function>;
-};
+export type FnsMapItem = Record<string, Array<Function>>;
 
 export type FnsMap = Array<FnsMapItem>;
 
-export type Error = {
+export interface Error {
   name: string;
   message?: string | null;
-};
+}
 
-export type Entry = {
+export interface Entry {
   $invalid: boolean;
   $errors: Array<Error>;
   $messages: Array<string>;
@@ -70,25 +66,25 @@ export type Entry = {
   $reset: () => void;
   $touch: () => void;
   $uw?: () => void;
-};
+}
 
-export type Entries = {
+export interface Entries {
   [key: string]: Entry | Entries;
-};
+}
 
 export type GetDataFn = () => Data;
 
 export type Args = [GetDataFn, Rules, Dirt, UnknownObject, Entries];
 
-export type ArgsObject = {
+export interface ArgsObject {
   data: GetDataFn;
   rules: Rules;
   dirt: Dirt;
   rawData: UnknownObject;
   entries: Entries;
-};
+}
 
-export type Result = {
+export interface Result {
   $invalid: boolean;
   $errors: Array<Error>;
   $messages: Array<string>;
@@ -99,8 +95,8 @@ export type Result = {
 
   // currently there's no good implementation to well support circular reference, so left it any
   [key: string]: any;
-};
+}
 
-export type UseValidate = {
+export interface UseValidate {
   result: ComputedRef<Result | any>;
-};
+}

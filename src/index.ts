@@ -1,34 +1,28 @@
+import type { ComputedRef, Ref, UnwrapRef } from 'vue-demi';
+import { computed, reactive, watch } from 'vue-demi';
 import {
-  computed,
-  reactive,
-  watch,
-  UnwrapRef,
-  Ref,
-  ComputedRef,
-} from 'vue-demi';
-import {
-  OPTION,
   ENTRY_PARAM,
   NOOP,
+  OPTION,
   hasOwn,
   isObject,
-  unwrap,
   setReactiveValue,
+  unwrap,
 } from './helpers';
-import {
-  Fns,
+import type {
+  ArgsObject,
   Data,
-  Rules,
-  Rule,
   Dirt,
   Entries,
-  UnknownObject,
-  Result,
-  ArgsObject,
   Entry,
   Error,
-  Option,
+  Fns,
   GetDataFn,
+  Option,
+  Result,
+  Rule,
+  Rules,
+  UnknownObject,
   UseValidate,
 } from './types';
 
@@ -174,8 +168,8 @@ const useValidate = (
       },
     );
 
-    let $errors: Array<Error> = [];
-    let $messages: Array<string> = [];
+    const $errors: Array<Error> = [];
+    const $messages: Array<string> = [];
     let ruleItem = rules[key] as Rule | Array<Rule>;
 
     if (!ruleItem) return;
@@ -267,7 +261,7 @@ const useValidate = (
     const watchCb =
       (label: string) =>
       (value: any): void => {
-        console.log('\x1b[32m%s\x1b[0m', label, value);
+        console.log('\x1B[32m%s\x1B[0m', label, value);
       };
 
     watch(result, watchCb('RESULT'));

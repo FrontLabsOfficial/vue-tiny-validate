@@ -11,7 +11,7 @@
 - Fix wrong `result` when `data` has multiple nested properties.
 - Async `$test` method.
 
-```js
+```s
 await result.$test();
 console.log('Tested');
 ```
@@ -54,11 +54,12 @@ const { result } = useValidate(data, rules, options);
 const rules = reactive({
   name: {
     name: 'required',
-    test: (value) => new Promise(resolve => {
-      resolve(true);
-    });
-  }
-})
+    test: value =>
+      new Promise(resolve => {
+        resolve(true);
+      }),
+  },
+});
 ```
 
 - Clear entry data (`$error`, `$invalid`, `$messages`) on resetting.
