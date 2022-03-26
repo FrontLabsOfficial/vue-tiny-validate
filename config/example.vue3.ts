@@ -6,6 +6,8 @@ import {
   transformerVariantGroup,
 } from 'unocss';
 import Unocss from 'unocss/vite';
+import type { ConfigEnv } from 'vite';
+import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { LIBRARY_NAME } from './shared';
 
@@ -38,8 +40,9 @@ const dev = {
 const build = {
   ...settings,
   build: {
-    outDir: resolve(__dirname, '../dist-example-vue3'),
+    outDir: resolve(__dirname, '../dist-example'),
   },
 };
 
-export default ({ command }) => (command === 'serve' ? dev : build);
+export default ({ command }: ConfigEnv) =>
+  defineConfig(command === 'serve' ? dev : build);

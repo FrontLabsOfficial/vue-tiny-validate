@@ -293,9 +293,11 @@
           <div class="flex items-center">
             <input
               id="autoTest"
-              v-model="options.autoTest"
+              :value="options.autoTest"
+              :checked="options.autoTest"
               type="checkbox"
               class="mr-1"
+              @change="changeOption('autoTest')"
             />
             <label
               for="autoTest"
@@ -307,9 +309,11 @@
           <div class="flex items-center">
             <input
               id="autoTouch"
-              v-model="options.autoTouch"
+              :value="options.autoTouch"
+              :checked="options.autoTouch"
               type="checkbox"
               class="mr-1"
+              @change="changeOption('autoTouch')"
             />
             <label
               for="autoTouch"
@@ -321,9 +325,11 @@
           <div class="flex items-center">
             <input
               id="lazy"
-              v-model="options.lazy"
+              :value="options.lazy"
+              :checked="options.lazy"
               type="checkbox"
               class="mr-1"
+              @change="changeOption('lazy')"
             />
             <label for="lazy" class="block text-sm font-medium text-gray-700">
               Lazy
@@ -332,9 +338,11 @@
           <div class="flex items-center">
             <input
               id="firstError"
-              v-model="options.firstError"
+              :value="options.firstError"
+              :checked="options.firstError"
               type="checkbox"
               class="mr-1"
+              @change="changeOption('firstError')"
             />
             <label
               for="firstError"
@@ -346,9 +354,11 @@
           <div class="flex items-center">
             <input
               id="touchOnTest"
-              v-model="options.touchOnTest"
+              :value="options.touchOnTest"
+              :checked="options.touchOnTest"
               type="checkbox"
               class="mr-1"
+              @change="changeOption('touchOnTest')"
             />
             <label
               for="touchOnTest"
@@ -359,11 +369,21 @@
           </div>
         </div>
         <div class="text-right">
-          <button class="base-button text-blue-600 !shadow-none" @click="reset">
+          <button
+            class="
+              base-button
+              text-blue-600
+              !shadow-none
+              !focus:outline-0
+              !focus:ring-0
+            "
+            @click="reset"
+          >
             Reset
           </button>
           <button
             class="
+              ml-4
               base-button
               text-white
               bg-blue-600
@@ -455,13 +475,11 @@ export default defineComponent({
       };
 
       const stateCheck = async (value: string): Promise<boolean> => {
-        const result: boolean = await new Promise(resolve =>
+        return new Promise(resolve =>
           setTimeout(() => {
             resolve(/[a-z]/.test(value));
           }, 2000),
         );
-
-        return result;
       };
 
       const required = {
@@ -523,22 +541,25 @@ export default defineComponent({
 
     const { result } = useValidate(info, rules, options);
 
+    info.value.firstName = 'Hihihi';
+
     const validate = async () => {
       await result.value.$test();
-      console.log('Validated!');
+      console.log('Successfully Validated!');
     };
 
-    const reset = () => {
+    const reset = async () => {
       info.value = cloneDeep(defaultInfo);
-      result.value.$reset();
-      console.log('Successfully reset!');
+      await result.value.$reset();
+      console.log('Successfully Reset!');
     };
 
-    watch(options, () => {
-      info.value = cloneDeep(defaultInfo);
-    });
+    const changeOption = async key => {
+      await reset();
+      options[key] = !options[key];
+    };
 
-    return { info, options, result, validate, reset };
+    return { info, options, result, validate, reset, changeOption };
   },
 });
 </script>

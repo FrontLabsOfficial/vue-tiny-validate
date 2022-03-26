@@ -9,7 +9,7 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
-    "types": ["jest", "vite/client"],
+    "types": ["vite/client" ,"vitest", "vitest/globals"],
     "skipLibCheck": true,
     "declaration": true,
     "emitDeclarationOnly": false,

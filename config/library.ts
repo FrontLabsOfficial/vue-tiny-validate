@@ -1,9 +1,10 @@
 import { resolve } from 'path';
+import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { LIBRARY_NAME } from './shared';
 
-const config = {
-  plugin: [vue()],
+export default defineConfig({
+  plugins: [vue()],
   build: {
     lib: {
       entry: resolve(__dirname, '../src/index.ts'),
@@ -22,6 +23,4 @@ const config = {
     },
     outDir: resolve(__dirname, '../dist'),
   },
-};
-
-export default config;
+});
