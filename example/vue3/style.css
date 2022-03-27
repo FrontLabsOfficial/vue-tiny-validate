@@ -1,22 +1,29 @@
-// animation
 @keyframes moveGradient {
   50% {
     background-position: 100% 50%;
   }
 }
 
-// style
 body {
-  background: linear-gradient(-60deg, #5f86f2, #a65ff2, #f25fd0, #f25f61, #f2cb5f, #abf25f, #5ff281, #5ff2f0);
-  background-position: 0 50%;
+  background: linear-gradient(
+      -60deg,
+      #5f86f2,
+      #a65ff2,
+      #f25fd0,
+      #f25f61,
+      #f2cb5f,
+      #abf25f,
+      #5ff281,
+      #5ff2f0
+    )
+    0 50%;
   background-size: 300% 300%;
   animation: moveGradient 10s alternate infinite;
 }
 
 input[type='text'],
 select {
-  @apply relative bg-white border px-3 py-2 leading-5 mt-1 block w-full shadow-sm border-gray-300
-  rounded-md sm:text-sm sm:leading-5 focus:ring-blue-500 focus:border-blue-500;
+  @apply relative bg-white border px-3 py-2 leading-5 mt-1 block w-full shadow-sm border-gray-300 rounded-md sm:text-sm sm:leading-5 focus:ring-blue-500 focus:border-blue-500;
   z-index: 2;
 }
 
@@ -29,8 +36,7 @@ select {
 }
 
 .base-button {
-  @apply inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md
-  focus:outline-none focus:ring-2 focus:ring-offset-2;
+  @apply inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2;
 }
 
 .form-item {
@@ -41,11 +47,13 @@ select {
   @apply text-xs absolute mt-0.5 block text-red-600;
 }
 
-.form-input__error[type='text'] {
+.form-input__error[type='text'],
+select.form-input__error {
   @apply border-red-500;
 }
 
-.form-input__success[type='text'] {
+.form-input__success[type='text'],
+select.form-input__success {
   @apply border-green-500;
 }
 
@@ -60,16 +68,24 @@ select {
   width: calc(100% + 2px);
   height: 38px;
   z-index: 1;
-  background: linear-gradient(60deg, #5f86f2, #a65ff2, #f25fd0, #f25f61, #f2cb5f, #abf25f, #5ff281, #5ff2f0);
-  background-position: 0 50%;
+  background: linear-gradient(
+      60deg,
+      #5f86f2,
+      #a65ff2,
+      #f25fd0,
+      #f25f61,
+      #f2cb5f,
+      #abf25f,
+      #5ff281,
+      #5ff2f0
+    )
+    0 50%;
   background-size: 300% 300%;
   animation: moveGradient 4s alternate infinite;
 
-  @apply -bottom-0.5 sm:bottom-0 absolute -left-px rounded-md;
+  @apply -bottom-0.5 lg:bottom-0 absolute -left-px rounded-md;
 }
 
-
-// json tree
 .tree * {
   @apply justify-start text-base;
 }

@@ -3,25 +3,25 @@
 Data:
 
 ```ts
-type Data = { [key: string]: any };
+type Data = Record<string, any>;
 
-type DataParam: UnwrapRef<Data> | Ref<Data> | ComputedRef<Data>;
+type DataParam = UnwrapRef<Data> | Ref<Data> | ComputedRef<Data>;
 ```
 
 Rules:
 
 ```ts
-type Rule = {
+interface Rule {
   test: ((value: any) => boolean) | ((value: any) => Promise<boolean>);
   message?: string | ((value: any) => string);
   name: string;
-};
+}
 
-type Rules = {
+interface Rules {
   [key: string]: Array<Rule> | Rule | Rules;
-};
+}
 
-type RulesParam: UnwrapRef<Rules> | Ref<Rules> | ComputedRef<Rules>;
+type RulesParam = UnwrapRef<Rules> | Ref<Rules> | ComputedRef<Rules>;
 ```
 
 `Data` and `Rules` should have the same structure, and `Data` must always have all the properties that `Rules` has.
@@ -31,14 +31,14 @@ They all must be **reactive object**. More exactly, they can only be **Ref**, **
 ## Result
 
 ```ts
-type Result = {
+interface Result {
   $invalid: boolean;
   $errors: Array<Error>;
   $messages: Array<string>;
   $dirty: boolean;
 
   // method properties...
-};
+}
 ```
 
 ### $invalid
@@ -51,10 +51,10 @@ Validation state. It's **true** whenever properties have **errors**.
 ### $errors
 
 ```ts
-type Error = {
+interface Error {
   name: string;
   message?: string | null;
-};
+}
 ```
 
 - Type: `Array<Error>`
@@ -87,13 +87,13 @@ It's **true** whenever the `$test` method is performing **async validation**.
 ## Methods
 
 ```ts
-type Result = {
+interface Result {
   // result properties...
 
   $test: (() => void) | (() => Promise<void>);
   $reset: () => void;
   $touch: () => void;
-};
+}
 ```
 
 ### $test
@@ -120,13 +120,13 @@ The `$touch` method sets `dirty` result of the property to **true**.
 ## Options
 
 ```ts
-type Option = {
+interface Option {
   autoTouch?: boolean;
   autoTest?: boolean;
   lazy?: boolean;
   firstError?: boolean;
   touchOnTest?: boolean;
-};
+}
 ```
 
 ### autoTest

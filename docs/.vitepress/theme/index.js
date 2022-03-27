@@ -5,8 +5,8 @@ import './style.css';
 const Theme = {
   ...DefaultTheme,
   enhanceApp({ app }) {
-    app.use(Analytics)
-  }
-}
+    app.use(Analytics);
+  },
+};
 
 export default Theme;

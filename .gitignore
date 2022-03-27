@@ -1,6 +1,6 @@
 node_modules
 .DS_Store
-dist
-dist-example
-dist-ssr
+dist*
 *.local
+coverage
+.idea

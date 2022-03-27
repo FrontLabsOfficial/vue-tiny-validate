@@ -1,5 +1,5 @@
-import { reactive, isRef, isVue2, Vue2 } from 'vue-demi';
-import { UnknownObject } from './types';
+import { Vue2, isRef, isVue2, reactive } from 'vue-demi';
+import type { UnknownObject } from './types';
 
 export const setReactiveValue = (obj: any, key: string, value: any) => {
   if (isVue2) {

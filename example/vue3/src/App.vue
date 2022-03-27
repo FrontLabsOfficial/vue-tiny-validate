@@ -1,5 +1,20 @@
 <template>
   <div class="p-4 space-y-4 md:px-5 md:py-10 md:container md:mx-auto">
+    <div
+      class="
+        shadow
+        bg-white
+        overflow-hidden
+        rounded
+        px-4
+        py-5
+        font-bold
+        text-base
+        lg:text-xl
+      "
+    >
+      Vue Tiny Validate: Vue 3 Example
+    </div>
     <div class="shadow overflow-hidden rounded">
       <div class="px-4 py-5 bg-white sm:p-6">
         <div class="grid grid-cols-6 gap-6">
@@ -11,11 +26,11 @@
               First name
             </label>
             <input
+              id="first_name"
+              v-model="info.firstName"
               type="text"
               name="first_name"
-              id="first_name"
               autocomplete="given-name"
-              v-model="info.firstName"
               :class="{
                 'form-input__error': result.firstName.$invalid,
                 'form-input__success':
@@ -35,11 +50,11 @@
               Last name
             </label>
             <input
+              id="last_name"
+              v-model="info.lastName"
               type="text"
               name="last_name"
-              id="last_name"
               autocomplete="family-name"
-              v-model="info.lastName"
               :class="{
                 'form-input__error': result.lastName.$invalid,
                 'form-input__success':
@@ -59,11 +74,11 @@
               Email address
             </label>
             <input
+              id="email_address"
+              v-model="info.email"
               type="text"
               name="email_address"
-              id="email_address"
               autocomplete="email"
-              v-model="info.email"
               :class="{
                 'form-input__error': result.email.$invalid,
                 'form-input__success':
@@ -84,9 +99,9 @@
             </label>
             <select
               id="country"
+              v-model="info.address.country"
               name="country"
               autocomplete="country"
-              v-model="info.address.country"
               :class="{
                 'form-input__error': result.address.country.$invalid,
                 'form-input__success':
@@ -115,11 +130,11 @@
               Street address
             </label>
             <input
+              id="street_address"
+              v-model="info.address.street"
               type="text"
               name="street_address"
-              id="street_address"
               autocomplete="street-address"
-              v-model="info.address.street"
               :class="{
                 'form-input__error': result.address.street.$invalid,
                 'form-input__success':
@@ -136,17 +151,17 @@
           </div>
 
           <div
-            class="col-span-6 sm:col-span-6 lg:col-span-2 form-item"
-            :class="{'form-item__loading': result.address.city.$pending}"
+            class="col-span-6 sm:col-span-3 lg:col-span-2 form-item"
+            :class="{ 'form-item__loading': result.address.city.$pending }"
           >
             <label for="city" class="block text-sm font-medium text-gray-700">
               City
             </label>
             <input
-              type="text"
-              name="city"
               id="city"
               v-model="info.address.city"
+              type="text"
+              name="city"
               :class="{
                 'form-input__error': result.address.city.$invalid,
                 'form-input__success':
@@ -163,16 +178,16 @@
 
           <div
             class="col-span-6 sm:col-span-3 lg:col-span-2 form-item"
-            :class="{'form-item__loading': result.address.state.$pending}"
+            :class="{ 'form-item__loading': result.address.state.$pending }"
           >
             <label for="state" class="block text-sm font-medium text-gray-700">
               State / Province
             </label>
             <input
-              type="text"
-              name="state"
               id="state"
               v-model="info.address.state"
+              type="text"
+              name="state"
               :class="{
                 'form-input__error': result.address.state.$invalid,
                 'form-input__success':
@@ -195,11 +210,11 @@
               ZIP / Postal
             </label>
             <input
+              id="postal_code"
+              v-model="info.address.zip"
               type="text"
               name="postal_code"
-              id="postal_code"
               autocomplete="postal-code"
-              v-model="info.address.zip"
               :class="{
                 'form-input__error': result.address.zip.$invalid,
                 'form-input__success':
@@ -219,11 +234,11 @@
               Password
             </label>
             <input
+              id="password01"
+              v-model="info.password.p1"
               type="text"
               name="password01"
-              id="password01"
               autocomplete="given-name"
-              v-model="info.password.p1"
               :class="{
                 'form-input__error': result.password.p1.$invalid,
                 'form-input__success':
@@ -243,11 +258,11 @@
               Re-type your password
             </label>
             <input
+              id="password02"
+              v-model="info.password.p2"
               type="text"
               name="password02"
-              id="password02"
               autocomplete="family-name"
-              v-model="info.password.p2"
               :class="{
                 'form-input__error': result.password.p2.$invalid,
                 'form-input__success':
@@ -277,10 +292,12 @@
         <div class="flex flex-col md:flex-row gap-4">
           <div class="flex items-center">
             <input
-              type="checkbox"
               id="autoTest"
+              :value="options.autoTest"
+              :checked="options.autoTest"
+              type="checkbox"
               class="mr-1"
-              v-model="options.autoTest"
+              @change="changeOption('autoTest')"
             />
             <label
               for="autoTest"
@@ -291,10 +308,12 @@
           </div>
           <div class="flex items-center">
             <input
-              type="checkbox"
               id="autoTouch"
+              :value="options.autoTouch"
+              :checked="options.autoTouch"
+              type="checkbox"
               class="mr-1"
-              v-model="options.autoTouch"
+              @change="changeOption('autoTouch')"
             />
             <label
               for="autoTouch"
@@ -305,10 +324,12 @@
           </div>
           <div class="flex items-center">
             <input
-              type="checkbox"
               id="lazy"
+              :value="options.lazy"
+              :checked="options.lazy"
+              type="checkbox"
               class="mr-1"
-              v-model="options.lazy"
+              @change="changeOption('lazy')"
             />
             <label for="lazy" class="block text-sm font-medium text-gray-700">
               Lazy
@@ -316,10 +337,12 @@
           </div>
           <div class="flex items-center">
             <input
-              type="checkbox"
               id="firstError"
+              :value="options.firstError"
+              :checked="options.firstError"
+              type="checkbox"
               class="mr-1"
-              v-model="options.firstError"
+              @change="changeOption('firstError')"
             />
             <label
               for="firstError"
@@ -330,10 +353,12 @@
           </div>
           <div class="flex items-center">
             <input
-              type="checkbox"
               id="touchOnTest"
+              :value="options.touchOnTest"
+              :checked="options.touchOnTest"
+              type="checkbox"
               class="mr-1"
-              v-model="options.touchOnTest"
+              @change="changeOption('touchOnTest')"
             />
             <label
               for="touchOnTest"
@@ -344,26 +369,40 @@
           </div>
         </div>
         <div class="text-right">
-          <button class="base-button text-blue-600 !shadow-none" @click="reset">
+          <button
+            class="
+              base-button
+              text-blue-600
+              !shadow-none
+              !focus:outline-0
+              !focus:ring-0
+            "
+            @click="reset"
+          >
             Reset
           </button>
           <button
-            @click="validate"
             class="
+              ml-4
               base-button
               text-white
               bg-blue-600
               hover:bg-blue-700
               focus:ring-blue-500
             "
+            @click="validate"
           >
             Validate
           </button>
         </div>
       </div>
     </div>
-    <div class="shadow bg-white rounded px-4 py-5">
-      <JsonTreeView :data="JSON.stringify(result)" :maxDepth="0" class="tree" />
+    <div class="shadow bg-white overflow-hidden rounded px-4 py-5">
+      <JsonTreeView
+        :data="JSON.stringify(result)"
+        :max-depth="0"
+        class="tree"
+      />
     </div>
     <div class="text-center text-light-500 md:mt-5">
       made with
@@ -381,10 +420,10 @@
 </template>
 
 <script lang="ts">
-import { ref, reactive, defineComponent, computed, watch } from 'vue';
 import { JsonTreeView } from 'json-tree-view-vue3';
-import useValidate from 'vue-tiny-validate';
 import cloneDeep from 'lodash/cloneDeep';
+import { computed, defineComponent, reactive, ref } from 'vue';
+import useValidate from 'vue-tiny-validate';
 
 export default defineComponent({
   name: 'App',
@@ -428,19 +467,19 @@ export default defineComponent({
           rgx.test(value);
 
       const cityCheck = (value: string): Promise<boolean> => {
-        return new Promise(resolve => setTimeout(() => {
-          resolve(/[a-z]/.test(value));
-        }, 2000));
-      };
-
-      const stateCheck = async (value: string): Promise<boolean> => {
-        const result: boolean = await new Promise(resolve =>
+        return new Promise(resolve =>
           setTimeout(() => {
             resolve(/[a-z]/.test(value));
           }, 2000),
         );
+      };
 
-        return result;
+      const stateCheck = async (value: string): Promise<boolean> => {
+        return new Promise(resolve =>
+          setTimeout(() => {
+            resolve(/[a-z]/.test(value));
+          }, 2000),
+        );
       };
 
       const required = {
@@ -504,20 +543,21 @@ export default defineComponent({
 
     const validate = async () => {
       await result.value.$test();
-      console.log('Validated!');
+      console.log('Successfully Validated!');
     };
 
-    const reset = () => {
+    const reset = async () => {
       info.value = cloneDeep(defaultInfo);
-      result.value.$reset();
-      console.log('Resetted!');
+      await result.value.$reset();
+      console.log('Successfully Reset!');
     };
 
-    watch(options, () => {
-      info.value = cloneDeep(defaultInfo);
-    });
+    const changeOption = async key => {
+      await reset();
+      options[key] = !options[key];
+    };
 
-    return { info, options, result, validate, reset };
+    return { info, options, result, validate, reset, changeOption };
   },
 });
 </script>

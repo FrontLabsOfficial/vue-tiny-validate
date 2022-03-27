@@ -1,34 +1,28 @@
+import type { ComputedRef, Ref, UnwrapRef } from 'vue-demi';
+import { computed, reactive, watch } from 'vue-demi';
 import {
-  computed,
-  reactive,
-  watch,
-  UnwrapRef,
-  Ref,
-  ComputedRef,
-} from 'vue-demi';
-import {
-  OPTION,
   ENTRY_PARAM,
   NOOP,
+  OPTION,
   hasOwn,
   isObject,
-  unwrap,
   setReactiveValue,
+  unwrap,
 } from './helpers';
-import {
-  Fns,
+import type {
+  ArgsObject,
   Data,
-  Rules,
-  Rule,
   Dirt,
   Entries,
-  UnknownObject,
-  Result,
-  ArgsObject,
   Entry,
   Error,
-  Option,
+  Fns,
   GetDataFn,
+  Option,
+  Result,
+  Rule,
+  Rules,
+  UnknownObject,
   UseValidate,
 } from './types';
 
@@ -167,15 +161,15 @@ const useValidate = (
 
     let cancel = false;
 
-    watch(
+    const unWatchPending = watch(
       () => entries[key].$pending,
       value => {
         if (!value) cancel = true;
       },
     );
 
-    let $errors: Array<Error> = [];
-    let $messages: Array<string> = [];
+    const $errors: Array<Error> = [];
+    const $messages: Array<string> = [];
     let ruleItem = rules[key] as Rule | Array<Rule>;
 
     if (!ruleItem) return;
@@ -216,6 +210,8 @@ const useValidate = (
         if (firstError) break;
       }
     }
+
+    unWatchPending();
 
     if (!cancel) {
       setReactiveValue(dirt, key, isDirtied);
@@ -262,21 +258,21 @@ const useValidate = (
 
   // for development purpose
   if (import.meta.env.MODE === 'development') {
-    const watchOps = { immediate: true, deep: true };
+    const watchOption = { immediate: true, deep: true };
 
-    const watchCb =
+    const watchCallback =
       (label: string) =>
       (value: any): void => {
-        console.log('\x1b[32m%s\x1b[0m', label, value);
+        console.log('\x1B[32m%s\x1B[0m', label, value);
       };
 
-    watch(result, watchCb('RESULT'));
+    watch(result, watchCallback('RESULT'));
 
-    watch(_data, watchCb('DATA UPDATED'), watchOps);
+    watch(_data, watchCallback('DATA UPDATED'), watchOption);
 
-    watch(_rules, watchCb('RULES UPDATED'), watchOps);
+    watch(_rules, watchCallback('RULES UPDATED'), watchOption);
 
-    watch(_option, watchCb('OPTIONS UPDATED'), watchOps);
+    watch(_option, watchCallback('OPTIONS UPDATED'), watchOption);
   }
 
   return { result };
