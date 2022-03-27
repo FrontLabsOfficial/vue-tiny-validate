@@ -422,7 +422,7 @@
 <script lang="ts">
 import { JsonTreeView } from 'json-tree-view-vue3';
 import cloneDeep from 'lodash/cloneDeep';
-import { computed, defineComponent, reactive, ref, watch } from 'vue';
+import { computed, defineComponent, reactive, ref } from 'vue';
 import useValidate from 'vue-tiny-validate';
 
 export default defineComponent({
@@ -540,8 +540,6 @@ export default defineComponent({
     });
 
     const { result } = useValidate(info, rules, options);
-
-    info.value.firstName = 'Hihihi';
 
     const validate = async () => {
       await result.value.$test();

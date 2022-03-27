@@ -10,6 +10,5 @@ export default defineConfig({
     deps: {
       inline: ['vue2', '@vue/composition-api', 'vue-demi'],
     },
-    include: ['./test/option.spec.ts'],
   },
 });

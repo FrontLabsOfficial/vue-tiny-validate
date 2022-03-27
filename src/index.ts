@@ -161,7 +161,7 @@ const useValidate = (
 
     let cancel = false;
 
-    watch(
+    const unWatchPending = watch(
       () => entries[key].$pending,
       value => {
         if (!value) cancel = true;
@@ -211,6 +211,8 @@ const useValidate = (
       }
     }
 
+    unWatchPending();
+
     if (!cancel) {
       setReactiveValue(dirt, key, isDirtied);
       setReactiveValue(entries, key, {
@@ -256,21 +258,21 @@ const useValidate = (
 
   // for development purpose
   if (import.meta.env.MODE === 'development') {
-    const watchOps = { immediate: true, deep: true };
+    const watchOption = { immediate: true, deep: true };
 
-    const watchCb =
+    const watchCallback =
       (label: string) =>
       (value: any): void => {
         console.log('\x1B[32m%s\x1B[0m', label, value);
       };
 
-    watch(result, watchCb('RESULT'));
+    watch(result, watchCallback('RESULT'));
 
-    watch(_data, watchCb('DATA UPDATED'), watchOps);
+    watch(_data, watchCallback('DATA UPDATED'), watchOption);
 
-    watch(_rules, watchCb('RULES UPDATED'), watchOps);
+    watch(_rules, watchCallback('RULES UPDATED'), watchOption);
 
-    watch(_option, watchCb('OPTIONS UPDATED'), watchOps);
+    watch(_option, watchCallback('OPTIONS UPDATED'), watchOption);
   }
 
   return { result };
