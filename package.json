@@ -33,7 +33,7 @@
     "clean": "rimraf dist* docs/.vitepress/dist",
     "format": "eslint --fix --ext=ts,js,vue,html .",
     "type": "tsc --outdir dist",
-    "test": "yarn test:vue3",
+    "test": "yarn test:vue3 && yarn test:vue2",
     "test:vue2": "vue-demi-switch 2 vue2 && vitest run --config ./config/test.ts",
     "test:vue3": "vue-demi-switch 3 && vitest run --config ./config/test.ts",
     "dev": "vite --config config/example.vue3.ts",
