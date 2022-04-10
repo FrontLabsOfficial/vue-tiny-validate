@@ -10,5 +10,9 @@ export default defineConfig({
     deps: {
       inline: ['vue2', '@vue/composition-api', 'vue-demi'],
     },
+    coverage: {
+      include: ['src/*'],
+      clean: true,
+    },
   },
 });

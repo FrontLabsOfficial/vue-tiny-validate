@@ -48,14 +48,39 @@ describe('rules', () => {
     valueExpect(result.value.year, baseState);
   });
 
-  it.concurrent('should work with async validator', () => {
+  it.concurrent('should work with resolved async validator', () => {
     const data = reactive({ year: 1970 });
     const rules = reactive({
       year: {
         name: 'in20th',
         test: (): Promise<boolean> => {
           // eslint-disable-next-line promise/param-names
-          return new Promise(r => setTimeout(() => r(false), 2000));
+          return new Promise(resolve => setTimeout(() => resolve(false), 2000));
+        },
+      },
+    });
+
+    const { result } = useValidate(data, rules);
+
+    result.value.$test().then(() => {
+      valueExpect(result.value.year, {
+        ...baseState,
+        $invalid: true,
+        $errors: [{ name: 'in20th', message: null }],
+      });
+    });
+
+    expect(result.value.year.$pending).toBe(true);
+  });
+
+  it.concurrent('should work with rejected async validator', () => {
+    const data = reactive({ year: 1970 });
+    const rules = reactive({
+      year: {
+        name: 'in20th',
+        test: (): Promise<boolean> => {
+          // eslint-disable-next-line promise/param-names
+          return new Promise((_, reject) => reject(new Error('Rejected')));
         },
       },
     });

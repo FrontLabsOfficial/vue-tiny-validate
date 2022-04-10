@@ -22,6 +22,7 @@ That's why `vue-tiny-validate` was born.
 - Flexible. Full control over everything.
 - Fully functional. Sync validation, async validation, etc supported.
 - Compatible. Works with both Vue 2.6 and Vue 3.
+- Nearly 100% unit test coverage.
 
 ## Usage
 
