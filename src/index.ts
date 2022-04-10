@@ -256,7 +256,9 @@ const useValidate = (
 
   watch(_option, initialize);
 
-  // for development purpose
+  // FOR DEVELOPMENT PURPOSE
+
+  /* c8 ignore start */
   if (import.meta.env.MODE === 'development') {
     const watchOption = { immediate: true, deep: true };
 
@@ -274,6 +276,7 @@ const useValidate = (
 
     watch(_option, watchCallback('OPTIONS UPDATED'), watchOption);
   }
+  /* c8 ignore stop */
 
   return { result };
 };
