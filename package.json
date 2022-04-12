@@ -30,7 +30,7 @@
   "homepage": "https://github.com/FrontLabsOfficial/vue-tiny-validate/tree/master#readme",
   "scripts": {
     "postinstall": "husky install",
-    "clean": "rimraf dist* docs/.vitepress/dist",
+    "clean": "rimraf dist* docs/.vitepress/dist coverage",
     "format": "eslint --fix --ext=ts,js,vue,html .",
     "type": "tsc --outdir dist",
     "test": "yarn test:vue3 && yarn test:vue2",

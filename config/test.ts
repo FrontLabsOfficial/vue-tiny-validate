@@ -13,6 +13,8 @@ export default defineConfig({
     coverage: {
       include: ['src/*'],
       clean: true,
+      lines: 99,
+      statements: 99,
     },
   },
 });
