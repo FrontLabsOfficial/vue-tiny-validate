@@ -1,17 +1,150 @@
+<script lang="ts">
+import { JsonTreeView } from 'json-tree-view-vue3';
+import cloneDeep from 'lodash/cloneDeep';
+import { computed, defineComponent, reactive, ref } from 'vue';
+import useValidate from 'vue-tiny-validate';
+
+export default defineComponent({
+  name: 'App',
+  components: {
+    JsonTreeView,
+  },
+  setup() {
+    const defaultInfo = {
+      firstName: '',
+      lastName: '',
+      email: '',
+      address: {
+        country: '',
+        street: '',
+        city: '',
+        state: '',
+        zip: '',
+      },
+      password: {
+        p1: '',
+        p2: '',
+      },
+    };
+
+    const info = ref(cloneDeep(defaultInfo));
+
+    const options = reactive({
+      autoTest: false,
+      autoTouch: false,
+      lazy: false,
+      firstError: false,
+      touchOnTest: false,
+    });
+
+    const rules = computed(() => {
+      const requiredCheck = (value: string): boolean => value !== '';
+
+      const rgxCheck =
+        (rgx: RegExp) =>
+        (value: string): boolean =>
+          rgx.test(value);
+
+      const cityCheck = (value: string): Promise<boolean> => {
+        return new Promise(resolve =>
+          setTimeout(() => {
+            resolve(/[a-z]/.test(value));
+          }, 2000),
+        );
+      };
+
+      const stateCheck = async (value: string): Promise<boolean> => {
+        return new Promise(resolve =>
+          setTimeout(() => {
+            resolve(/[a-z]/.test(value));
+          }, 2000),
+        );
+      };
+
+      const required = {
+        test: requiredCheck,
+        message: 'Field is required',
+        name: 'required',
+      };
+
+      const email = {
+        test: rgxCheck(
+          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
+        ),
+        message: (value: string) => `Your email "${value}" is not correct`,
+        name: 'email',
+      };
+
+      const city = {
+        test: cityCheck,
+        message: 'City must be a string',
+        name: 'city',
+      };
+
+      const state = {
+        test: stateCheck,
+        message: 'State must be a string',
+        name: 'state',
+      };
+
+      const zip = {
+        test: rgxCheck(/^[0-9]{5}(?:-[0-9]{4})?$/),
+        message: 'ZIP code is not correct',
+        name: 'zip',
+      };
+
+      const same = {
+        test: (value: any, globalValue: any) =>
+          value === globalValue.password.p1,
+        message: 'Password is not the same',
+        name: 'same',
+      };
+
+      return {
+        firstName: [required],
+        lastName: required,
+        email: [required, email],
+        address: {
+          country: required,
+          street: required,
+          city: [required, city],
+          state: [required, state],
+          zip: [required, zip],
+        },
+        password: {
+          p1: required,
+          p2: [required, same],
+        },
+      };
+    });
+
+    const { result } = useValidate(info, rules, options);
+
+    const validate = async () => {
+      await result.value.$test();
+      console.log('Successfully Validated!');
+    };
+
+    const reset = async () => {
+      info.value = cloneDeep(defaultInfo);
+      await result.value.$reset();
+      console.log('Successfully Reset!');
+    };
+
+    const changeOption = async key => {
+      await reset();
+      options[key] = !options[key];
+    };
+
+    return { info, options, result, validate, reset, changeOption };
+  },
+});
+</script>
+
 <template>
   <div class="p-4 space-y-4 md:px-5 md:py-10 md:container md:mx-auto">
     <div
-      class="
-        shadow
-        bg-white
-        overflow-hidden
-        rounded
-        px-4
-        py-5
-        font-bold
-        text-base
-        lg:text-xl
-      "
+      class="shadow bg-white overflow-hidden rounded px-4 py-5 font-bold text-base lg:text-xl"
     >
       Vue Tiny Validate: Vue 3 Example
     </div>
@@ -276,18 +409,7 @@
         </div>
       </div>
       <div
-        class="
-          px-4
-          py-3
-          bg-gray-100
-          form-item
-          gap-4
-          flex flex-col
-          sm:px-6
-          md:flex-row
-          md:justify-between
-          md:items-center
-        "
+        class="px-4 py-3 bg-gray-100 form-item gap-4 flex flex-col sm:px-6 md:flex-row md:justify-between md:items-center"
       >
         <div class="flex flex-col md:flex-row gap-4">
           <div class="flex items-center">
@@ -370,26 +492,13 @@
         </div>
         <div class="text-right">
           <button
-            class="
-              base-button
-              text-blue-600
-              !shadow-none
-              !focus:outline-0
-              !focus:ring-0
-            "
+            class="base-button text-blue-600 !shadow-none !focus:outline-0 !focus:ring-0"
             @click="reset"
           >
             Reset
           </button>
           <button
-            class="
-              ml-4
-              base-button
-              text-white
-              bg-blue-600
-              hover:bg-blue-700
-              focus:ring-blue-500
-            "
+            class="ml-4 base-button text-white bg-blue-600 hover:bg-blue-700 focus:ring-blue-500"
             @click="validate"
           >
             Validate
@@ -418,146 +527,3 @@
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import { JsonTreeView } from 'json-tree-view-vue3';
-import cloneDeep from 'lodash/cloneDeep';
-import { computed, defineComponent, reactive, ref } from 'vue';
-import useValidate from 'vue-tiny-validate';
-
-export default defineComponent({
-  name: 'App',
-  components: {
-    JsonTreeView,
-  },
-  setup() {
-    const defaultInfo = {
-      firstName: '',
-      lastName: '',
-      email: '',
-      address: {
-        country: '',
-        street: '',
-        city: '',
-        state: '',
-        zip: '',
-      },
-      password: {
-        p1: '',
-        p2: '',
-      },
-    };
-
-    const info = ref(cloneDeep(defaultInfo));
-
-    const options = reactive({
-      autoTest: false,
-      autoTouch: false,
-      lazy: false,
-      firstError: false,
-      touchOnTest: false,
-    });
-
-    const rules = computed(() => {
-      const requiredCheck = (value: string): boolean => value !== '';
-
-      const rgxCheck =
-        (rgx: RegExp) =>
-        (value: string): boolean =>
-          rgx.test(value);
-
-      const cityCheck = (value: string): Promise<boolean> => {
-        return new Promise(resolve =>
-          setTimeout(() => {
-            resolve(/[a-z]/.test(value));
-          }, 2000),
-        );
-      };
-
-      const stateCheck = async (value: string): Promise<boolean> => {
-        return new Promise(resolve =>
-          setTimeout(() => {
-            resolve(/[a-z]/.test(value));
-          }, 2000),
-        );
-      };
-
-      const required = {
-        test: requiredCheck,
-        message: 'Field is required',
-        name: 'required',
-      };
-
-      const email = {
-        test: rgxCheck(
-          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
-        ),
-        message: (value: string) => `Your email "${value}" is not correct`,
-        name: 'email',
-      };
-
-      const city = {
-        test: cityCheck,
-        message: 'City must be a string',
-        name: 'city',
-      };
-
-      const state = {
-        test: stateCheck,
-        message: 'State must be a string',
-        name: 'state',
-      };
-
-      const zip = {
-        test: rgxCheck(/^[0-9]{5}(?:-[0-9]{4})?$/),
-        message: 'ZIP code is not correct',
-        name: 'zip',
-      };
-
-      const same = {
-        test: (value: any, globalValue: any) =>
-          value === globalValue.password.p1,
-        message: 'Password is not the same',
-        name: 'same',
-      };
-
-      return {
-        firstName: [required],
-        lastName: required,
-        email: [required, email],
-        address: {
-          country: required,
-          street: required,
-          city: [required, city],
-          state: [required, state],
-          zip: [required, zip],
-        },
-        password: {
-          p1: required,
-          p2: [required, same],
-        },
-      };
-    });
-
-    const { result } = useValidate(info, rules, options);
-
-    const validate = async () => {
-      await result.value.$test();
-      console.log('Successfully Validated!');
-    };
-
-    const reset = async () => {
-      info.value = cloneDeep(defaultInfo);
-      await result.value.$reset();
-      console.log('Successfully Reset!');
-    };
-
-    const changeOption = async key => {
-      await reset();
-      options[key] = !options[key];
-    };
-
-    return { info, options, result, validate, reset, changeOption };
-  },
-});
-</script>

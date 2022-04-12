@@ -44,37 +44,37 @@
     "release": "yarn build:library && np"
   },
   "dependencies": {
-    "vue-demi": "^0.12.4"
+    "vue-demi": "^0.12.5"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.18.9",
-    "@firebase/analytics": "^0.7.6",
-    "@firebase/app": "^0.7.19",
+    "@antfu/eslint-config": "^0.20.2",
+    "@firebase/analytics": "^0.7.7",
+    "@firebase/app": "^0.7.20",
     "@trivago/prettier-plugin-sort-imports": "^3.2.0",
     "@types/jest": "^27.4.1",
-    "@types/lodash": "^4.14.171",
+    "@types/lodash": "^4.14.181",
     "@types/node": "^17.0.23",
-    "@vitejs/plugin-vue": "^2.2.4",
-    "@vue/compiler-sfc": "^3.2.26",
+    "@vitejs/plugin-vue": "^2.3.1",
+    "@vue/compiler-sfc": "^3.2.32",
     "@vue/composition-api": "^1.4.9",
     "c8": "^7.11.0",
-    "eslint": "^8.11.0",
+    "eslint": "^8.13.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "happy-dom": "^2.50.0",
+    "happy-dom": "^2.55.0",
     "husky": "^7.0.4",
     "json-tree-view-vue3": "^0.1.16",
     "lodash": "^4.17.21",
-    "np": "^7.5.0",
-    "prettier": "^2.3.0",
+    "np": "^7.6.1",
+    "prettier": "^2.6.2",
     "rimraf": "^3.0.2",
-    "sass": "^1.34.1",
-    "typescript": "^4.3.2",
-    "unocss": "^0.29.5",
-    "vite": "^2.8.6",
-    "vitepress": "^0.20.10",
-    "vitest": "^0.7.6",
-    "vue": "^3.2.31",
+    "sass": "^1.50.0",
+    "typescript": "^4.6.3",
+    "unocss": "^0.31.0",
+    "vite": "^2.9.1",
+    "vitepress": "^0.22.3",
+    "vitest": "^0.9.3",
+    "vue": "^3.2.32",
     "vue2": "npm:vue@2.6"
   },
   "peerDependencies": {
@@ -91,7 +91,6 @@
     "bracketSpacing": true,
     "htmlWhitespaceSensitivity": "ignore",
     "insertPragma": false,
-    "jsxBracketSameLine": true,
     "jsxSingleQuote": false,
     "printWidth": 80,
     "proseWrap": "preserve",
@@ -124,7 +123,8 @@
       "no-console": "off",
       "@typescript-eslint/no-use-before-define": "off",
       "prettier/prettier": "error",
-      "import/export": "off"
+      "import/export": "off",
+      "antfu/if-newline": "off"
     }
   }
 }
