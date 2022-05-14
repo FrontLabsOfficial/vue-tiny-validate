@@ -1,7 +1,7 @@
 import { getAnalytics, isSupported } from '@firebase/analytics';
 import { initializeApp } from '@firebase/app';
 
-const config = {
+const GOOGLE_ANALYTICS_CONFIG = {
   apiKey: 'AIzaSyBY-7TmR3rfgye-KDG3QCx2F73tM4BQo-A',
   authDomain: 'vue-tiny-validate.firebaseapp.com',
   projectId: 'vue-tiny-validate',
@@ -11,15 +11,34 @@ const config = {
   measurementId: 'G-G6Y36531LR',
 };
 
+const SELF_DEPLOYED_ANALYTICS_CONFIG = {
+  'data-website-id': 'e40a6e9f-6d6a-4f57-969b-085c8e22a276',
+  src: 'https://analytics.duyanh.dev/umami.js',
+  defer: '',
+};
+
+const setAttributes = (el, attrs) => {
+  for (const key in attrs) {
+    el.setAttribute(key, attrs[key]);
+  }
+};
+
 const AnalyticsPlugin = {
   async install() {
+    // google analytics
     const isEnvSupported = await isSupported();
 
     if (isEnvSupported) {
-      const firebaseApp = initializeApp(config);
+      const firebaseApp = initializeApp(GOOGLE_ANALYTICS_CONFIG);
       getAnalytics(firebaseApp);
-      console.info('Init-ed FireBase Analytics');
+      console.info('Init-ed FireBase analytics');
     }
+
+    // self-deployed analytics
+    const scriptElement = document.createElement('script');
+    setAttributes(scriptElement, SELF_DEPLOYED_ANALYTICS_CONFIG);
+    document.head.appendChild(scriptElement);
+    console.info('Init-ed self-deployed analytics');
   },
 };
 
