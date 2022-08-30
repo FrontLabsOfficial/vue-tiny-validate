@@ -1,4 +1,4 @@
-### `vue-tiny-validate` :100: Tiny Vue Validate Composition
+`vue-tiny-validate` :100: Tiny Vue Validate Composition
 
 ## Motivation
 

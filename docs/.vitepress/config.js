@@ -1,6 +1,7 @@
-module.exports = {
+export default {
   title: 'vue-tiny-validate',
   description: 'Tiny Vue Validate Composition',
+  lastUpdated: true,
   head: [
     ['meta', { property: 'og:title', content: 'vue-tiny-validate' }],
     [
@@ -12,28 +13,40 @@ module.exports = {
     ],
   ],
   themeConfig: {
-    repo: 'FrontLabsOfficial/vue-tiny-validate',
-    docsDir: 'docs',
-    docsBranch: 'main',
     prevLinks: true,
     nextLinks: true,
-    nav: [
+    siteTitle: 'vue-tiny-validate',
+    socialLinks: [
       {
-        text: 'Example Source',
-        link: 'https://github.com/FrontLabsOfficial/vue-tiny-validate/tree/master/example',
+        icon: 'github',
+        link: 'https://github.com/FrontLabsOfficial/vue-tiny-validate',
       },
+    ],
+    nav: [
       {
         text: 'Example',
         link: 'https://vue-tiny-validate-example.netlify.app/',
       },
     ],
     sidebar: [
-      { text: 'Introduction', link: '/' },
-      { text: 'Getting Started', link: '/getting-started' },
-      { text: 'Usage', link: '/usage' },
-      { text: 'API', link: '/api' },
-      { text: 'FAQ', link: '/faq' },
-      { text: 'Changelog', link: '/change-log' },
+      {
+        text: 'Guide',
+        collapsible: true,
+        items: [
+          { text: 'Introduction', link: '/' },
+          { text: 'Getting Started', link: '/getting-started' },
+          { text: 'Usage', link: '/usage' },
+        ],
+      },
+      {
+        text: 'Others',
+        collapsible: true,
+        items: [
+          { text: 'API', link: '/api' },
+          { text: 'FAQ', link: '/faq' },
+          { text: 'Changelog', link: '/change-log' },
+        ],
+      },
     ],
     algolia: {
       appId: 'IPJD2UD9OR',

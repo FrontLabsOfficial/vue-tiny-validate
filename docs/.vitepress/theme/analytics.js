@@ -25,6 +25,7 @@ const setAttributes = (el, attrs) => {
 
 const AnalyticsPlugin = {
   async install() {
+    if (import.meta.env.SSR || import.meta.env.DEV) return;
     // google analytics
     const isEnvSupported = await isSupported();
 

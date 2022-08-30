@@ -54,7 +54,6 @@ describe('rules', () => {
       year: {
         name: 'in20th',
         test: (): Promise<boolean> => {
-          // eslint-disable-next-line promise/param-names
           return new Promise(resolve => setTimeout(() => resolve(false), 2000));
         },
       },
