@@ -4,11 +4,33 @@ export default {
   lastUpdated: true,
   head: [
     ['meta', { property: 'og:title', content: 'vue-tiny-validate' }],
+    ['meta', { property: 'twitter:title', content: 'vue-tiny-validate' }],
     [
       'meta',
       {
         property: 'og:description',
         content: 'Tiny Vue Validate Composition',
+      },
+    ],
+    [
+      'meta',
+      {
+        property: 'twitter:description',
+        content: 'Tiny Vue Validate Composition',
+      },
+    ],
+    [
+      'meta',
+      {
+        property: 'og:image',
+        content: 'https://vue-tiny-validate.js.org/og.png',
+      },
+    ],
+    [
+      'meta',
+      {
+        property: 'twitter:image',
+        content: 'https://vue-tiny-validate.js.org/og.png',
       },
     ],
   ],
