@@ -23,6 +23,7 @@ Now that you've installed the library, let's get started with a basic usage guid
   <button v-on:click='result.$test'>Validate</button>
 </template>
 
+<script>
 import { reactive } from 'vue';
 import useValidate from 'vue-tiny-validate';
 
@@ -42,6 +43,7 @@ export default {
     return { result, data };
   }
 }
+</script>
 ```
 
 As you can see above, the `useValidate` composition requires 2 parameters `data` and `rules`.

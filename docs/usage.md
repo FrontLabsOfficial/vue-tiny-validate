@@ -12,6 +12,7 @@
   <button v-on:click='result.$test'>Validate</button>
 </template>
 
+<script>
 import { reactive } from 'vue';
 import useValidate from 'vue-tiny-validate';
 
@@ -33,6 +34,7 @@ export default {
     return { result, data };
   }
 }
+</script>
 ```
 
 The `useValidate` composition requires 3 parameters: `data`, `rules` and `options`. `data` and `rules` are **mandatory**.

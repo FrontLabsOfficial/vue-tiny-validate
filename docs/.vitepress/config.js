@@ -16,21 +16,21 @@ export default {
       'meta',
       {
         property: 'twitter:description',
-        content: 'Tiny Vue Validate Composition',
+        content: 'Tiny Vue validate Composition',
       },
     ],
     [
       'meta',
       {
         property: 'og:image',
-        content: 'https://vue-tiny-validate.js.org/og.png',
+        content: 'https://vue-tiny-validate.js.org/og_.jpeg',
       },
     ],
     [
       'meta',
       {
         property: 'twitter:image',
-        content: 'https://vue-tiny-validate.js.org/og.png',
+        content: 'https://vue-tiny-validate.js.org/og_.jpeg',
       },
     ],
   ],
