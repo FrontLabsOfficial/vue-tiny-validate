@@ -77,6 +77,46 @@ const rules = reactive({
 });
 ```
 
+### Array data
+
+Data can also be an array, even though this library is written for **object structured data**.
+
+```js
+const data = reactive({
+  name: 'Evelyn',
+  add: ['St Louis'],
+});
+
+const rules = reactive({
+  name: {
+    name: 'required',
+    test: value => Boolean(value),
+    message: 'Name must not be empty.',
+  },
+  add: {
+    0: {
+      name: 'required',
+      test: value => Boolean(value),
+      message: 'Address must not be empty.',
+    },
+  },
+});
+```
+
+or
+
+```js
+const data = ref(['St Louis']);
+
+const rules = ref({
+  0: {
+    name: 'required',
+    test: value => Boolean(value),
+    message: 'Name must not be empty.',
+  }
+});
+```
+
 ## Rules
 
 Each property has its own rule. Rule must be **an object** (validator).
@@ -224,12 +264,12 @@ const { result } = useValidate(data, rules);
 
 // This function is called to test all properties
 const testAll = () => {
-  result.$test();
+  result.value.$test();
 };
 
 // This function is called to only test the 'name' property
 const testName = () => {
-  result.name.$test();
+  result.value.name.$test();
 };
 ```
 

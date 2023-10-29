@@ -4,3 +4,4 @@ dist*
 *.local
 coverage
 .idea
+docs/.vitepress/cache

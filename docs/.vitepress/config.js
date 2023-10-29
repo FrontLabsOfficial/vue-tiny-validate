@@ -35,6 +35,7 @@ export default {
     ],
   ],
   themeConfig: {
+    outline: 'deep',
     prevLinks: true,
     nextLinks: true,
     siteTitle: 'vue-tiny-validate',

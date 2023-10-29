@@ -1,4 +1,5 @@
-`vue-tiny-validate` :100: Tiny Vue Validate Composition
+**vue-tiny-validate** \
+:100: Tiny Vue Validate Composition
 
 ## Motivation
 
@@ -24,8 +25,8 @@ That's why `vue-tiny-validate` was born.
 
 ## About
 
-- This library is heavily inspired by [Vuelidate](https://github.com/vuelidate/vuelidate).
-- Created by [Anh Le](https://github.com/culee) :vietnam:.
+- Inspired by [Vuelidate](https://github.com/vuelidate/vuelidate).
+- Created mainly for usage of the `Front` team at [ShopBase :vietnam:](https://shopbase.com) by [Anh Le](https://github.com/anh-ld).
 
 <a href="https://www.netlify.com" style="margin-top: 2rem; display: block;">
   <img src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg" alt="Deploys by Netlify" />
